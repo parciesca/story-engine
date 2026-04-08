@@ -15,6 +15,7 @@ DRAMATIS PERSONAE
   Dr. Phineas Winslow — Town physician, Tremont Street. Nearly 60. Thirty-year practice built on availability and reasonable fees. Professional acquaintance of Patience's — she compounds a specific nerve remedy for him twice yearly. Was at the Bunch of Grapes on the night Cooke died; came in late, sought Cooke out, escorted him out the door. Was not called to examine the body. Status: active, suspect.
   Nell — Serving girl at the Bunch of Grapes, 16. Forthcoming, not yet trained in what not to say. Status: minor/active.
   Silas Horne — Landlord, the Bunch of Grapes, 50s. Careful, prefers not to know things. Status: minor/active.
+  Jonathan Webb — Rope merchant, Long Wharf. Sober acquaintance of Winslow's. Took Cooke in his care at Queen Street (~11pm). Last known person to have Cooke before the body appeared in Patience's alley. Status: minor/active, unquestioned.
 
 WORLD RULES
   - Early 18th century Boston: no police force, no forensics. The constable handles public order; physicians handle the body if available; gossip handles everything else.
@@ -31,19 +32,22 @@ THEMATIC THREADS
   - Complicity: Patience may have unknowingly supplied the instrument of murder.
 
 UNRESOLVED TENSIONS
-  - Did Dr. Winslow kill Cooke using Patience's compound? Who supplied it to him and how?
-  - Why did Winslow seek Cooke out at the tavern — was it planned, or opportunistic?
-  - Why was Cooke's body left specifically in Patience's alley?
+  - Did Winslow kill Cooke using Patience's compound? Provisionally: no — timing and manner don't fit. But he's not fully cleared.
+  - Winslow sought Cooke out at the tavern because Cooke's wife sent a note saying he'd been unwell. Was this genuine concern, or a pretext?
+  - Why was Cooke's body moved to Patience's alley specifically? Someone moved it between ~11pm (Queen Street, with Webb) and dawn.
   - Why did Thomas walk to the wrong side of the garden — what drew him there?
   - Who searched Patience's drying rack, and why only look (not take)?
   - Did Pratt not call Winslow because he couldn't find him, or because he knew?
+  - What happened at the Merchant's Club supper on 8 February? Cooke was unwell from the 8th — already sick before the night he died. Patience has not followed this thread.
+  - Jonathan Webb: what was Cooke's condition when he took him at Queen Street, and where exactly did Webb leave him?
 
 TIMELINE & STATE
-  Current location: Cornhill Street apothecary shop; Bunch of Grapes (visited Ch. 2)
-  Time position: Night of 14 February 1712 / into 15 February
+  Current location: Cornhill Street apothecary shop (morning of 15 February 1712)
+  Time position: Morning of 15 February 1712
   Key events so far:
     Ch. 1 — Body of Alderman Cooke found in Patience's alley. Constable rules cold and drink. Patience notes no frost on lips, sweet smell — identifies it from reference books as something administered. Decides to investigate.
     Ch. 2 — Patience goes to the Bunch of Grapes. Serving girl Nell reveals Cooke left with Dr. Winslow, who came in late and sought him out. Patience connects Winslow to the nerve compound she makes for him. Returns home to find garden gate open and drying rack searched — someone confirmed what she stocks. They did not take more.
+    Ch. 3 — Patience reviews her compound records (confirms means and timing). Visits Winslow on Tremont Street. He accounts for himself: left Cooke with Webb at Queen Street ~11pm; Cooke was unwell before his drinks (sick since a supper on the 8th). Winslow's account provisionally clears him. Body was deliberately moved to Patience's alley between ~11pm and dawn. Patience shifts focus to Webb and the question of who moved the body.
 
 READER PROMISES
   - The real cause of death will be revealed and it will be consistent with clues already visible.

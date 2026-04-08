@@ -7,8 +7,8 @@
   "tone": "dry wit, atmospheric, quietly tense — the manners of Puritan Boston stretched thin over something ugly",
   "perspective": "3rd person",
   "created": "2026-04-07T00:00:00Z",
-  "last_modified": "2026-04-07T00:00:00Z",
-  "current_chapter": "ch-7f8d86c3",
+  "last_modified": "2026-04-08T00:00:00Z",
+  "current_chapter": "ch-cd8d2c0d",
   "active_branch": "br-main",
   "branches": {
     "br-main": {
@@ -36,6 +36,15 @@
       "file": "chapters/02-ch-7f8d86c3.md",
       "written": "2026-04-07",
       "word_count": 978
+    },
+    {
+      "id": "ch-cd8d2c0d",
+      "number": 3,
+      "branch": "br-main",
+      "title": "Tremont Street",
+      "file": "chapters/03-ch-cd8d2c0d.md",
+      "written": "2026-04-08",
+      "word_count": 1012
     }
   ],
   "treatment_source": null
