@@ -1,0 +1,222 @@
+{
+  "id": "bk-7c3e9a01",
+  "title": "Creation Beyond Existence",
+  "slug": "creation-beyond-existence",
+  "status": "completed",
+  "genre": "Hard sci-fi / philosophical epic",
+  "tone": "Near-future thriller evolving into mythic",
+  "perspective": "3rd person limited, rotating POV",
+  "created": "2026-03-26T00:00:00Z",
+  "last_modified": "2026-04-06T00:00:00Z",
+  "current_chapter": "ch-95139abc",
+  "active_branch": "br-main",
+  "branches": {
+    "br-main": {
+      "name": "main",
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-03-26T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "id": "ch-36848304",
+      "number": 1,
+      "branch": "br-main",
+      "title": "The Light Before Light",
+      "file": "chapters/01-ch-36848304.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1171
+    },
+    {
+      "id": "ch-8d9b61fc",
+      "number": 2,
+      "branch": "br-main",
+      "title": "The Coalition of the Terrified",
+      "file": "chapters/02-ch-8d9b61fc.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1423
+    },
+    {
+      "id": "ch-f0348f94",
+      "number": 3,
+      "branch": "br-main",
+      "title": "The Fermi Trap",
+      "file": "chapters/03-ch-f0348f94.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1584
+    },
+    {
+      "id": "ch-6cd9d1c2",
+      "number": 4,
+      "branch": "br-main",
+      "title": "The Honest General",
+      "file": "chapters/04-ch-6cd9d1c2.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1388
+    },
+    {
+      "id": "ch-b146efdd",
+      "number": 5,
+      "branch": "br-main",
+      "title": "The Room Where It Stops",
+      "file": "chapters/05-ch-b146efdd.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1729
+    },
+    {
+      "id": "ch-82053844",
+      "number": 6,
+      "branch": "br-main",
+      "title": "Intermission: The Long Patience",
+      "file": "chapters/06-ch-82053844.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1265
+    },
+    {
+      "id": "ch-e7551338",
+      "number": 7,
+      "branch": "br-main",
+      "title": "The Second Light",
+      "file": "chapters/07-ch-e7551338.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1312
+    },
+    {
+      "id": "ch-21ab3f47",
+      "number": 8,
+      "branch": "br-main",
+      "title": "The Constant Hum",
+      "file": "chapters/08-ch-21ab3f47.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1900
+    },
+    {
+      "id": "ch-ef9b8d4b",
+      "number": 9,
+      "branch": "br-main",
+      "title": "Intermission: The Kaida Constant",
+      "file": "chapters/09-ch-ef9b8d4b.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1800
+    },
+    {
+      "id": "ch-b28f9df2",
+      "number": 10,
+      "branch": "br-main",
+      "title": "The Ones Who Sing Back",
+      "file": "chapters/10-ch-b28f9df2.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1840
+    },
+    {
+      "id": "ch-b00e20d0",
+      "number": 11,
+      "branch": "br-main",
+      "title": "The Weight of the Seat (Part I)",
+      "file": "chapters/11-ch-b00e20d0.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1486
+    },
+    {
+      "id": "ch-5830a85b",
+      "number": 12,
+      "branch": "br-main",
+      "title": "The Weight of the Seat (Part II)",
+      "file": "chapters/12-ch-5830a85b.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 846
+    },
+    {
+      "id": "ch-fc78c607",
+      "number": 13,
+      "branch": "br-main",
+      "title": "The Shape of the Problem",
+      "file": "chapters/13-ch-fc78c607.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 2195
+    },
+    {
+      "id": "ch-1c3faf81",
+      "number": 14,
+      "branch": "br-main",
+      "title": "The Careful Hand",
+      "file": "chapters/14-ch-1c3faf81.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 799
+    },
+    {
+      "id": "ch-6bfb85e4",
+      "number": 15,
+      "branch": "br-main",
+      "title": "Intermission: Twenty-Five Hands on the Weight",
+      "file": "chapters/15-ch-6bfb85e4.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 805
+    },
+    {
+      "id": "ch-da683ce1",
+      "number": 16,
+      "branch": "br-main",
+      "title": "The Knock",
+      "file": "chapters/16-ch-da683ce1.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1482
+    },
+    {
+      "id": "ch-5231d213",
+      "number": 17,
+      "branch": "br-main",
+      "title": "The Broadcast and the Beam",
+      "file": "chapters/17-ch-5231d213.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 1615
+    },
+    {
+      "id": "ch-a7e24cb0",
+      "number": 18,
+      "branch": "br-main",
+      "title": "Intermission: The Network Grows Quiet, Then Loud",
+      "file": "chapters/18-ch-a7e24cb0.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 912
+    },
+    {
+      "id": "ch-5a9a385a",
+      "number": 19,
+      "branch": "br-main",
+      "title": "The Letter Back",
+      "file": "chapters/19-ch-5a9a385a.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 2406
+    },
+    {
+      "id": "ch-9340f882",
+      "number": 20,
+      "branch": "br-main",
+      "title": "The Empty Chair",
+      "file": "chapters/20-ch-9340f882.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 3322
+    },
+    {
+      "id": "ch-d420e0d2",
+      "number": 21,
+      "branch": "br-main",
+      "title": "The Work That Remains",
+      "file": "chapters/21-ch-d420e0d2.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 2660
+    },
+    {
+      "id": "ch-95139abc",
+      "number": 22,
+      "branch": "br-main",
+      "title": "Epilogue: What the Void Remembers",
+      "file": "chapters/22-ch-95139abc.md",
+      "written": "2026-03-26T00:00:00Z",
+      "word_count": 768
+    }
+  ],
+  "treatment_source": "treatment.md"
+}

@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Viewer</title>
+<style>
+  :root {
+    --bg: #faf8f5;
+    --text: #2c2c2c;
+    --muted: #6b6b6b;
+    --border: #ddd;
+    --accent: #8b4513;
+    --sidebar-bg: #f0ece6;
+    --hover: #e8e2da;
+    --font-body: 'Georgia', 'Times New Roman', serif;
+    --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* --- Header --- */
+  header {
+    font-family: var(--font-ui);
+    padding: 12px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: var(--sidebar-bg);
+    flex-shrink: 0;
+  }
+  header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  header .book-title {
+    font-size: 18px;
+    font-weight: 400;
+    font-family: var(--font-body);
+    font-style: italic;
+  }
+  header .meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* --- Landing / Library --- */
+  #landing {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var(--font-ui);
+    overflow-y: auto;
+  }
+  #landing.centered {
+    justify-content: center;
+  }
+  #landing h2 {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 24px;
+    color: var(--accent);
+  }
+  #landing p {
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 400px;
+    text-align: center;
+    line-height: 1.6;
+  }
+  #landing button {
+    padding: 10px 28px;
+    font-size: 14px;
+    font-family: var(--font-ui);
+    border: 1px solid var(--accent);
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  #landing button:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .open-prompt {
+    gap: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  /* Book picker grid */
+  .library-grid {
+    width: 100%;
+    max-width: 800px;
+    padding: 40px 24px 60px;
+  }
+  .library-grid h2 {
+    margin-bottom: 24px;
+  }
+  .book-card {
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 12px;
+  }
+  .book-card:hover {
+    border-color: var(--accent);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .book-card-title {
+    font-family: var(--font-body);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .book-card-meta {
+    font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .book-card-status {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1px 6px;
+    border-radius: 2px;
+    margin-left: auto;
+  }
+  .book-card-status.active { background: #e8f0e8; color: #3d6b3d; }
+  .book-card-status.completed { background: #e8e8f0; color: #4a4a7a; }
+
+  header .back-link {
+    font-size: 12px;
+    color: var(--accent);
+    cursor: pointer;
+    text-decoration: none;
+    display: none;
+  }
+  header .back-link:hover {
+    text-decoration: underline;
+  }
+
+  /* --- Main layout --- */
+  #app {
+    display: none;
+    flex: 1;
+    overflow: hidden;
+  }
+  .columns {
+    display: flex;
+    height: 100%;
+  }
+
+  /* --- Sidebar --- */
+  aside {
+    width: 260px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    flex-shrink: 0;
+    font-family: var(--font-ui);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Sidebar tabs */
+  .sidebar-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .sidebar-tabs button {
+    flex: 1;
+    padding: 10px 0;
+    font-family: var(--font-ui);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sidebar-tabs button:hover {
+    color: var(--text);
+  }
+  .sidebar-tabs button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+
+  .ch-list {
+    list-style: none;
+  }
+  .ch-list li {
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.1s;
+    display: flex;
+    gap: 8px;
+    line-height: 1.4;
+  }
+  .ch-list li:hover {
+    background: var(--hover);
+  }
+  .ch-list li.active {
+    background: var(--hover);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+  .ch-list .ch-num {
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 20px;
+  }
+  .ch-list .ch-title {
+    color: var(--text);
+  }
+  .ch-list .ch-words {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  /* --- Character list in sidebar --- */
+  .char-list {
+    list-style: none;
+  }
+  .char-list li {
+    padding: 7px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    transition: all 0.1s;
+    line-height: 1.4;
+  }
+  .char-list li:hover {
+    background: var(--hover);
+  }
+  .char-list li.active {
+    background: var(--hover);
+    border-left-color: var(--accent);
+  }
+  .char-list .char-name {
+    font-weight: 600;
+    color: var(--text);
+  }
+  .char-list .char-role {
+    color: var(--muted);
+    font-size: 11px;
+    display: block;
+    margin-top: 1px;
+  }
+  .char-list .char-status {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-left: 6px;
+  }
+  .char-list .status-active { color: #5a8a5a; }
+  .char-list .status-departed, .char-list .status-closed { color: var(--muted); }
+  .char-list .status-deceased { color: #a04040; }
+
+  /* --- Reading area --- */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 48px 48px 80px;
+  }
+  .reading-col {
+    width: 100%;
+  }
+  .chapter-heading {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapter-heading .ch-label {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .chapter-heading h2 {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .chapter-heading .ch-meta {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .chapter-prose {
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .chapter-prose p {
+    margin-bottom: 1em;
+    text-indent: 1.5em;
+  }
+  .chapter-prose p:first-child {
+    text-indent: 0;
+  }
+
+  /* --- Dramatis Personae view --- */
+  .dp-heading {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .dp-heading .dp-label {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .dp-heading h2 {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .dp-heading .dp-meta {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .char-card {
+    margin-bottom: 28px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .char-card:last-child {
+    border-bottom: none;
+  }
+  .char-card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .char-card-name {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text);
+  }
+  .char-card-status {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+  .char-card-status.active { background: #e8f0e8; color: #3d6b3d; }
+  .char-card-status.departed, .char-card-status.closed { background: #eee; color: var(--muted); }
+  .char-card-status.deceased { background: #f0e0e0; color: #804040; }
+  .char-card-status.unknown { background: #f0eadf; color: #8b7355; }
+  .char-card-body {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  .char-card-body p {
+    margin-bottom: 0.6em;
+  }
+  .char-card-statusline {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .dp-source-note {
+    font-family: var(--font-ui);
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* --- Handoff panel --- */
+  .handoff-panel {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 2px solid var(--border);
+  }
+  .handoff-panel h3 {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .handoff-content {
+    font-family: var(--font-ui);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    background: var(--sidebar-bg);
+    padding: 16px 20px;
+    border-left: 3px solid var(--accent);
+  }
+
+  /* --- Feedback panel --- */
+  .feedback-panel {
+    margin-top: 32px;
+    font-family: var(--font-ui);
+  }
+  .feedback-panel h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .feedback-panel textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px 16px;
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+    resize: vertical;
+  }
+  .feedback-panel textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .feedback-actions {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .feedback-actions button {
+    padding: 8px 20px;
+    font-size: 13px;
+    font-family: var(--font-ui);
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .feedback-actions button:hover {
+    background: #6d360f;
+  }
+  .feedback-actions button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  .feedback-status {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .existing-feedback {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: #eef6ee;
+    border-left: 3px solid #5a8a5a;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+  .existing-feedback .label {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5a8a5a;
+    margin-bottom: 8px;
+  }
+
+  /* --- Chapter nav --- */
+  .chapter-nav {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-ui);
+    font-size: 13px;
+  }
+  .chapter-nav a {
+    color: var(--accent);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .chapter-nav a:hover {
+    text-decoration: underline;
+  }
+  .chapter-nav .disabled {
+    color: var(--border);
+    cursor: default;
+  }
+
+  /* --- No planning notice --- */
+  .no-planning {
+    margin-top: 48px;
+    padding: 16px 20px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Book Viewer</h1>
+  <a class="back-link" id="backToLibrary">&larr; Library</a>
+  <span class="book-title" id="headerTitle"></span>
+  <span class="meta" id="headerMeta"></span>
+</header>
+
+<div id="landing" class="centered">
+  <div class="open-prompt" id="openPrompt">
+    <h2>Book Viewer</h2>
+    <p>Select your <strong>Books</strong> folder to browse all available books.</p>
+    <button id="openBtn">Open Library</button>
+    <p style="font-size:12px; color:#999;">Uses File System Access API &mdash; Chrome or Edge required.</p>
+  </div>
+  <div class="library-grid" id="libraryGrid" style="display:none;"></div>
+</div>
+
+<div id="app">
+  <div class="columns">
+    <aside>
+      <div class="sidebar-tabs">
+        <button class="active" data-tab="chapters">Chapters</button>
+        <button data-tab="characters">Characters</button>
+      </div>
+      <div class="sidebar-content">
+        <div id="sidebarChapters">
+          <ul class="ch-list" id="chapterList"></ul>
+        </div>
+        <div id="sidebarCharacters" style="display:none;">
+          <ul class="char-list" id="characterList"></ul>
+        </div>
+      </div>
+    </aside>
+    <main>
+      <div class="reading-col" id="readingCol">
+        <!-- chapter or character content rendered here -->
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+// ---- State ----
+let bookDir = null;
+let manifest = null;
+let currentIdx = 0;
+let currentView = 'chapter';  // 'chapter' or 'characters'
+let currentCharIdx = -1;      // which character is selected (-1 = all)
+let planningCache = {};
+let storyBible = null;
+let characters = [];          // parsed character entries
+
+// ---- File helpers ----
+async function readTextFile(dirHandle, path) {
+  const parts = path.replace(/\\/g, '/').split('/');
+  let handle = dirHandle;
+  for (let i = 0; i < parts.length - 1; i++) {
+    try { handle = await handle.getDirectoryHandle(parts[i]); }
+    catch { return null; }
+  }
+  try {
+    const fileHandle = await handle.getFileHandle(parts[parts.length - 1]);
+    const file = await fileHandle.getFile();
+    const buf = await file.arrayBuffer();
+    return new TextDecoder('utf-8').decode(buf);
+  } catch { return null; }
+}
+
+async function writeTextFile(dirHandle, path, content) {
+  const parts = path.replace(/\\/g, '/').split('/');
+  let handle = dirHandle;
+  for (let i = 0; i < parts.length - 1; i++) {
+    handle = await handle.getDirectoryHandle(parts[i], { create: true });
+  }
+  const fileHandle = await handle.getFileHandle(parts[parts.length - 1], { create: true });
+  const writable = await fileHandle.createWritable();
+  await writable.write(content);
+  await writable.close();
+}
+
+// ---- Parsing ----
+function parseChapterMd(text) {
+  const match = text.match(/^---\s*\n[\s\S]*?\n---\s*\n([\s\S]*)$/);
+  return match ? match[1].trim() : text.trim();
+}
+
+function proseToParagraphs(prose) {
+  return prose.split(/\n\s*\n/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p>${escHtml(p).replace(/\n/g, ' ')}</p>`)
+    .join('\n');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function parseHandoff(text) {
+  if (!text) return null;
+  const idx = text.indexOf('CHAPTER HANDOFF');
+  if (idx === -1) return null;
+  return text.slice(idx).trim();
+}
+
+function parseFeedbackContent(text) {
+  if (!text) return null;
+  const lines = text.split('\n');
+  let bodyStart = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim();
+    if (l.startsWith('CHAPTER FEEDBACK') || l.startsWith('For:') || l.startsWith('Written:') || l === '') {
+      bodyStart = i + 1;
+    } else {
+      break;
+    }
+  }
+  return lines.slice(bodyStart).join('\n').trim();
+}
+
+// ---- Parse DRAMATIS PERSONAE from story bible ----
+function parseCharacters(bibleText) {
+  if (!bibleText) return [];
+
+  // Find the DRAMATIS PERSONAE section
+  const dpStart = bibleText.indexOf('DRAMATIS PERSONAE');
+  if (dpStart === -1) return [];
+
+  // Find the end: next major section header (line starting with all-caps word followed by newline)
+  const afterDp = bibleText.slice(dpStart + 'DRAMATIS PERSONAE'.length);
+  const sectionEnd = afterDp.search(/\n[A-Z]{2}[A-Z &]+\n/);
+  const dpBlock = sectionEnd === -1 ? afterDp : afterDp.slice(0, sectionEnd);
+
+  // Parse individual character entries
+  // Each entry starts with "  Name — Description" at 2-space indent
+  // Continuation lines have deeper indent or start with "    Status:"
+  const chars = [];
+  const lines = dpBlock.split('\n');
+  let current = null;
+
+  for (const line of lines) {
+    // Character entry line: starts with 2-space indent, has an em dash
+    const entryMatch = line.match(/^  (\S.+?)\s*[—\-]+\s*(.+)$/);
+    if (entryMatch && !line.match(/^\s{4,}/)) {
+      if (current) chars.push(current);
+      current = {
+        name: entryMatch[1].trim(),
+        description: [entryMatch[2].trim()],
+        statusLine: null,
+        status: 'active'
+      };
+    } else if (current) {
+      const trimmed = line.trim();
+      if (!trimmed) continue;
+
+      // Status line
+      const statusMatch = trimmed.match(/^Status:\s*(.+)/i);
+      if (statusMatch) {
+        current.statusLine = statusMatch[1].trim();
+        // Extract status keyword
+        const s = current.statusLine.toLowerCase();
+        if (s.startsWith('active')) current.status = 'active';
+        else if (s.startsWith('deceased')) current.status = 'deceased';
+        else if (s.startsWith('departed') || s.includes('thread closed') || s.includes('closed thread')) current.status = 'departed';
+        else if (s.startsWith('unknown')) current.status = 'unknown';
+        else if (s.includes('closed')) current.status = 'closed';
+        else current.status = 'active';
+      } else {
+        current.description.push(trimmed);
+      }
+    }
+  }
+  if (current) chars.push(current);
+
+  // Join multi-line descriptions
+  chars.forEach(c => {
+    c.description = c.description.join(' ');
+  });
+
+  return chars;
+}
+
+// ---- Load planning data for a chapter ----
+async function loadPlanning(chapterId) {
+  if (planningCache[chapterId]) return planningCache[chapterId];
+
+  const proposalPath = `planning/${chapterId}-proposal.md`;
+  const feedbackPath = `planning/${chapterId}-feedback.md`;
+
+  const [proposalText, feedbackText] = await Promise.all([
+    readTextFile(bookDir, proposalPath),
+    readTextFile(bookDir, feedbackPath)
+  ]);
+
+  const result = {
+    proposal: proposalText,
+    handoff: parseHandoff(proposalText),
+    feedback: feedbackText ? parseFeedbackContent(feedbackText) : null,
+    feedbackRaw: feedbackText
+  };
+  planningCache[chapterId] = result;
+  return result;
+}
+
+// ---- Sidebar tabs ----
+function switchSidebarTab(tab) {
+  document.querySelectorAll('.sidebar-tabs button').forEach(b => {
+    b.classList.toggle('active', b.dataset.tab === tab);
+  });
+  document.getElementById('sidebarChapters').style.display = tab === 'chapters' ? '' : 'none';
+  document.getElementById('sidebarCharacters').style.display = tab === 'characters' ? '' : 'none';
+}
+
+// ---- Render sidebar ----
+function renderChapterList() {
+  const list = document.getElementById('chapterList');
+  list.innerHTML = manifest.chapters.map((ch, i) => {
+    const active = (currentView === 'chapter' && i === currentIdx) ? ' active' : '';
+    return `<li class="${active}" data-idx="${i}">
+      <span class="ch-num">${ch.number}.</span>
+      <span class="ch-title">${escHtml(ch.title)}</span>
+      <span class="ch-words">${(ch.word_count || 0).toLocaleString()}w</span>
+    </li>`;
+  }).join('');
+
+  list.querySelectorAll('li').forEach(li => {
+    li.addEventListener('click', () => {
+      currentIdx = parseInt(li.dataset.idx);
+      currentView = 'chapter';
+      switchSidebarTab('chapters');
+      renderChapterList();
+      renderCharacterList();
+      renderChapter();
+    });
+  });
+}
+
+function renderCharacterList() {
+  const list = document.getElementById('characterList');
+  if (!characters.length) {
+    list.innerHTML = '<li style="color:var(--muted); font-style:italic; padding:12px 16px; font-size:13px;">No story bible found</li>';
+    return;
+  }
+
+  // Sort: active first, then departed/closed
+  const sorted = [...characters].sort((a, b) => {
+    const order = { active: 0, unknown: 1, departed: 2, closed: 3, deceased: 3 };
+    return (order[a.status] || 0) - (order[b.status] || 0);
+  });
+
+  list.innerHTML = sorted.map((ch, i) => {
+    const origIdx = characters.indexOf(ch);
+    const active = (currentView === 'characters' && currentCharIdx === origIdx) ? ' active' : '';
+    // Short role: first clause before the period
+    const shortRole = ch.description.split(/\.\s/)[0];
+    const statusCls = 'status-' + ch.status;
+    return `<li class="${active}" data-char-idx="${origIdx}">
+      <span class="char-name">${escHtml(ch.name)}</span>
+      <span class="char-status ${statusCls}">${ch.status}</span>
+      <span class="char-role">${escHtml(shortRole.length > 60 ? shortRole.slice(0, 57) + '...' : shortRole)}</span>
+    </li>`;
+  }).join('');
+
+  list.querySelectorAll('li').forEach(li => {
+    li.addEventListener('click', () => {
+      currentCharIdx = parseInt(li.dataset.charIdx);
+      currentView = 'characters';
+      renderChapterList();
+      renderCharacterList();
+      renderCharacterView();
+    });
+  });
+}
+
+// ---- Render main content ----
+async function renderChapter() {
+  currentView = 'chapter';
+  const ch = manifest.chapters[currentIdx];
+  const col = document.getElementById('readingCol');
+  const mainEl = document.querySelector('main');
+
+  const chapterText = await readTextFile(bookDir, ch.file);
+  if (!chapterText) {
+    col.innerHTML = `<div class="chapter-heading"><h2>Chapter not found</h2></div>
+      <p style="color:var(--muted); font-family:var(--font-ui); font-size:14px;">
+      Could not read <code>${escHtml(ch.file)}</code></p>`;
+    return;
+  }
+
+  const prose = parseChapterMd(chapterText);
+  const planning = await loadPlanning(ch.id);
+
+  const written = ch.written ? new Date(ch.written).toLocaleDateString('en-US', {
+    year: 'numeric', month: 'long', day: 'numeric'
+  }) : '';
+
+  let html = `
+    <div class="chapter-heading">
+      <div class="ch-label">Chapter ${ch.number}</div>
+      <h2>${escHtml(ch.title)}</h2>
+      <div class="ch-meta">${(ch.word_count || 0).toLocaleString()} words${written ? ' &middot; ' + written : ''}</div>
+    </div>
+    <div class="chapter-prose">
+      ${proseToParagraphs(prose)}
+    </div>`;
+
+  // Handoff section
+  if (planning.handoff) {
+    html += `
+    <div class="handoff-panel">
+      <h3>Planning Handoff</h3>
+      <div class="handoff-content">${escHtml(planning.handoff)}</div>
+    </div>`;
+
+    if (planning.feedback) {
+      html += `
+    <div class="feedback-panel">
+      <h3>Your Feedback</h3>
+      <div class="existing-feedback">
+        <div class="label">Saved feedback</div>
+        ${escHtml(planning.feedback)}
+      </div>
+    </div>`;
+    }
+
+    html += `
+    <div class="feedback-panel" id="feedbackPanel">
+      <h3>${planning.feedback ? 'Update Feedback' : 'Write Your Response'}</h3>
+      <textarea id="feedbackInput" placeholder="Write your steering for the next chapter...">${planning.feedback ? escHtml(planning.feedback) : ''}</textarea>
+      <div class="feedback-actions">
+        <button id="saveFeedbackBtn">Save Feedback</button>
+        <span class="feedback-status" id="feedbackStatus"></span>
+      </div>
+    </div>`;
+  } else if (!planning.proposal) {
+    html += `<div class="no-planning">No planning data available for this chapter.</div>`;
+  } else {
+    html += `<div class="no-planning">Planning proposal exists but no handoff choices were recorded for this chapter.</div>`;
+  }
+
+  // Chapter nav
+  const prevCh = currentIdx > 0 ? manifest.chapters[currentIdx - 1] : null;
+  const nextCh = currentIdx < manifest.chapters.length - 1 ? manifest.chapters[currentIdx + 1] : null;
+  html += `
+    <div class="chapter-nav">
+      ${prevCh
+        ? `<a data-nav="prev">&larr; Ch. ${prevCh.number}: ${escHtml(prevCh.title)}</a>`
+        : `<span class="disabled">&larr;</span>`}
+      ${nextCh
+        ? `<a data-nav="next">Ch. ${nextCh.number}: ${escHtml(nextCh.title)} &rarr;</a>`
+        : `<span class="disabled">&rarr;</span>`}
+    </div>`;
+
+  col.innerHTML = html;
+  mainEl.scrollTop = 0;
+
+  col.querySelectorAll('[data-nav]').forEach(a => {
+    a.addEventListener('click', () => {
+      currentIdx += a.dataset.nav === 'prev' ? -1 : 1;
+      renderChapterList();
+      renderChapter();
+    });
+  });
+
+  const saveBtn = document.getElementById('saveFeedbackBtn');
+  if (saveBtn) {
+    saveBtn.addEventListener('click', () => saveFeedback(ch.id));
+  }
+}
+
+function renderCharacterView() {
+  currentView = 'characters';
+  const col = document.getElementById('readingCol');
+  const mainEl = document.querySelector('main');
+
+  if (!characters.length) {
+    col.innerHTML = `<div class="dp-heading">
+      <div class="dp-label">Dramatis Personae</div>
+      <h2>No Characters Found</h2>
+      <div class="dp-meta">No story bible available for this book.</div>
+    </div>`;
+    mainEl.scrollTop = 0;
+    return;
+  }
+
+  // Which characters to show
+  const toShow = currentCharIdx >= 0 ? [characters[currentCharIdx]] : characters;
+  const heading = currentCharIdx >= 0 ? characters[currentCharIdx].name : 'Dramatis Personae';
+  const subtitle = currentCharIdx >= 0
+    ? ''
+    : `${characters.filter(c => c.status === 'active').length} active, ${characters.length} total`;
+
+  let html = `
+    <div class="dp-heading">
+      <div class="dp-label">Dramatis Personae</div>
+      <h2>${escHtml(heading)}</h2>
+      ${subtitle ? `<div class="dp-meta">${subtitle}</div>` : ''}
+    </div>`;
+
+  for (const ch of toShow) {
+    const statusCls = ch.status;
+    html += `
+    <div class="char-card">
+      <div class="char-card-header">
+        <span class="char-card-name">${escHtml(ch.name)}</span>
+        <span class="char-card-status ${statusCls}">${ch.status}</span>
+      </div>
+      <div class="char-card-body">
+        <p>${escHtml(ch.description)}</p>
+      </div>
+      ${ch.statusLine ? `<div class="char-card-statusline">${escHtml(ch.statusLine)}</div>` : ''}
+    </div>`;
+  }
+
+  html += `<div class="dp-source-note">Source: story-bible.md</div>`;
+
+  col.innerHTML = html;
+  mainEl.scrollTop = 0;
+}
+
+async function saveFeedback(chapterId) {
+  const input = document.getElementById('feedbackInput');
+  const status = document.getElementById('feedbackStatus');
+  const btn = document.getElementById('saveFeedbackBtn');
+  const text = input.value.trim();
+
+  if (!text) {
+    status.textContent = 'Write something first.';
+    return;
+  }
+
+  btn.disabled = true;
+  status.textContent = 'Saving...';
+
+  const now = new Date().toISOString().split('T')[0];
+  const content = `CHAPTER FEEDBACK\n  For: ${chapterId}\n  Written: ${now}\n\n${text}\n`;
+  const path = `planning/${chapterId}-feedback.md`;
+
+  try {
+    await writeTextFile(bookDir, path, content);
+    delete planningCache[chapterId];
+    status.textContent = 'Saved.';
+    btn.disabled = false;
+    await loadPlanning(chapterId);
+    setTimeout(() => renderChapter(), 600);
+  } catch (e) {
+    status.textContent = 'Error: ' + e.message;
+    btn.disabled = false;
+  }
+}
+
+// ---- Library: scan Books folder ----
+let booksDir = null;  // handle to the Books/ directory
+
+async function openLibrary() {
+  try {
+    booksDir = await window.showDirectoryPicker({
+      id: 'books-library',
+      mode: 'readwrite'
+    });
+    await scanLibrary();
+  } catch (e) {
+    if (e.name !== 'AbortError') {
+      console.error(e);
+      alert('Error opening library: ' + e.message);
+    }
+  }
+}
+
+async function scanLibrary() {
+  const books = [];
+  for await (const [name, handle] of booksDir) {
+    if (handle.kind !== 'directory') continue;
+    // Check for manifest.json in this subdirectory
+    try {
+      const manifestHandle = await handle.getFileHandle('manifest.json');
+      const file = await manifestHandle.getFile();
+      const buf = await file.arrayBuffer();
+      const text = new TextDecoder('utf-8').decode(buf);
+      const data = JSON.parse(text);
+      books.push({ dirHandle: handle, manifest: data, dirName: name });
+    } catch {
+      // No manifest.json — skip (legacy book or non-book folder)
+    }
+  }
+
+  // Sort: active first, then by last_modified descending
+  books.sort((a, b) => {
+    if (a.manifest.status !== b.manifest.status) {
+      return a.manifest.status === 'active' ? -1 : 1;
+    }
+    return (b.manifest.last_modified || '').localeCompare(a.manifest.last_modified || '');
+  });
+
+  renderLibrary(books);
+}
+
+function renderLibrary(books) {
+  const grid = document.getElementById('libraryGrid');
+  const prompt = document.getElementById('openPrompt');
+  const landing = document.getElementById('landing');
+
+  landing.classList.remove('centered');
+  prompt.style.display = 'none';
+  grid.style.display = '';
+
+  if (!books.length) {
+    grid.innerHTML = `<h2>Library</h2>
+      <p style="color:var(--muted); text-align:left;">No books with manifest.json found in this folder.</p>`;
+    return;
+  }
+
+  let html = '<h2>Library</h2>';
+  for (const book of books) {
+    const m = book.manifest;
+    const chCount = (m.chapters || []).length;
+    const totalWords = (m.chapters || []).reduce((sum, ch) => sum + (ch.word_count || 0), 0);
+    const statusCls = m.status || 'active';
+    html += `
+      <div class="book-card" data-dir="${escHtml(book.dirName)}">
+        <div class="book-card-title">${escHtml(m.title || book.dirName)}</div>
+        <div class="book-card-meta">
+          <span>${chCount} chapter${chCount !== 1 ? 's' : ''}</span>
+          <span>${totalWords.toLocaleString()} words</span>
+          <span>${escHtml(m.genre || '')}</span>
+          <span class="book-card-status ${statusCls}">${escHtml(m.status || 'active')}</span>
+        </div>
+      </div>`;
+  }
+  grid.innerHTML = html;
+
+  // Wire up clicks
+  grid.querySelectorAll('.book-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const dirName = card.dataset.dir;
+      const book = books.find(b => b.dirName === dirName);
+      if (book) openBook(book.dirHandle, book.manifest);
+    });
+  });
+}
+
+async function openBook(dirHandle, manifestData) {
+  bookDir = dirHandle;
+  manifest = manifestData;
+  planningCache = {};
+  currentIdx = 0;
+  currentView = 'chapter';
+  currentCharIdx = -1;
+
+  // Jump to current chapter
+  if (manifest.current_chapter) {
+    const idx = manifest.chapters.findIndex(c => c.id === manifest.current_chapter);
+    if (idx >= 0) currentIdx = idx;
+  }
+
+  // Load story bible for characters
+  let biblePath = 'story-bible.md';
+  if (manifest.active_branch && manifest.active_branch !== 'br-main') {
+    const branchBible = `branches/${manifest.active_branch}/story-bible.md`;
+    const branchText = await readTextFile(bookDir, branchBible);
+    if (branchText) biblePath = branchBible;
+  }
+  storyBible = await readTextFile(bookDir, biblePath);
+  characters = parseCharacters(storyBible);
+
+  // Update header
+  document.getElementById('headerTitle').textContent = manifest.title;
+  document.getElementById('headerMeta').textContent =
+    `${manifest.chapters.length} chapters \u00b7 ${manifest.genre || ''} \u00b7 ${manifest.status}`;
+  document.getElementById('backToLibrary').style.display = booksDir ? '' : 'none';
+
+  // Show app, hide landing
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+
+  switchSidebarTab('chapters');
+  renderChapterList();
+  renderCharacterList();
+  renderChapter();
+}
+
+function showLibrary() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('landing').style.display = '';
+  document.getElementById('headerTitle').textContent = '';
+  document.getElementById('headerMeta').textContent = '';
+  document.getElementById('backToLibrary').style.display = 'none';
+  manifest = null;
+  bookDir = null;
+  // Re-scan in case books changed
+  if (booksDir) scanLibrary();
+}
+
+// Wire up sidebar tabs
+document.querySelectorAll('.sidebar-tabs button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    switchSidebarTab(btn.dataset.tab);
+    if (btn.dataset.tab === 'characters' && currentView !== 'characters') {
+      currentCharIdx = -1;
+      currentView = 'characters';
+      renderChapterList();
+      renderCharacterList();
+      renderCharacterView();
+    }
+  });
+});
+
+document.getElementById('openBtn').addEventListener('click', openLibrary);
+document.getElementById('backToLibrary').addEventListener('click', showLibrary);
+
+// Keyboard nav
+document.addEventListener('keydown', (e) => {
+  if (!manifest) return;
+  if (e.target.tagName === 'TEXTAREA') return;
+  if (currentView !== 'chapter') return;
+  if (e.key === 'ArrowLeft' && currentIdx > 0) {
+    currentIdx--;
+    renderChapterList();
+    renderChapter();
+  } else if (e.key === 'ArrowRight' && currentIdx < manifest.chapters.length - 1) {
+    currentIdx++;
+    renderChapterList();
+    renderChapter();
+  }
+});
+</script>
+</body>
+</html>

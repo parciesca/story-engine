@@ -1,0 +1,33 @@
+{
+  "id": "bk-c7b33ebf",
+  "title": "Load Bearing",
+  "slug": "load-bearing",
+  "status": "active",
+  "genre": "Contemporary literary fiction",
+  "tone": "Grounded, procedural, understated — pressure that builds from human-scale friction rather than plot mechanics",
+  "perspective": "3rd person",
+  "created": "2026-04-06T00:00:00Z",
+  "last_modified": "2026-04-06T00:00:00Z",
+  "current_chapter": "ch-19a4471a",
+  "active_branch": "br-main",
+  "branches": {
+    "br-main": {
+      "name": "main",
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-04-06T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "id": "ch-19a4471a",
+      "number": 1,
+      "branch": "br-main",
+      "title": "Carbonation",
+      "file": "chapters/01-ch-19a4471a.md",
+      "written": "2026-04-06",
+      "word_count": 1082
+    }
+  ],
+  "treatment_source": null
+}

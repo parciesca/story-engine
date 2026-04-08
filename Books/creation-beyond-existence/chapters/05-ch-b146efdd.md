@@ -1,0 +1,90 @@
+---
+id: ch-b146efdd
+chapter: 5
+title: "The Room Where It Stops"
+branch: br-main
+written: 2026-03-26
+word_count: 1729
+---
+
+Tanabe moved fast. Faster than Lena had thought possible for someone who operated within the calcified bureaucracies of international science, and faster than was probably wise. But Tanabe had done the same math everyone in the Coalition had done in the hours after Raines' disclosure, and the math was simple: if Kindling was eighteen months along and the Chinese and European programs were on similar timelines, then the window for intervention was measured in years, not decades. Possibly less.
+
+She made four phone calls in the first seventy-two hours. The first was to the Secretary-General's office in New York. The second was to the French permanent mission to the United Nations, because France held the rotating Security Council presidency that month and Tanabe had a contact there — Ambassador Céleste Fournier, a career diplomat she'd worked with during the ITER fusion negotiations a decade earlier. The third was to Raines, instructing him to prepare a declassified summary of Kindling suitable for a non-technical audience. The fourth was to Lena.
+
+"I need you in New York," Tanabe said. No preamble. No pleasantries. The pen-tapping was audible even over the phone. "I need you to present the fragment data to the Security Council in language that a room full of politicians can understand without panicking."
+
+"They should panic."
+
+"They should act. There's a difference, and I need you on the right side of it. Panic closes doors. Urgency opens them. I need urgency."
+
+Lena agreed, because Tanabe was right and because the alternative was sitting in Geneva running models while somewhere in New Mexico a team of well-meaning physicists inched closer to a line they couldn't see.
+
+---
+
+The emergency session was convened eleven days later under a procedural mechanism that Fournier navigated with the quiet expertise of someone who had spent twenty years learning where the levers were hidden. It was not, technically, a full Security Council meeting. It was a "closed consultation" — no public record, no press, no formal vote required. This distinction mattered for reasons that Lena found both strategically sensible and deeply depressing: a formal session would require advance notification to all member states, which would trigger exactly the kind of political positioning and information warfare that would bury the substance under process. A closed consultation could happen quickly, quietly, and with the fifteen Council members receiving classified briefings in advance.
+
+Fournier had arranged the briefings personally. Each delegation received a summary document — forty pages, distilled from the Coalition's work by Tanabe and vetted by Raines for anything that might trigger an immediate classification dispute with Washington. The document walked the delegations through three things: the discovery of the multiverse fragments, the analysis of terminal ignition signatures, and the existence of active research programs in multiple countries that were, unknowingly, developing the same category of technology that had destroyed every dead universe the Coalition could analyze.
+
+The reactions, Fournier told Tanabe privately, ranged from "genuine alarm" to "suspicion that this was an elaborate Western ploy to shut down Chinese energy research." The Chinese delegation in particular had requested a separate technical briefing, which Voronov conducted over a secure video link in Mandarin, a detail that surprised no one who knew Voronov and visibly impressed the Chinese ambassador.
+
+The consultation itself took place on a rainy Wednesday in a windowless conference room on the third floor of the UN Secretariat building. Lena had expected something grand — vaulted ceilings, dramatic lighting, the architectural weight of global power. What she got was a beige room with a long oval table, bottled water, and the faint smell of carpet cleaner. The flags of fifteen nations stood in a row along one wall like an afterthought.
+
+Secretary-General David Nyong'o opened the session with characteristic brevity. He was a Kenyan diplomat of the old school, spare and precise, who believed that the purpose of language was to convey meaning rather than to perform importance. He introduced Tanabe. Tanabe introduced Lena. Lena stood at the front of the beige room and looked at the fifteen delegations and thought: these are the people who get to decide whether we take this seriously.
+
+She had rehearsed. She had practiced with Melo, who had pushed her to strip away every layer of jargon until the presentation was as clean and stark as the data itself. No technical displays. No spectral analysis charts. Just the story.
+
+"Six months ago, we detected the birth of a new universe," she began. "Not a theoretical prediction. Not a mathematical model. An observation. Something exploded into existence beyond the boundary of our own reality with enough energy to send gravitational ripples washing across the void between us, and our instruments were sensitive enough to pick them up."
+
+She told them about the fragments. She told them about the map — thousands of dead realities surrounding their own, each one ended by the same kind of event. She told them about the ignition signatures, the structured energy profiles that pointed not to natural catastrophe but to technological origin.
+
+And then she told them about Kindling.
+
+The room shifted. Not physically — no one moved, no one whispered, no chairs scraped. But the quality of attention changed. Lena had been speaking to scientists for months and had learned to read the particular silence of people processing information they didn't want to be true. This silence was different. This was the silence of people calculating consequences.
+
+Raines spoke next. He was in uniform for the first time since Lena had known him — dress blues, medals, the full weight of institutional authority deployed as a deliberate rhetorical choice. He confirmed Kindling's existence. He confirmed the anomalous energy yields. He confirmed, carefully, that similar programs existed in at least three other nations.
+
+"I am here with the knowledge but not the authorization of my chain of command," he said. "I want to be transparent about that. My government did not send me to make this disclosure. I am making it because the data compels it, and because I believe the risk of inaction exceeds the risk of unauthorized candor."
+
+The Chinese ambassador — a sharp-featured woman named Wei Linghui whom Lena had not been introduced to — spoke first in the discussion that followed. Her question was directed at Raines and delivered in flawless English with the precision of a scalpel.
+
+"General Raines. You are asking this Council to believe that the United States military has voluntarily disclosed a classified weapons-adjacent research program out of altruistic concern for the survival of reality itself."
+
+"I'm asking this Council to believe the data, Ambassador Wei. My motivations are secondary."
+
+"Your motivations are never secondary." But she said it without hostility, almost with respect, and then she turned to Lena. "Dr. Sarova. The comparison between Kindling's energy signatures and the fragment terminal profiles. How close is the match?"
+
+Lena had the numbers ready. "The resonance correlation is point nine seven. On a scale where one point zero would be identical."
+
+The room absorbed this.
+
+The British representative asked about timelines. The Russian representative asked about verification. The Indian representative asked whether halting vacuum energy research would simply cede a strategic advantage to whichever nation refused to comply. The French representative — Fournier herself, stepping out of her procedural role — asked the question that cut through everything else.
+
+"If we do nothing," she said, "what is the timeline to an irreversible event?"
+
+Lena looked at Raines. Raines looked at the table.
+
+"Based on current rates of progress across all known programs," he said, "and assuming the correlation between Kindling's signatures and the fragment data is predictive rather than coincidental — which at point nine seven, I believe it is — we estimate that one or more programs will reach the critical self-sustaining threshold within fifteen to thirty years."
+
+The silence that followed was the longest Lena had ever experienced in a room full of people. She counted eleven seconds — the same duration as the original detection at Paranal, a coincidence that felt obscene.
+
+Secretary-General Nyong'o broke it. He had been listening with his hands folded, his expression betraying nothing, and when he spoke it was with the measured gravity of a man who understood that the next words out of his mouth would set the frame for everything that followed.
+
+"I want to be certain I understand what we've been told," he said. "The evidence suggests that advanced civilizations, across multiple realities over an immense timescale, have independently developed a category of energy technology that ultimately destroyed their universes. Several nations on this planet are currently developing that same category of technology. And the margin between our current capability and the point of no return may be measured in decades."
+
+"That is correct, Mr. Secretary-General," Tanabe said.
+
+Nyong'o looked around the table. Fifteen delegations. Fifteen sets of national interests, strategic calculations, domestic pressures, and institutional inertia. Fifteen reasons to delay, deflect, and defer.
+
+"Then this is not an arms control problem," he said. "This is not an energy policy problem. This is a survival problem. And I intend to treat it as one."
+
+He asked Fournier to begin drafting a framework for an emergency resolution. He asked Tanabe to establish a formal technical advisory body answerable to the Council. He asked Raines — pointedly, publicly, in front of every delegation — whether the United States would submit Kindling to international inspection.
+
+Raines didn't hesitate. "Yes."
+
+Ambassador Wei watched him from across the table with an expression that was no longer skeptical. It was something closer to recognition — the look of someone reassessing a variable in a calculation that had just gotten much more complicated.
+
+"China will open its programs to equivalent inspection," she said. "On the condition that all Council members with relevant research do the same."
+
+It wasn't agreement. It wasn't a treaty. It was the first, fragile, contingent thread of something that might, under enormous pressure and against every incentive toward suspicion, hold.
+
+Lena stood at the front of the beige room with its bottled water and carpet-cleaner smell and watched the most powerful governments on Earth take the first tentative step toward not destroying everything, and she thought: this is what it looks like. Not grand. Not cinematic. Just fifteen delegations in a bad room, choosing fear over pride, because someone showed them the map of what happens when you don't.

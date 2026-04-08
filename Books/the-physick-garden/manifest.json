@@ -1,0 +1,42 @@
+{
+  "id": "bk-620232a5",
+  "title": "The Physick Garden",
+  "slug": "the-physick-garden",
+  "status": "active",
+  "genre": "cozy mystery, period drama",
+  "tone": "dry wit, atmospheric, quietly tense — the manners of Puritan Boston stretched thin over something ugly",
+  "perspective": "3rd person",
+  "created": "2026-04-07T00:00:00Z",
+  "last_modified": "2026-04-07T00:00:00Z",
+  "current_chapter": "ch-7f8d86c3",
+  "active_branch": "br-main",
+  "branches": {
+    "br-main": {
+      "name": "main",
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-04-07T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "id": "ch-2313604f",
+      "number": 1,
+      "branch": "br-main",
+      "title": "A Cold Morning's Work",
+      "file": "chapters/01-ch-2313604f.md",
+      "written": "2026-04-07",
+      "word_count": 1087
+    },
+    {
+      "id": "ch-7f8d86c3",
+      "number": 2,
+      "branch": "br-main",
+      "title": "The Bunch of Grapes",
+      "file": "chapters/02-ch-7f8d86c3.md",
+      "written": "2026-04-07",
+      "word_count": 978
+    }
+  ],
+  "treatment_source": null
+}

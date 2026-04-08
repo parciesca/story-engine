@@ -1,0 +1,33 @@
+{
+  "id": "bk-84529e0a",
+  "title": "The Burn Pattern",
+  "slug": "the-burn-pattern",
+  "status": "active",
+  "genre": "quiet procedural / literary fiction",
+  "tone": "grounded, observational, human-scale — the weight of ordinary expertise, what fire reveals",
+  "perspective": "3rd person",
+  "created": "2026-04-06T00:00:00Z",
+  "last_modified": "2026-04-06T00:00:00Z",
+  "current_chapter": "ch-be9a3def",
+  "active_branch": "br-main",
+  "branches": {
+    "br-main": {
+      "name": "main",
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-04-06T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "id": "ch-be9a3def",
+      "number": 1,
+      "branch": "br-main",
+      "title": "Origin",
+      "file": "chapters/01-ch-be9a3def.md",
+      "written": "2026-04-06",
+      "word_count": 1021
+    }
+  ],
+  "treatment_source": null
+}

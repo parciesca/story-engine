@@ -1,0 +1,33 @@
+{
+  "id": "bk-233b10e3",
+  "title": "The Winding",
+  "slug": "the-winding",
+  "status": "active",
+  "genre": "Occupational literary fiction",
+  "tone": "Grounded, human-scale, quiet tension. The weight of objects and what they hold.",
+  "perspective": "3rd person",
+  "created": "2026-04-06T00:00:00Z",
+  "last_modified": "2026-04-06T00:00:00Z",
+  "current_chapter": "ch-cb327904",
+  "active_branch": "br-main",
+  "branches": {
+    "br-main": {
+      "name": "main",
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-04-06T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "id": "ch-cb327904",
+      "number": 1,
+      "branch": "br-main",
+      "title": "The Commission",
+      "file": "chapters/01-ch-cb327904.md",
+      "written": "2026-04-06",
+      "word_count": 1089
+    }
+  ],
+  "treatment_source": null
+}
