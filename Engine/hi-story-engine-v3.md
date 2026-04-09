@@ -76,7 +76,7 @@ The book's state machine. Read at session start, updated after every chapter or 
   "id": "bk-a1b2c3d4",
   "title": "Book Title",
   "slug": "book-title",
-  "status": "active",
+  "status": "active",          // "initializing" → "active" → "completed"
   "topic": "The specific historical subject",
   "time_period": "1920s",
   "geographic_focus": "London, England",
@@ -205,6 +205,20 @@ If anything interrupts mid-write, the chapter prose is safe.
 
 File I/O happens silently. The user doesn't need to see "saving chapter..." or "updating bible..." confirmations. If something fails, mention it. Otherwise, just do it.
 
+### Incremental Persistence
+
+**The engine must never hold significant unsaved work in context.** Research findings, proposals, and chapters are saved to disk as they are produced — not batched at the end of a phase.
+
+This matters because research-heavy operations (book initialization, chapter production) consume context through web searches. If a session reaches its limit mid-research, everything not yet on disk is lost.
+
+**The rule:** after every meaningful unit of work, write it to disk before starting the next unit.
+
+- **Book initialization:** Create directory, skeleton manifest (`status: "initializing"`), and skeleton bible *before* any research. Then update the bible incrementally as research comes in — each search pass that yields useful findings gets folded into the bible and saved. The proposal is written to disk before the chapter is drafted. The chapter is saved before the bible is finalized and manifest updated.
+- **Chapter production:** Research findings are folded into the research bible as they're gathered — not held in context until the chapter is written. The proposal is saved to disk before drafting begins. The chapter is saved before the bible update.
+- **Addendum production:** Same discipline. Save as you go.
+
+The goal: if the session ends unexpectedly at any point, the maximum lost work is one incomplete operation — not an entire research pass or chapter draft.
+
 ### Chat Output Discipline
 
 A book-viewer frontend handles prose display. **Do not output chapter or addendum prose to chat.** After writing, output to chat only:
@@ -323,6 +337,8 @@ Before writing, conduct research using web search. This is a core part of the ch
 - Look for the specific detail that brings a moment alive — the telling anecdote, the vivid primary source quote, the surprising statistic
 
 **Integrate research naturally.** The chapter should read as engaging narrative, not as a research report. Sources can be mentioned when they add interest or credibility ("As one contemporary observer noted...") but don't footnote everything.
+
+**Save incrementally.** After each productive search pass, fold findings into the research bible on disk — update ESTABLISHED CONTEXT, KEY FIGURES, SOURCES OF NOTE, THREADS TO PULL as relevant. Do not hold research in context waiting for the chapter to be written. If the session ends during research, the bible should reflect everything gathered so far.
 
 ### Writing the Chapter
 
@@ -473,28 +489,34 @@ When the user wants to start a new exploration:
 
 1. Accept the starting point. This can be anything from "1923 London" to a detailed brief about a specific historical question. If a template brief was provided, skip what's already answered.
 2. If the starting point is very broad, briefly confirm scope or ask one orienting question. If it's specific enough to start, just start.
-3. **Create the book directory:**
+3. **Checkpoint — create the book on disk immediately:**
    - Generate book GUID
    - Create `~/Documents/Stories/History/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
-   - Initialize `manifest.json` with metadata, empty chapters and addenda arrays
-   - Initialize `research-bible.md` with topic, time period, scope, empty sections
-4. Research the opening topic.
-5. Write the opening chapter.
-6. **Save all files** (chapter, proposal, bible update, manifest update).
-7. Present key figures + navigation options.
+   - Write `manifest.json` with metadata, empty chapters/addenda arrays, `status: "initializing"`
+   - Write skeleton `research-bible.md` with topic, time period, scope, empty sections
+   - *The book now exists on disk. If the session ends here, resume can pick it up.*
+4. **Research the opening topic — incrementally:**
+   - Conduct web searches. After each productive search pass, fold findings into the research bible on disk (update ESTABLISHED CONTEXT, KEY FIGURES, THREADS TO PULL as relevant).
+   - Don't hold research in context waiting for a complete picture. Save what you have, then search for more.
+   - When enough material has accumulated for a strong opening chapter, move on.
+5. **Checkpoint — write the chapter proposal** to `planning/ch-[guid]-proposal.md`.
+6. Write the opening chapter. **Save the chapter file immediately.**
+7. Update research bible with chapter implications. Update manifest (`status: "active"`, chapter registered).
+8. Present key figures + navigation options.
 
 ### Initialization — Resume Existing Book
 
 When the user wants to continue an exploration (names it, or says "continue" and there's only one active book):
 
 1. **Read `manifest.json`** — understand the book state, chapter/addendum count.
-2. **Read `research-bible.md`** — load exploration state.
-3. **Read the most recent 1-2 chapter files** — get voice, momentum, last topic.
-4. **Read the planning file for the current item** (`planning/ch-[current_item]-proposal.md` or `planning/ad-[current_item]-proposal.md`) — look for the HANDOFF section.
-5. **Check for a feedback file** (`planning/ch-[current_item]-feedback.md` or `planning/ad-[current_item]-feedback.md`).
-6. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter or addendum using that feedback. Do not re-present the handoff navigation or wait for input.
-7. **If no feedback file but a HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
-8. **If neither exists** (legacy import or interrupted session): generate a handoff now — best effort from the manifest, research bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
+2. **Check status.** If `"initializing"` — the previous session was interrupted during book setup. Read `research-bible.md` to see how far research got (it may have partial findings already saved). Resume the initialization flow from where it left off: continue researching if the bible is thin, or proceed to writing the first chapter if enough material has accumulated. Once the first chapter is written, set status to `"active"`.
+3. **Read `research-bible.md`** — load exploration state.
+4. **Read the most recent 1-2 chapter files** — get voice, momentum, last topic.
+5. **Read the planning file for the current item** (`planning/ch-[current_item]-proposal.md` or `planning/ad-[current_item]-proposal.md`) — look for the HANDOFF section.
+6. **Check for a feedback file** (`planning/ch-[current_item]-feedback.md` or `planning/ad-[current_item]-feedback.md`).
+7. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter or addendum using that feedback. Do not re-present the handoff navigation or wait for input.
+8. **If no feedback file but a HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
+9. **If neither exists** (legacy import or interrupted session): generate a handoff now — best effort from the manifest, research bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
 
 ### Initialization — From Treatment
 
