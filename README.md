@@ -2,6 +2,8 @@
 
 A file-backed collaborative novel engine for Claude Code. You and Claude co-author books together — Claude writes, you steer. Stories persist across sessions in plain files so nothing is lost when context windows close.
 
+**Status:** Alpha. Single-author project, actively developed. Interfaces and file layouts may still shift without deprecation notices.
+
 ---
 
 ## How It Works
@@ -148,13 +150,46 @@ python3 Engine/migrate-book.py Books/my-book/book.md \
 
 ---
 
-## Active Books
+## Branch Model
 
-| Title | Genre | Chapters | Status |
-|---|---|---|---|
-| Alone on the Bosphorus | Historical fiction | 12 | Active |
-| Creation Beyond Existence | Hard sci-fi | 22 | Active |
-| Load-Bearing | — | 1 | Active |
-| The Burn Pattern | — | 1 | Active |
-| The Physick Garden | — | 2 | Active |
-| The Winding | — | 1 | Active |
+The repo's branches are about **engine versions**, not books. The library of books is its own space — it is not enumerated here and does not belong to any particular engine branch.
+
+- **`main`** — the stable, canonical engine. This is what new work orients against and what books should initialize from.
+- **Engine feature branches** (e.g. `hi-story`) — in-progress engine variants with their own goals. `hi-story` in particular is working toward a distinct engine posture and is not a superset of `main`. Merged back into `main` only when stable.
+- **`claude/*` branches** — ephemeral branches created by Claude Code review / PR workflows. Not intended for direct work.
+
+**Working conventions (alpha posture):**
+- Commit issue fixes and small changes directly to the working branch. Don't spin up sub-branches for individual issues.
+- Only create a new branch when you're starting a genuinely distinct project (a new engine variant, a major rework, etc.).
+- A book initialized while a given engine branch is active is effectively pinned to that engine version until you choose to update it.
+
+**Future direction:** Issue #13 (backlogged) proposes a git-native backend where each book lives on its own `book/<slug>` branch, with the engine version pinned at branch-creation time. That model is **not** in effect yet — if you read it in an older issue or comment, treat it as aspirational. Today, books exist as folders under `Books/` on whatever branch they were created on; the long-term direction is to separate the library entirely from engine branches.
+
+---
+
+## Working on the Engine
+
+The engine is the set of files under `Engine/` plus `CLAUDE.md`. To change how Claude behaves in a story session, edit `Engine/story-engine-v3.md` (the authoritative prompt) or the supporting scripts.
+
+- **Small fixes and edits** — commit directly to the branch you're on (`main` for stable work, `hi-story` for the in-progress variant).
+- **Larger reworks or experiments** — start a new engine feature branch off `main`. Merge back when stable.
+- **Book initialization** should always happen from a stable branch (`main`). Books initialized mid-experiment inherit whatever engine state was live at the time.
+- **Book viewer** (`Engine/book-viewer.html`) is a static file — open it in a browser, no build step.
+
+---
+
+## Issue Tracker
+
+Issues are tracked on GitHub. Labels in active use:
+
+| Label | Meaning |
+|---|---|
+| `high-priority` | Should be addressed soon; blocks other work or orientation |
+| `backlog` | Tracked but not actively scheduled |
+| `enhancement` | New feature or capability |
+| `bug` | Something isn't behaving correctly |
+| `documentation` | Docs, READMEs, contributor orientation |
+| `question` | Open design question; discussion welcome |
+
+When filing an issue, prefer concrete "what's needed" and "why" sections over open-ended discussion — the backlog is small enough that issues double as specs.
+
