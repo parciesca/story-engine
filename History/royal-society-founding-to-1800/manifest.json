@@ -1,0 +1,42 @@
+{
+  "id": "bk-b67e3d1b",
+  "title": "The Royal Society: Founding to 1800",
+  "slug": "royal-society-founding-to-1800",
+  "status": "active",
+  "topic": "The Royal Society of London for Improving Natural Knowledge — its founding, institutional life, and role in shaping natural philosophy from the 1660s to 1800",
+  "time_period": "c. 1640–1800",
+  "geographic_focus": "London and its correspondence networks across Britain, Europe, and the wider world",
+  "created": "2026-04-10T00:00:00Z",
+  "last_modified": "2026-04-10T00:00:00Z",
+  "current_item": "ad-576c22fe",
+  "chapters": [
+    {
+      "id": "ch-eee1b4a9",
+      "number": 1,
+      "title": "The Twelve at Gresham",
+      "file": "chapters/01-ch-eee1b4a9.md",
+      "written": "2026-04-10T00:00:00Z",
+      "word_count": 980
+    },
+    {
+      "id": "ch-406a7741",
+      "number": 2,
+      "title": "The Secretary and the Curator",
+      "file": "chapters/02-ch-406a7741.md",
+      "written": "2026-04-10T00:00:00Z",
+      "word_count": 1020
+    }
+  ],
+  "addenda": [
+    {
+      "id": "ad-576c22fe",
+      "number": 1,
+      "title": "The Size of a Flea: Micrographia and the New Resolution of the World",
+      "after_chapter": "ch-406a7741",
+      "file": "addenda/01-ad-576c22fe.md",
+      "written": "2026-04-10T00:00:00Z",
+      "word_count": 2650
+    }
+  ],
+  "treatment_source": null
+}
