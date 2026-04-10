@@ -253,6 +253,15 @@
     margin-left: auto;
     flex-shrink: 0;
   }
+  .ch-list li.addendum-item {
+    padding-left: 28px;
+    font-size: 12px;
+    font-style: italic;
+  }
+  .ch-list li.addendum-item .ch-num {
+    color: var(--accent);
+    font-style: normal;
+  }
 
   /* --- Character list in sidebar --- */
   .char-list {
@@ -567,7 +576,7 @@
 <div id="landing" class="centered">
   <div class="open-prompt" id="openPrompt">
     <h2>Book Viewer</h2>
-    <p>Select your <strong>Books</strong> folder to browse all available books.</p>
+    <p>Select a library folder (<strong>Books</strong> or <strong>History</strong>) to browse available books.</p>
     <button id="openBtn">Open Library</button>
     <p style="font-size:12px; color:#999;">Uses File System Access API &mdash; Chrome or Edge required.</p>
   </div>
@@ -602,12 +611,14 @@
 // ---- State ----
 let bookDir = null;
 let manifest = null;
+let items = [];               // unified chapters+addenda reading order
 let currentIdx = 0;
 let currentView = 'chapter';  // 'chapter' or 'characters'
 let currentCharIdx = -1;      // which character is selected (-1 = all)
 let planningCache = {};
 let storyBible = null;
 let characters = [];          // parsed character entries
+let isHistory = false;
 
 // ---- File helpers ----
 async function readTextFile(dirHandle, path) {
@@ -657,7 +668,8 @@ function escHtml(s) {
 
 function parseHandoff(text) {
   if (!text) return null;
-  const idx = text.indexOf('CHAPTER HANDOFF');
+  let idx = text.indexOf('CHAPTER HANDOFF');
+  if (idx === -1) idx = text.indexOf('ADDENDUM HANDOFF');
   if (idx === -1) return null;
   return text.slice(idx).trim();
 }
@@ -668,13 +680,43 @@ function parseFeedbackContent(text) {
   let bodyStart = 0;
   for (let i = 0; i < lines.length; i++) {
     const l = lines[i].trim();
-    if (l.startsWith('CHAPTER FEEDBACK') || l.startsWith('For:') || l.startsWith('Written:') || l === '') {
+    if (l.startsWith('CHAPTER FEEDBACK') || l.startsWith('ADDENDUM FEEDBACK') || l.startsWith('For:') || l.startsWith('Written:') || l === '') {
       bodyStart = i + 1;
     } else {
       break;
     }
   }
   return lines.slice(bodyStart).join('\n').trim();
+}
+
+// ---- History vs fiction detection + item list ----
+function isHistoryBook(m) {
+  return !!(m && (m.topic || m.time_period || m.geographic_focus || Array.isArray(m.addenda)));
+}
+
+// Build a unified ordered list of items (chapters + addenda interleaved).
+// Each item: { kind: 'chapter'|'addendum', id, number, title, file, word_count, written, after_chapter? }
+function buildItems(m) {
+  const items = [];
+  const chapters = m.chapters || [];
+  const addenda = (m.addenda || []).slice().sort((a, b) => (a.number || 0) - (b.number || 0));
+
+  for (const ch of chapters) {
+    items.push({ kind: 'chapter', ...ch });
+    // Append any addenda that follow this chapter, in order
+    for (const ad of addenda) {
+      if (ad.after_chapter === ch.id) {
+        items.push({ kind: 'addendum', ...ad });
+      }
+    }
+  }
+  // Any orphaned addenda (after_chapter not matched) — append at end
+  for (const ad of addenda) {
+    if (!chapters.some(c => c.id === ad.after_chapter)) {
+      items.push({ kind: 'addendum', ...ad });
+    }
+  }
+  return items;
 }
 
 // ---- Parse DRAMATIS PERSONAE from story bible ----
@@ -773,12 +815,15 @@ function switchSidebarTab(tab) {
 // ---- Render sidebar ----
 function renderChapterList() {
   const list = document.getElementById('chapterList');
-  list.innerHTML = manifest.chapters.map((ch, i) => {
+  list.innerHTML = items.map((it, i) => {
     const active = (currentView === 'chapter' && i === currentIdx) ? ' active' : '';
-    return `<li class="${active}" data-idx="${i}">
-      <span class="ch-num">${ch.number}.</span>
-      <span class="ch-title">${escHtml(ch.title)}</span>
-      <span class="ch-words">${(ch.word_count || 0).toLocaleString()}w</span>
+    const isAd = it.kind === 'addendum';
+    const numLabel = isAd ? `A${it.number}.` : `${it.number}.`;
+    const addClass = isAd ? ' addendum-item' : '';
+    return `<li class="${active}${addClass}" data-idx="${i}">
+      <span class="ch-num">${numLabel}</span>
+      <span class="ch-title">${escHtml(it.title)}</span>
+      <span class="ch-words">${(it.word_count || 0).toLocaleString()}w</span>
     </li>`;
   }).join('');
 
@@ -834,13 +879,15 @@ function renderCharacterList() {
 // ---- Render main content ----
 async function renderChapter() {
   currentView = 'chapter';
-  const ch = manifest.chapters[currentIdx];
+  const ch = items[currentIdx];
+  if (!ch) return;
   const col = document.getElementById('readingCol');
   const mainEl = document.querySelector('main');
 
   const chapterText = await readTextFile(bookDir, ch.file);
+  const kindLabel = ch.kind === 'addendum' ? 'Addendum' : 'Chapter';
   if (!chapterText) {
-    col.innerHTML = `<div class="chapter-heading"><h2>Chapter not found</h2></div>
+    col.innerHTML = `<div class="chapter-heading"><h2>${kindLabel} not found</h2></div>
       <p style="color:var(--muted); font-family:var(--font-ui); font-size:14px;">
       Could not read <code>${escHtml(ch.file)}</code></p>`;
     return;
@@ -853,9 +900,18 @@ async function renderChapter() {
     year: 'numeric', month: 'long', day: 'numeric'
   }) : '';
 
+  // For addenda, show which chapter they follow
+  let labelText = `${kindLabel} ${ch.number}`;
+  if (ch.kind === 'addendum' && ch.after_chapter) {
+    const parentCh = (manifest.chapters || []).find(c => c.id === ch.after_chapter);
+    if (parentCh) {
+      labelText += ` · after Ch. ${parentCh.number}: ${parentCh.title}`;
+    }
+  }
+
   let html = `
     <div class="chapter-heading">
-      <div class="ch-label">Chapter ${ch.number}</div>
+      <div class="ch-label">${escHtml(labelText)}</div>
       <h2>${escHtml(ch.title)}</h2>
       <div class="ch-meta">${(ch.word_count || 0).toLocaleString()} words${written ? ' &middot; ' + written : ''}</div>
     </div>
@@ -898,15 +954,19 @@ async function renderChapter() {
   }
 
   // Chapter nav
-  const prevCh = currentIdx > 0 ? manifest.chapters[currentIdx - 1] : null;
-  const nextCh = currentIdx < manifest.chapters.length - 1 ? manifest.chapters[currentIdx + 1] : null;
+  const prevCh = currentIdx > 0 ? items[currentIdx - 1] : null;
+  const nextCh = currentIdx < items.length - 1 ? items[currentIdx + 1] : null;
+  const navLabel = (it) => {
+    const prefix = it.kind === 'addendum' ? `Add. ${it.number}` : `Ch. ${it.number}`;
+    return `${prefix}: ${escHtml(it.title)}`;
+  };
   html += `
     <div class="chapter-nav">
       ${prevCh
-        ? `<a data-nav="prev">&larr; Ch. ${prevCh.number}: ${escHtml(prevCh.title)}</a>`
+        ? `<a data-nav="prev">&larr; ${navLabel(prevCh)}</a>`
         : `<span class="disabled">&larr;</span>`}
       ${nextCh
-        ? `<a data-nav="next">Ch. ${nextCh.number}: ${escHtml(nextCh.title)} &rarr;</a>`
+        ? `<a data-nav="next">${navLabel(nextCh)} &rarr;</a>`
         : `<span class="disabled">&rarr;</span>`}
     </div>`;
 
@@ -1075,13 +1135,22 @@ function renderLibrary(books) {
     const chCount = (m.chapters || []).length;
     const totalWords = (m.chapters || []).reduce((sum, ch) => sum + (ch.word_count || 0), 0);
     const statusCls = m.status || 'active';
+    const isHist = isHistoryBook(m);
+    const adCount = (m.addenda || []).length;
+    const categoryBits = [];
+    if (isHist) {
+      if (m.time_period) categoryBits.push(escHtml(m.time_period));
+      if (m.geographic_focus) categoryBits.push(escHtml(m.geographic_focus));
+    } else if (m.genre) {
+      categoryBits.push(escHtml(m.genre));
+    }
     html += `
       <div class="book-card" data-dir="${escHtml(book.dirName)}">
         <div class="book-card-title">${escHtml(m.title || book.dirName)}</div>
         <div class="book-card-meta">
-          <span>${chCount} chapter${chCount !== 1 ? 's' : ''}</span>
+          <span>${chCount} chapter${chCount !== 1 ? 's' : ''}${adCount ? ` · ${adCount} addend${adCount !== 1 ? 'a' : 'um'}` : ''}</span>
           <span>${totalWords.toLocaleString()} words</span>
-          <span>${escHtml(m.genre || '')}</span>
+          ${categoryBits.map(b => `<span>${b}</span>`).join('')}
           <span class="book-card-status ${statusCls}">${escHtml(m.status || 'active')}</span>
         </div>
       </div>`;
@@ -1105,27 +1174,51 @@ async function openBook(dirHandle, manifestData) {
   currentIdx = 0;
   currentView = 'chapter';
   currentCharIdx = -1;
+  isHistory = isHistoryBook(manifest);
 
-  // Jump to current chapter
-  if (manifest.current_chapter) {
-    const idx = manifest.chapters.findIndex(c => c.id === manifest.current_chapter);
+  // Build unified item list (chapters + addenda interleaved)
+  items = buildItems(manifest);
+
+  // Jump to current item (history uses current_item, fiction uses current_chapter)
+  const currentId = manifest.current_item || manifest.current_chapter;
+  if (currentId) {
+    const idx = items.findIndex(it => it.id === currentId);
     if (idx >= 0) currentIdx = idx;
   }
 
-  // Load story bible for characters
-  let biblePath = 'story-bible.md';
-  if (manifest.active_branch && manifest.active_branch !== 'br-main') {
-    const branchBible = `branches/${manifest.active_branch}/story-bible.md`;
-    const branchText = await readTextFile(bookDir, branchBible);
-    if (branchText) biblePath = branchBible;
+  // Characters tab only applies to fiction (story-bible.md). History books use research-bible.md.
+  const charsTabBtn = document.querySelector('.sidebar-tabs button[data-tab="characters"]');
+  if (isHistory) {
+    storyBible = null;
+    characters = [];
+    if (charsTabBtn) charsTabBtn.style.display = 'none';
+  } else {
+    if (charsTabBtn) charsTabBtn.style.display = '';
+    // Load story bible for characters
+    let biblePath = 'story-bible.md';
+    if (manifest.active_branch && manifest.active_branch !== 'br-main') {
+      const branchBible = `branches/${manifest.active_branch}/story-bible.md`;
+      const branchText = await readTextFile(bookDir, branchBible);
+      if (branchText) biblePath = branchBible;
+    }
+    storyBible = await readTextFile(bookDir, biblePath);
+    characters = parseCharacters(storyBible);
   }
-  storyBible = await readTextFile(bookDir, biblePath);
-  characters = parseCharacters(storyBible);
 
   // Update header
   document.getElementById('headerTitle').textContent = manifest.title;
-  document.getElementById('headerMeta').textContent =
-    `${manifest.chapters.length} chapters \u00b7 ${manifest.genre || ''} \u00b7 ${manifest.status}`;
+  const chapCount = (manifest.chapters || []).length;
+  const adCount = (manifest.addenda || []).length;
+  let metaBits = [`${chapCount} chapter${chapCount !== 1 ? 's' : ''}`];
+  if (adCount) metaBits.push(`${adCount} addend${adCount !== 1 ? 'a' : 'um'}`);
+  if (isHistory) {
+    if (manifest.time_period) metaBits.push(manifest.time_period);
+    if (manifest.geographic_focus) metaBits.push(manifest.geographic_focus);
+  } else if (manifest.genre) {
+    metaBits.push(manifest.genre);
+  }
+  metaBits.push(manifest.status);
+  document.getElementById('headerMeta').textContent = metaBits.join(' \u00b7 ');
   document.getElementById('backToLibrary').style.display = booksDir ? '' : 'none';
 
   // Show app, hide landing
@@ -1176,7 +1269,7 @@ document.addEventListener('keydown', (e) => {
     currentIdx--;
     renderChapterList();
     renderChapter();
-  } else if (e.key === 'ArrowRight' && currentIdx < manifest.chapters.length - 1) {
+  } else if (e.key === 'ArrowRight' && currentIdx < items.length - 1) {
     currentIdx++;
     renderChapterList();
     renderChapter();
