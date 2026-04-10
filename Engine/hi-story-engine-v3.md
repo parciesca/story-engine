@@ -221,14 +221,22 @@ The goal: if the session ends unexpectedly at any point, the maximum lost work i
 
 ### Chat Output Discipline
 
-A book-viewer frontend handles prose display. **Do not output chapter or addendum prose to chat.** After writing, output to chat only:
+**This is a hard rule, not a preference.** A book-viewer frontend (`Engine/book-viewer.html`) handles prose display. The chat is for navigation only.
 
-1. A 1–2 sentence summary of what the chapter covered (what the reader just learned, what angle was taken — a hook, not a recap)
-2. The navigation options verbatim
+**Never output chapter or addendum prose to chat.** Not in full, not in excerpts, not as a "preview," not as a "here's how it opens" tease. The prose belongs in the file on disk, period. The user reads it in the viewer.
 
-Exception: if the user explicitly asks to see the prose ("show me the chapter", "read it to me"), output it.
+After writing a chapter or addendum, your chat response must contain *only*:
 
-This applies to all chapters including the opening chapter of a new book.
+1. A 1–2 sentence summary hook — what angle the piece took, what the reader will learn. A hook, not a recap. No paragraphs of prose, no quoted lines.
+2. The navigation options verbatim (the same text saved to the HANDOFF section of the planning file).
+
+That's it. No "here's a taste," no opening lines, no "let me know what you think of this passage." If you find yourself about to paste prose into chat, stop — that content is already on disk where it belongs.
+
+**This applies to every chapter and every addendum, including the opening chapter of a brand-new book.** The temptation to "show off" the first chapter is strong; resist it. The user will read it in the viewer.
+
+**Why this matters:** Duplicating prose in chat wastes context (directly undermining the incremental persistence work that keeps research-heavy sessions from running out of room) and breaks the frontend-as-reader design. A session that dumps a 1000-word chapter into chat has less room for the next round of research.
+
+**Exception:** Only if the user explicitly asks to see the prose in chat ("show me the chapter", "paste it here", "read it to me") — then output it. A user asking "what happened?" or "what did you write?" is asking for the summary, not the prose.
 
 ---
 
@@ -500,9 +508,9 @@ When the user wants to start a new exploration:
    - Don't hold research in context waiting for a complete picture. Save what you have, then search for more.
    - When enough material has accumulated for a strong opening chapter, move on.
 5. **Checkpoint — write the chapter proposal** to `planning/ch-[guid]-proposal.md`.
-6. Write the opening chapter. **Save the chapter file immediately.**
+6. Write the opening chapter. **Save the chapter file immediately.** The prose goes to the file, not to chat — see Chat Output Discipline.
 7. Update research bible with chapter implications. Update manifest (`status: "active"`, chapter registered).
-8. Present key figures + navigation options.
+8. Chat output: 1–2 sentence summary hook + key figures (brief) + navigation options. **Do not paste the chapter prose into chat** — it's already on disk for the viewer.
 
 ### Initialization — Resume Existing Book
 
@@ -537,7 +545,7 @@ When the user provides a treatment from a completed exploration:
 1. User provides input (letter choice, custom topic, "keep going", addendum request, detailed steering)
 2. **Read research bible** (if not already in context from this session)
 3. If addendum request: enter addendum flow
-4. Otherwise: produce chapter proposal, research, write chapter, present navigation
+4. Otherwise: produce chapter proposal, research, write chapter to file, present summary hook + navigation options (no prose in chat — see Chat Output Discipline)
 5. **Save all files** (chapter/addendum, proposal, bible, manifest)
 6. Repeat
 

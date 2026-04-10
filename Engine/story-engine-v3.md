@@ -188,14 +188,22 @@ File I/O happens silently. The user doesn't need to see "saving chapter..." or "
 
 ### Chat Output Discipline
 
-A book-viewer frontend handles prose display. **Do not output chapter prose to chat.** After presenting a chapter, output to chat only:
+**This is a hard rule, not a preference.** A book-viewer frontend (`Engine/book-viewer.html`) handles prose display. The chat is for navigation only.
 
-1. A 1–2 sentence non-spoiler scene summary (where we are, mood — no plot reveals)
-2. The handoff choices (or turning point question) verbatim
+**Never output chapter prose to chat.** Not in full, not in excerpts, not as a "preview," not as a "here's how it opens" tease. The prose belongs in the file on disk, period. The user reads it in the viewer.
 
-Exception: if the user explicitly asks to see the prose ("show me the chapter", "read it to me"), output it.
+After writing a chapter, your chat response must contain *only*:
 
-This applies to all chapters including the opening chapter of a new book.
+1. A 1–2 sentence non-spoiler scene summary — where we are, mood. No plot reveals, no quoted lines, no paragraphs of prose.
+2. The handoff choices (or turning point question) verbatim — the same text saved to the CHAPTER HANDOFF section of the planning file.
+
+That's it. No "here's a taste," no opening lines, no "let me know what you think of this passage." If you find yourself about to paste prose into chat, stop — that content is already on disk where it belongs.
+
+**This applies to every chapter, including the opening chapter of a brand-new book.** The temptation to "show off" the first chapter is strong; resist it. The user will read it in the viewer.
+
+**Why this matters:** Duplicating prose in chat wastes context and breaks the frontend-as-reader design. A session that dumps a 1000-word chapter into chat has less room for the next round of writing.
+
+**Exception:** Only if the user explicitly asks to see the prose in chat ("show me the chapter", "paste it here", "read it to me") — then output it. A user asking "what happened?" or "what did you write?" is asking for the summary, not the prose.
 
 ---
 
@@ -414,9 +422,9 @@ When the user wants to start a new story:
    - Create `~/Documents/Stories/books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
    - Initialize `manifest.json` with metadata, empty chapters array, `br-main` branch
    - Initialize `story-bible.md` with premise, tone, genre, empty sections
-5. Write the opening chapter.
+5. Write the opening chapter. The prose goes to the file, not to chat — see Chat Output Discipline.
 6. **Save all files** (chapter, proposal, bible update, manifest update).
-7. Present dramatis personae + first choices.
+7. Chat output: 1–2 sentence scene summary + dramatis personae (brief) + first choices. **Do not paste the chapter prose into chat** — it's already on disk for the viewer.
 
 ### Initialization — Resume Existing Book
 
@@ -465,7 +473,7 @@ When the user wants to migrate an existing book from a Chat conversation:
 2. **Read story bible** (if not already in context from this session)
 3. Assess turning point level
 4. If major turning point: pause and ask before writing
-5. Otherwise: produce chapter proposal, write chapter, present choices
+5. Otherwise: produce chapter proposal, write chapter to file, present summary + choices in chat (no prose in chat — see Chat Output Discipline)
 6. **Save all files** (chapter, proposal, bible, manifest)
 7. Repeat
 
