@@ -6,8 +6,8 @@
   "tone": "Immersive, grounded, sensory",
   "perspective": "3rd person",
   "created": "2026-04-07T15:48:08Z",
-  "last_modified": "2026-04-07T15:48:08Z",
-  "current_chapter": 12,
+  "last_modified": "2026-04-11T00:00:00Z",
+  "current_chapter": 13,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -112,6 +112,14 @@
       "file": "chapters/12.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 2119
+    },
+    {
+      "number": 13,
+      "branch": "main",
+      "title": "Four Words for Rope",
+      "file": "chapters/13.md",
+      "written": "2026-04-11T00:00:00Z",
+      "word_count": 1850
     }
   ],
   "treatment_source": null

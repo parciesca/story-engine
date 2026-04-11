@@ -28,7 +28,13 @@ DRAMATIS PERSONAE
     Status: active in Bursa. Relationship with Cornelis established — has assessed him as adequate, which means the door is open.
 
   Kemal — Han keeper, Sivas. Sardonic, accurate. Regards the world with the amusement of someone who has seen its repetitions. Switches between Turkish and trading Italian with ease. Distinguishes between problems (solvable) and conditions (managed).
-    Status: active in Sivas. Currently hosting the caravan. Has intelligence about the road east that has not yet been delivered.
+    Status: active in Sivas. Host during the caravan's Sivas stay. Has revised his initial assessment of Cornelis upward on the strength of the Halil report.
+
+  Rüstem — Merchant, experienced on the Sivas–Erzurum road. Broad-shouldered, settled, the confidence of a man whose concerns have been reduced to a manageable short list. Speaks with the dry qualification of someone who believes absence of reports is not the same as absence of danger. Pulled in by Kemal as the informed voice on current conditions. Teaches by blunt practical counsel: on this road, you listen to the horse.
+    Status: active. Joining the caravan forming out of Sivas for the Erzurum road — likely primary travel companion on the mountain stretch.
+
+  Halil — Old rope merchant, Sivas. Seventy or more, deliberate, patient. Finds instruction a form of commerce in itself. Speaks the older, more granular Sivas Turkish. Reported Cornelis approvingly to Kemal after the rope transaction — a minor but meaningful endorsement.
+    Status: thread closed. One-encounter mentor; his lesson (four words where Cornelis brought one) is now a generalized principle in Cornelis's ledger.
 
   Ibrahim — Cloth merchant. Travelled with caravan to İznik. Mild, avuncular. Found Cornelis mildly amusing.
     Status: departed at İznik. Minor character, closed thread.
@@ -69,6 +75,7 @@ WORLD RULES
   — The layers of Turkish formality (formal/informal/archaic) are as important as the words themselves.
   — The call to prayer marks time on the road. The caravan adjusts around it without formality.
   — In Ottoman commercial culture, a reputation for paying what you said you would pay is a form of currency more durable than silver.
+  — Language granularity follows the demands of the road. Where the western plateau has one word, the eastern city may have four — more specific tools, more specific distinctions. Sivas speaks an older, more granular Turkish than Kayseri; the Erzurum side has more distinctions still. Assume this about everything east.
 
   Ottoman Political Context
   — Early 1600s: Janissary tensions with central authority are present and surfacing, particularly felt in Konya. Merchants navigate this by careful positioning — warmth without entanglement.
@@ -108,10 +115,10 @@ UNRESOLVED TENSIONS
 
 TIMELINE & STATE
 
-  Current location: Sivas. First evening at Kemal's han.
+  Current location: Sivas. Afternoon of the day before dawn departure for the Erzurum road.
   Time position: Early spring, approximately 1603–1604.
-    (Story opened late April; nine months elapsed across twelve chapters.)
-  Current company: Yusuf, Mehmet, two original guards, plus any additional caravan members forming for the Erzurum road. Adem remains in Kayseri.
+    (Story opened late April; approximately nine months and a week elapsed across thirteen chapters.)
+  Current company: Yusuf, Mehmet, two original guards, joining a Sivas caravan of some twenty merchants plus pilgrims, rotating soldiers, and unspecified travellers. Rüstem among them as experienced road voice. Adem remains in Kayseri.
 
   Key events by chapter:
 
@@ -140,6 +147,8 @@ TIMELINE & STATE
     Ch 11: What Adem Knew About Tabriz — Three evenings: Adem's full account of Tabriz. The Safavid transit economy, Gilan silk, the qaysariyya market. Cornelis's role defined: dalāl introduced. Yusuf confirms in the courtyard. Reveals he has been to Tabriz once, twelve years ago. Has something further east. Cornelis writes: *I am not afraid. I have noted this.*
 
     Ch 12: The Last Morning, and the Road to Sivas — Final Kayseri morning. Carpet workshop: Adem examines new piece, finds imperfection Cornelis can now also find. Adem articulates dalāl fully: the man who carries the true price. Departure from Kayseri. Road to Sivas. Sivas arrived day six. Kemal introduced. Problems vs. conditions. Han door swings behind them. Road east waits.
+
+    Ch 13: Four Words for Rope — Morning in the Sivas market. Easy transactions (salt, apricots, oil, blanket, copper pot) establish functional competence; then the rope shop. Halil, old and patient, corrects Cornelis's single *ip* into four words: *urgan, sicim, kendir, kolan.* Cornelis internalizes the principle — granular language for a more demanding road. Afternoon briefing with Kemal, Yusuf, and Rüstem (experienced Erzurum-road merchant): conditions workable, caravan of twenty forming for dawn departure. Kemal notes that Halil spoke approvingly of the Dutchman. Ledger note: *Assume this about everything east of here.*
 
 READER PROMISES
 
