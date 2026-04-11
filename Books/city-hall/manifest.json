@@ -1,5 +1,4 @@
 {
-  "id": "bk-4919ff51",
   "title": "City Hall",
   "slug": "city-hall",
   "status": "active",
@@ -8,11 +7,10 @@
   "perspective": "3rd person",
   "created": "2026-04-08T00:00:00Z",
   "last_modified": "2026-04-08T00:00:00Z",
-  "current_chapter": "ch-3fd38a17",
-  "active_branch": "br-main",
+  "current_chapter": 1,
+  "active_branch": "main",
   "branches": {
-    "br-main": {
-      "name": "main",
+    "main": {
       "forked_from": null,
       "forked_at_chapter": null,
       "created": "2026-04-08T00:00:00Z"
@@ -20,11 +18,10 @@
   },
   "chapters": [
     {
-      "id": "ch-3fd38a17",
       "number": 1,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Building on Maple",
-      "file": "chapters/01-ch-3fd38a17.md",
+      "file": "chapters/01.md",
       "written": "2026-04-08",
       "word_count": 1120
     }

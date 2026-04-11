@@ -1,5 +1,4 @@
 {
-  "id": "bk-a30e2c0b",
   "title": "Alone on the Bosphorus",
   "slug": "alone-on-the-bosphorus",
   "status": "active",
@@ -8,11 +7,10 @@
   "perspective": "3rd person",
   "created": "2026-04-07T15:48:08Z",
   "last_modified": "2026-04-07T15:48:08Z",
-  "current_chapter": "ch-27310cf8",
-  "active_branch": "br-main",
+  "current_chapter": 12,
+  "active_branch": "main",
   "branches": {
-    "br-main": {
-      "name": "main",
+    "main": {
       "forked_from": null,
       "forked_at_chapter": null,
       "created": "2026-04-07T15:48:08Z"
@@ -20,110 +18,98 @@
   },
   "chapters": [
     {
-      "id": "ch-96f0f2ac",
       "number": 1,
-      "branch": "br-main",
+      "branch": "main",
       "title": "What the Straits Keep",
-      "file": "chapters/01-ch-96f0f2ac.md",
+      "file": "chapters/01.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1143
     },
     {
-      "id": "ch-c8ab8997",
       "number": 2,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Consul's Ledger and the Road East",
-      "file": "chapters/02-ch-c8ab8997.md",
+      "file": "chapters/02.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1406
     },
     {
-      "id": "ch-7e262a16",
       "number": 3,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Road to Bursa",
-      "file": "chapters/03-ch-7e262a16.md",
+      "file": "chapters/03.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1589
     },
     {
-      "id": "ch-2732a78a",
       "number": 4,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Language of Silk",
-      "file": "chapters/04-ch-2732a78a.md",
+      "file": "chapters/04.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1909
     },
     {
-      "id": "ch-0536f5d9",
       "number": 5,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Plateau",
-      "file": "chapters/05-ch-0536f5d9.md",
+      "file": "chapters/05.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1855
     },
     {
-      "id": "ch-7bf5102c",
       "number": 6,
-      "branch": "br-main",
+      "branch": "main",
       "title": "Konya",
-      "file": "chapters/06-ch-7bf5102c.md",
+      "file": "chapters/06.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1607
     },
     {
-      "id": "ch-18b1d1e1",
       "number": 7,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Game at Karapınar",
-      "file": "chapters/07-ch-18b1d1e1.md",
+      "file": "chapters/07.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 2003
     },
     {
-      "id": "ch-4aef4426",
       "number": 8,
-      "branch": "br-main",
+      "branch": "main",
       "title": "Kayseri",
-      "file": "chapters/08-ch-4aef4426.md",
+      "file": "chapters/08.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 1901
     },
     {
-      "id": "ch-cfad77c6",
       "number": 9,
-      "branch": "br-main",
+      "branch": "main",
       "title": "What the Ledgers Said",
-      "file": "chapters/09-ch-cfad77c6.md",
+      "file": "chapters/09.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 2003
     },
     {
-      "id": "ch-43387dbc",
       "number": 10,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Winter Accounts",
-      "file": "chapters/10-ch-43387dbc.md",
+      "file": "chapters/10.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 2238
     },
     {
-      "id": "ch-b7231b40",
       "number": 11,
-      "branch": "br-main",
+      "branch": "main",
       "title": "What Adem Knew About Tabriz",
-      "file": "chapters/11-ch-b7231b40.md",
+      "file": "chapters/11.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 2018
     },
     {
-      "id": "ch-27310cf8",
       "number": 12,
-      "branch": "br-main",
+      "branch": "main",
       "title": "The Last Morning, and the Road to Sivas",
-      "file": "chapters/12-ch-27310cf8.md",
+      "file": "chapters/12.md",
       "written": "2026-04-07T15:48:08Z",
       "word_count": 2119
     }
