@@ -7,7 +7,7 @@ Usage:
                                       [--genre "Genre"] [--tone "Tone"]
                                       [--perspective "3rd person"]
                                       [--treatment treatment.md]
-                                      [--out ~/Documents/Stories/books/<slug>]
+                                      [--out ~/Documents/Stories/Books/<slug>]
                                       [--status completed|active]
                                       [--dry-run]
 
@@ -21,7 +21,7 @@ Heading detection patterns (in order of priority):
     ## Chapter N: Title
     # Chapter N: Title
 
-If --out is not specified, defaults to ~/Documents/Stories/books/<slug>/
+If --out is not specified, defaults to ~/Documents/Stories/Books/<slug>/
 
 Examples:
     # Minimal — auto-detect everything from the file
@@ -39,7 +39,6 @@ import argparse
 import json
 import os
 import re
-import secrets
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -52,10 +51,6 @@ def slugify(title: str) -> str:
     s = re.sub(r"[\s_]+", "-", s)
     s = re.sub(r"-+", "-", s)
     return s.strip("-")
-
-
-def generate_guid() -> str:
-    return secrets.token_hex(4)
 
 
 def find_sections(text: str):
@@ -141,7 +136,7 @@ def main():
     parser.add_argument("--tone", default="", help="Tone description")
     parser.add_argument("--perspective", default="3rd person", help="Narrative perspective")
     parser.add_argument("--treatment", help="Path to treatment.md to copy in")
-    parser.add_argument("--out", help="Output directory (default: ~/Documents/Stories/books/<slug>/)")
+    parser.add_argument("--out", help="Output directory (default: ~/Documents/Stories/Books/<slug>/)")
     parser.add_argument("--status", default="completed", choices=["completed", "active"],
                         help="Book status")
     parser.add_argument("--dry-run", action="store_true", help="Show what would be created without writing")
@@ -191,7 +186,7 @@ def main():
     if args.out:
         out_dir = Path(args.out).resolve()
     else:
-        out_dir = Path.home() / "Documents" / "Stories" / "books" / slug
+        out_dir = Path.home() / "Documents" / "Stories" / "Books" / slug
 
     chapters_dir = out_dir / "chapters"
     planning_dir = out_dir / "planning"
@@ -202,11 +197,6 @@ def main():
     print(f"Output: {out_dir}")
     print(f"Sections found: {len(sections)}")
     print()
-
-    # Generate GUIDs
-    book_guid = generate_guid()
-    for sec in sections:
-        sec["guid"] = generate_guid()
 
     # Extract prose for each section
     for i, sec in enumerate(sections):
@@ -219,9 +209,8 @@ def main():
     # Display plan
     total_words = 0
     for sec in sections:
-        prefix = "  "
-        fname = f"{sec['file_num']:02d}-ch-{sec['guid']}.md"
-        print(f"{prefix}{fname} — {sec['title']} ({sec['word_count']} words)")
+        fname = f"{sec['file_num']:02d}.md"
+        print(f"  {fname} — {sec['title']} ({sec['word_count']} words)")
         total_words += sec["word_count"]
     print(f"\nTotal: {total_words} words across {len(sections)} files")
 
@@ -236,15 +225,14 @@ def main():
     # Write chapter files
     chapter_entries = []
     for sec in sections:
-        fname = f"{sec['file_num']:02d}-ch-{sec['guid']}.md"
+        fname = f"{sec['file_num']:02d}.md"
         filepath = chapters_dir / fname
 
         front_matter = (
             f"---\n"
-            f"id: ch-{sec['guid']}\n"
             f"chapter: {sec['file_num']}\n"
             f"title: \"{sec['title']}\"\n"
-            f"branch: br-main\n"
+            f"branch: main\n"
             f"written: {today}\n"
             f"word_count: {sec['word_count']}\n"
             f"---"
@@ -255,9 +243,8 @@ def main():
 
         chapter_entries.append(
             {
-                "id": f"ch-{sec['guid']}",
                 "number": sec["file_num"],
-                "branch": "br-main",
+                "branch": "main",
                 "title": sec["title"],
                 "file": f"chapters/{fname}",
                 "written": now,
@@ -267,7 +254,6 @@ def main():
 
     # Build manifest
     manifest = {
-        "id": f"bk-{book_guid}",
         "title": title,
         "slug": slug,
         "status": args.status,
@@ -276,11 +262,10 @@ def main():
         "perspective": args.perspective,
         "created": now,
         "last_modified": now,
-        "current_chapter": f"ch-{sections[-1]['guid']}",
-        "active_branch": "br-main",
+        "current_chapter": sections[-1]["file_num"],
+        "active_branch": "main",
         "branches": {
-            "br-main": {
-                "name": "main",
+            "main": {
                 "forked_from": None,
                 "forked_at_chapter": None,
                 "created": now,
@@ -305,7 +290,7 @@ def main():
 
     print(f"\nMigration complete.")
     print(f"  {len(chapter_entries)} chapter files written")
-    print(f"  manifest.json created (id: bk-{book_guid})")
+    print(f"  manifest.json created (slug: {slug})")
     print(f"\nNext steps:")
     print(f"  - Write story-bible.md (requires reading the prose)")
     print(f"  - Compile book.md to verify round-trip integrity")

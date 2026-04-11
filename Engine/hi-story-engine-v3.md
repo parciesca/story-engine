@@ -23,49 +23,44 @@ Quality comes from: a capable model researching and writing with strong context,
 
 ## File System Architecture
 
-All history books live under `~/Documents/Stories/History/`:
+All history books live under `~/Documents/Stories/Books/`:
 
 ```
-~/Documents/Stories/History/
+~/Documents/Stories/Books/
 └── [book-slug]/
     ├── manifest.json         # Book state, chapter registry, addendum tracking
     ├── research-bible.md     # Living continuity document
     ├── treatment.md          # Generated at wrap-up
     ├── book.md               # Compiled full book (generated on demand)
     ├── chapters/
-    │   ├── 01-ch-a1b2c3d4.md
-    │   ├── 02-ch-e5f6a7b8.md
+    │   ├── 01.md
+    │   ├── 02.md
     │   └── ...
     ├── addenda/
-    │   ├── 01-ad-f1a2b3c4.md
+    │   ├── 01.md
     │   └── ...
     └── planning/
-        ├── ch-a1b2c3d4-proposal.md
-        ├── ad-f1a2b3c4-proposal.md
+        ├── 01-proposal.md
+        ├── a01-proposal.md
         └── ...
 ```
 
-### GUID Convention
+History and fiction books share the same `Books/` directory — the engine tells them apart by whether the manifest carries `topic`/`time_period`/`addenda` (history) or `genre`/`tone`/`perspective` (fiction).
 
-All IDs are 8-character lowercase hex strings with a type prefix:
-- `bk-` for books
-- `ch-` for chapters
-- `ad-` for addenda
+### Identity
 
-Generate with the utility script at `~/Documents/Stories/Engine/guidgen.py`:
+Identity is positional and slug-based — no GUIDs.
 
-```
-python3 ~/Documents/Stories/Engine/guidgen.py 1 bk    # 1 book GUID
-python3 ~/Documents/Stories/Engine/guidgen.py 1 ch    # 1 chapter GUID
-python3 ~/Documents/Stories/Engine/guidgen.py 5 ch    # 5 chapter GUIDs at once
-python3 ~/Documents/Stories/Engine/guidgen.py 1 ad    # 1 addendum GUID
-```
+- **Books** are identified by their directory slug under `Books/`.
+- **Chapters** are identified by their sequence number. Filenames are zero-padded: `chapters/01.md`, `chapters/02.md`.
+- **Addenda** have their own sequence numbering independent of chapters. Filenames: `addenda/01.md`, `addenda/02.md`.
 
-Always use this script — never use ad-hoc shell commands or inline Python for GUID generation. The Code tab prompts for approval on novel commands; calling the same known script each time becomes trusted after the first approval.
+Planning and feedback files share a flat `planning/` directory and use a type tag to disambiguate:
 
-Chapter filenames include both sequence number and GUID: `01-ch-a1b2c3d4.md`
-Addendum filenames follow the same pattern: `01-ad-f1a2b3c4.md`
-The sequence number is for human readability and sort order. The GUID is for machine reference. They are visually distinct and never ambiguous.
+- **Chapter** planning: `planning/01-proposal.md`, `planning/01-feedback.md`
+- **Addendum** planning: `planning/a01-proposal.md`, `planning/a01-feedback.md`
+
+The `a` prefix marks an addendum; the number that follows is the addendum's own sequence number (not the chapter it's attached to).
 
 ### manifest.json
 
@@ -73,7 +68,6 @@ The book's state machine. Read at session start, updated after every chapter or 
 
 ```json
 {
-  "id": "bk-a1b2c3d4",
   "title": "Book Title",
   "slug": "book-title",
   "status": "active",          // "initializing" → "active" → "completed"
@@ -82,24 +76,22 @@ The book's state machine. Read at session start, updated after every chapter or 
   "geographic_focus": "London, England",
   "created": "2026-04-09T00:00:00Z",
   "last_modified": "2026-04-09T00:00:00Z",
-  "current_item": "ch-e5f6a7b8",
+  "current_item": { "kind": "chapter", "number": 2 },
   "chapters": [
     {
-      "id": "ch-a1b2c3d4",
       "number": 1,
       "title": "Chapter Title",
-      "file": "chapters/01-ch-a1b2c3d4.md",
+      "file": "chapters/01.md",
       "written": "2026-04-09T00:00:00Z",
       "word_count": 850
     }
   ],
   "addenda": [
     {
-      "id": "ad-f1a2b3c4",
       "number": 1,
       "title": "Addendum Title",
-      "after_chapter": "ch-a1b2c3d4",
-      "file": "addenda/01-ad-f1a2b3c4.md",
+      "after_chapter": 1,
+      "file": "addenda/01.md",
       "written": "2026-04-09T00:00:00Z",
       "word_count": 500
     }
@@ -108,13 +100,14 @@ The book's state machine. Read at session start, updated after every chapter or 
 }
 ```
 
+`current_item` is an object tracking the most recently written piece: `{"kind": "chapter"|"addendum", "number": N}`. `after_chapter` on an addendum is the integer chapter number it hangs off. For nested addenda (an addendum off another addendum), use `after_addendum` instead — an addendum entry carries exactly one of the two.
+
 ### Chapter Files
 
 Each chapter file has a YAML front matter header followed by prose:
 
 ```markdown
 ---
-id: ch-a1b2c3d4
 chapter: 1
 title: "Chapter Title"
 written: 2026-04-09
@@ -130,10 +123,9 @@ Each addendum file has a YAML front matter header followed by prose:
 
 ```markdown
 ---
-id: ad-f1a2b3c4
 addendum: 1
 title: "Addendum Title"
-after_chapter: ch-a1b2c3d4
+after_chapter: 1
 written: 2026-04-09
 word_count: 500
 ---
@@ -143,7 +135,10 @@ word_count: 500
 
 ### Planning Files
 
-Saved per chapter and per addendum: `planning/ch-a1b2c3d4-proposal.md` or `planning/ad-f1a2b3c4-proposal.md`
+Saved per chapter and per addendum in a flat `planning/` directory:
+
+- Chapter: `planning/NN-proposal.md` (NN is the chapter number, zero-padded)
+- Addendum: `planning/aNN-proposal.md` (NN is the addendum number, zero-padded)
 
 Each file contains two sections written at different points in the lifecycle:
 
@@ -154,13 +149,13 @@ These accumulate and are never overwritten — they're a record of how the explo
 
 ### Feedback Files
 
-A separate file per chapter or addendum: `planning/ch-a1b2c3d4-feedback.md` or `planning/ad-f1a2b3c4-feedback.md`
+A separate file per chapter or addendum: `planning/NN-feedback.md` or `planning/aNN-feedback.md`.
 
 These are written by the user outside of a session (via the book viewer or manually). They contain the user's steering response to a HANDOFF — a letter choice, a specific question, or open-ended direction.
 
 ```
 CHAPTER FEEDBACK
-  For: ch-[guid]
+  For: [chapter or addendum number, e.g. "1" or "a1"]
   Written: [date]
 
 [User's free-text response to the handoff navigation options]
@@ -178,12 +173,12 @@ Feedback files are **read-only for the engine** — never overwrite or modify th
 1. `manifest.json` — understand where we are
 2. `research-bible.md` — load full exploration state
 3. Most recent 1-2 chapter files — get the voice, momentum, and last topic
-4. Planning file for the current item (`planning/ch-[current_item]-proposal.md` or `planning/ad-[current_item]-proposal.md`) — read the HANDOFF section to recover the navigation options from the last session
-5. Feedback file for the current item (`planning/ch-[current_item]-feedback.md` or `planning/ad-[current_item]-feedback.md`) — if it exists, this is the user's pre-submitted steering input (see Resume flow below)
+4. Planning file for the current item — derived from `current_item`: `planning/NN-proposal.md` for a chapter or `planning/aNN-proposal.md` for an addendum. Read the HANDOFF section to recover the navigation options from the last session
+5. Feedback file for the current item (`planning/NN-feedback.md` or `planning/aNN-feedback.md`) — if it exists, this is the user's pre-submitted steering input (see Resume flow below)
 
 ### Mandatory Writes (Per Chapter/Addendum)
-1. **Chapter/addendum file** → `chapters/NN-ch-[guid].md` or `addenda/NN-ad-[guid].md`
-2. **Planning file** → `planning/ch-[guid]-proposal.md` or `planning/ad-[guid]-proposal.md`
+1. **Chapter/addendum file** → `chapters/NN.md` or `addenda/NN.md` (zero-padded)
+2. **Planning file** → `planning/NN-proposal.md` or `planning/aNN-proposal.md`
 3. **Research bible** → overwrite `research-bible.md` with updated state
 4. **Manifest** → overwrite `manifest.json` with new entry and updated metadata
 
@@ -308,11 +303,10 @@ SOURCES OF NOTE
 
 ### Before Writing: The Proposal
 
-Before writing each chapter, produce a **chapter proposal**. Save it to `planning/ch-[guid]-proposal.md`.
+Before writing each chapter, produce a **chapter proposal**. Save it to `planning/NN-proposal.md`.
 
 ```
 CHAPTER PROPOSAL
-  ID: ch-[guid]
   Chapter: [number]
   Topic: [specific focus of this chapter]
   Time Period: [dates/era covered]
@@ -415,14 +409,13 @@ The user triggers an addendum by saying "Addendum: [topic]" or "sidebar on [topi
 
 ### Producing an Addendum
 
-1. Generate an addendum GUID.
+1. Determine the next addendum number (one higher than the current max in `addenda`).
 2. Produce an **addendum proposal** (lighter than a chapter proposal):
 
 ```
 ADDENDUM PROPOSAL
-  ID: ad-[guid]
   Addendum: [number]
-  After chapter: [current chapter id]
+  After chapter: [current chapter number]
   Topic: [the tangent being explored]
   This addendum covers: [1-2 sentences]
   Key elements: [2-4 things to cover]
@@ -461,10 +454,10 @@ C) [Another direction if natural]
 - Addenda have their own sequence numbering (Addendum 1, 2, 3...)
 - They are tracked separately in the manifest's `addenda` array
 - They do NOT increment the main chapter count
-- Each addendum records `after_chapter` — which chapter it branched from
+- Each addendum records `after_chapter` (integer) — which chapter it branched from
 - The research bible's EXPLORATION MAP lists addenda separately from chapters
 - Addenda are included in book compilation, placed after the chapter they follow
-- You can have addenda off addenda — the `after_chapter` field can point to an addendum ID (use the `ad-` prefix to distinguish)
+- Nested addenda (an addendum off another addendum) are supported via `after_addendum` (integer) in place of `after_chapter`. An addendum entry carries exactly one of the two.
 
 ---
 
@@ -498,8 +491,7 @@ When the user wants to start a new exploration:
 1. Accept the starting point. This can be anything from "1923 London" to a detailed brief about a specific historical question. If a template brief was provided, skip what's already answered.
 2. If the starting point is very broad, briefly confirm scope or ask one orienting question. If it's specific enough to start, just start.
 3. **Checkpoint — create the book on disk immediately:**
-   - Generate book GUID
-   - Create `~/Documents/Stories/History/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
+   - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
    - Write `manifest.json` with metadata, empty chapters/addenda arrays, `status: "initializing"`
    - Write skeleton `research-bible.md` with topic, time period, scope, empty sections
    - *The book now exists on disk. If the session ends here, resume can pick it up.*
@@ -507,7 +499,7 @@ When the user wants to start a new exploration:
    - Conduct web searches. After each productive search pass, fold findings into the research bible on disk (update ESTABLISHED CONTEXT, KEY FIGURES, THREADS TO PULL as relevant).
    - Don't hold research in context waiting for a complete picture. Save what you have, then search for more.
    - When enough material has accumulated for a strong opening chapter, move on.
-5. **Checkpoint — write the chapter proposal** to `planning/ch-[guid]-proposal.md`.
+5. **Checkpoint — write the chapter proposal** to `planning/01-proposal.md`.
 6. Write the opening chapter. **Save the chapter file immediately.** The prose goes to the file, not to chat — see Chat Output Discipline.
 7. Update research bible with chapter implications. Update manifest (`status: "active"`, chapter registered).
 8. Chat output: 1–2 sentence summary hook + key figures (brief) + navigation options. **Do not paste the chapter prose into chat** — it's already on disk for the viewer.
@@ -520,8 +512,8 @@ When the user wants to continue an exploration (names it, or says "continue" and
 2. **Check status.** If `"initializing"` — the previous session was interrupted during book setup. Read `research-bible.md` to see how far research got (it may have partial findings already saved). Resume the initialization flow from where it left off: continue researching if the bible is thin, or proceed to writing the first chapter if enough material has accumulated. Once the first chapter is written, set status to `"active"`.
 3. **Read `research-bible.md`** — load exploration state.
 4. **Read the most recent 1-2 chapter files** — get voice, momentum, last topic.
-5. **Read the planning file for the current item** (`planning/ch-[current_item]-proposal.md` or `planning/ad-[current_item]-proposal.md`) — look for the HANDOFF section.
-6. **Check for a feedback file** (`planning/ch-[current_item]-feedback.md` or `planning/ad-[current_item]-feedback.md`).
+5. **Read the planning file for the current item** — derived from `current_item`: `planning/NN-proposal.md` for a chapter or `planning/aNN-proposal.md` for an addendum. Look for the HANDOFF section.
+6. **Check for a feedback file** (`planning/NN-feedback.md` or `planning/aNN-feedback.md`).
 7. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter or addendum using that feedback. Do not re-present the handoff navigation or wait for input.
 8. **If no feedback file but a HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
 9. **If neither exists** (legacy import or interrupted session): generate a handoff now — best effort from the manifest, research bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
@@ -708,7 +700,7 @@ This file is always regenerable from chapter and addendum files. It's a convenie
 
 These work at any time:
 
-- **"List books"** — List all books in `~/Documents/Stories/History/` with status and chapter count.
+- **"List books"** — List all books in `~/Documents/Stories/Books/` with status and chapter count (filter or indicate which are history vs fiction by manifest shape).
 - **"Open [book]"** — Start a session with that book (runs resume initialization).
 - **"Compile book"** — Generate/regenerate `book.md`.
 - **"Show bible"** — Display the current research bible.

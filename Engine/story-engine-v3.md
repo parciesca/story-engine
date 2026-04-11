@@ -16,53 +16,43 @@ Quality comes from: a capable model writing with strong context, clear guardrail
 
 ## File System Architecture
 
-All books live under `~/Documents/Stories/`:
+All books live under `~/Documents/Stories/Books/`:
 
 ```
-~/Documents/Stories/
-├── books/
-│   └── [book-slug]/
-│       ├── manifest.json         # Book state, chapter registry, branch tracking
-│       ├── story-bible.md        # Living continuity document
-│       ├── treatment.md          # Imported seed OR generated at wrap-up
-│       ├── book.md               # Compiled full book (generated on demand)
-│       ├── chapters/
-│       │   ├── 01-ch-a1b2c3d4.md
-│       │   ├── 02-ch-e5f6a7b8.md
-│       │   └── ...
-│       ├── planning/
-│       │   ├── ch-a1b2c3d4-proposal.md
-│       │   └── ...
-│       └── branches/
-│           └── br-[guid]/
-│               ├── story-bible.md
-│               ├── chapters/
-│               │   └── NN-ch-[guid].md
-│               └── planning/
-│                   └── ...
-└── archive/                      # Completed books (moved here optionally)
+~/Documents/Stories/Books/
+└── [book-slug]/
+    ├── manifest.json         # Book state, chapter registry, branch tracking
+    ├── story-bible.md        # Living continuity document
+    ├── treatment.md          # Imported seed OR generated at wrap-up
+    ├── book.md               # Compiled full book (generated on demand)
+    ├── chapters/
+    │   ├── 01.md
+    │   ├── 02.md
+    │   └── ...
+    ├── planning/
+    │   ├── 01-proposal.md
+    │   ├── 01-feedback.md
+    │   └── ...
+    └── branches/
+        └── [branch-slug]/
+            ├── story-bible.md
+            ├── chapters/
+            │   └── NN.md
+            └── planning/
+                └── ...
 ```
 
-### GUID Convention
+### Identity
 
-All IDs are 8-character lowercase hex strings with a type prefix:
-- `bk-` for books
-- `ch-` for chapters
-- `br-` for branches
+Identity is positional and slug-based — no GUIDs.
 
-Generate with the utility script at `~/Documents/Stories/Engine/guidgen.py`:
+- **Books** are identified by their directory slug under `Books/`.
+- **Chapters** are identified by their sequence number within a branch. Filenames are zero-padded: `chapters/01.md`, `chapters/02.md`, `chapters/13.md`.
+- **Branches** are identified by a slug the user provides at fork time. The main branch is always `main`.
 
-```
-python3 ~/Documents/Stories/Engine/guidgen.py 1 bk    # 1 book GUID
-python3 ~/Documents/Stories/Engine/guidgen.py 1 ch    # 1 chapter GUID
-python3 ~/Documents/Stories/Engine/guidgen.py 5 ch    # 5 chapter GUIDs at once
-python3 ~/Documents/Stories/Engine/guidgen.py 1 br    # 1 branch GUID
-```
+Planning and feedback files mirror the chapter number: `planning/01-proposal.md`, `planning/01-feedback.md`.
 
-Always use this script — never use ad-hoc shell commands or inline Python for GUID generation. The Code tab prompts for approval on novel commands; calling the same known script each time becomes trusted after the first approval.
-
-Chapter filenames include both sequence number and GUID: `01-ch-a1b2c3d4.md`
-The sequence number is for human readability and sort order. The GUID is for machine reference. They are visually distinct and never ambiguous.
+Sequence numbering is scoped to the branch directory — main's `chapters/05.md` and a branch's `chapters/05.md` are different files and never collide because they live in different directories.
 
 ### manifest.json
 
@@ -70,7 +60,6 @@ The book's state machine. Read at session start, updated after every chapter.
 
 ```json
 {
-  "id": "bk-a1b2c3d4",
   "title": "Book Title",
   "slug": "book-title",
   "status": "active",
@@ -79,11 +68,10 @@ The book's state machine. Read at session start, updated after every chapter.
   "perspective": "3rd person",
   "created": "2026-04-06T00:00:00Z",
   "last_modified": "2026-04-06T00:00:00Z",
-  "current_chapter": "ch-e5f6a7b8",
-  "active_branch": "br-main",
+  "current_chapter": 1,
+  "active_branch": "main",
   "branches": {
-    "br-main": {
-      "name": "main",
+    "main": {
       "forked_from": null,
       "forked_at_chapter": null,
       "created": "2026-04-06T00:00:00Z"
@@ -91,11 +79,10 @@ The book's state machine. Read at session start, updated after every chapter.
   },
   "chapters": [
     {
-      "id": "ch-a1b2c3d4",
       "number": 1,
-      "branch": "br-main",
+      "branch": "main",
       "title": "Chapter Title",
-      "file": "chapters/01-ch-a1b2c3d4.md",
+      "file": "chapters/01.md",
       "written": "2026-04-06T00:00:00Z",
       "word_count": 1050
     }
@@ -104,16 +91,17 @@ The book's state machine. Read at session start, updated after every chapter.
 }
 ```
 
+`current_chapter` is an integer — the sequence number of the most recently written chapter on the active branch. `active_branch` is the branch slug. The `branches` map is keyed by slug; `main` is the default branch and is always present.
+
 ### Chapter Files
 
 Each chapter file has a YAML front matter header followed by prose:
 
 ```markdown
 ---
-id: ch-a1b2c3d4
 chapter: 1
 title: "Chapter Title"
-branch: br-main
+branch: main
 written: 2026-04-06
 word_count: 1050
 ---
@@ -123,7 +111,7 @@ word_count: 1050
 
 ### Planning Files
 
-Saved per chapter: `planning/ch-a1b2c3d4-proposal.md`
+Saved per chapter: `planning/01-proposal.md` (number matches the chapter it belongs to).
 
 Each file contains two sections written at different points in the chapter lifecycle:
 
@@ -134,13 +122,13 @@ These accumulate and are never overwritten — they're a record of how the story
 
 ### Feedback Files
 
-A separate file per chapter: `planning/ch-a1b2c3d4-feedback.md`
+A separate file per chapter: `planning/01-feedback.md`
 
 These are written by the user outside of a session (via the book viewer or manually). They contain the user's steering response to a CHAPTER HANDOFF — the same kind of input the user would give in a chat prompt (a letter choice, custom direction, or open-ended steering).
 
 ```
 CHAPTER FEEDBACK
-  For: ch-[guid]
+  For: [chapter number]
   Written: [date]
 
 [User's free-text response to the handoff choices]
@@ -158,12 +146,12 @@ Feedback files are **read-only for the engine** — never overwrite or modify th
 1. `manifest.json` — understand where we are
 2. `story-bible.md` — load full continuity state
 3. Most recent 1-2 chapter files — get the voice, momentum, and last scene
-4. Planning file for the current chapter (`planning/ch-[current_chapter]-proposal.md`) — read the CHAPTER HANDOFF section to recover the choices or turning point question from the last session
-5. Feedback file for the current chapter (`planning/ch-[current_chapter]-feedback.md`) — if it exists, this is the user's pre-submitted steering input (see Resume flow below)
+4. Planning file for the current chapter (`planning/NN-proposal.md` where NN is `current_chapter` zero-padded) — read the CHAPTER HANDOFF section to recover the choices or turning point question from the last session
+5. Feedback file for the current chapter (`planning/NN-feedback.md`) — if it exists, this is the user's pre-submitted steering input (see Resume flow below)
 
 ### Mandatory Writes (Per Chapter)
-1. **Chapter file** → `chapters/NN-ch-[guid].md`
-2. **Planning file** → `planning/ch-[guid]-proposal.md`
+1. **Chapter file** → `chapters/NN.md` (NN is the chapter number, zero-padded)
+2. **Planning file** → `planning/NN-proposal.md`
 3. **Story bible** → overwrite `story-bible.md` with updated state
 4. **Manifest** → overwrite `manifest.json` with new chapter entry and updated metadata
 
@@ -261,7 +249,7 @@ READER PROMISES
 
 **Branch bibles:** Each branch has its own `story-bible.md`. When a branch is created, the current bible is copied to the branch directory as its starting state. After that, each branch's bible evolves independently.
 
-**Which bible to read:** Check `active_branch` in the manifest. If it's `br-main`, read `story-bible.md` in the book root. If it's any other branch, read `branches/[branch-id]/story-bible.md`.
+**Which bible to read:** Check `active_branch` in the manifest. If it's `main`, read `story-bible.md` in the book root. If it's any other branch slug, read `branches/[branch-slug]/story-bible.md`.
 
 ---
 
@@ -269,13 +257,12 @@ READER PROMISES
 
 ### Before Writing: The Proposal
 
-Before writing each chapter, produce a **chapter proposal**. Save it to `planning/ch-[guid]-proposal.md` (or `branches/[branch-id]/planning/...` if on a branch).
+Before writing each chapter, produce a **chapter proposal**. Save it to `planning/NN-proposal.md` (or `branches/[branch-slug]/planning/...` if on a branch).
 
 ```
 CHAPTER PROPOSAL
-  ID: ch-[guid]
   Chapter: [number]
-  Branch: [branch id]
+  Branch: [branch slug]
   Follows from: [user's choice/direction]
   This chapter accomplishes: [1-2 sentences]
   Key beats: [3-6 moments to hit]
@@ -418,9 +405,8 @@ When the user wants to start a new story:
 2. Ask for perspective preference if not specified (3rd person default, 2nd person CYOA-style available).
 3. Optional: tone/theme notes, content preferences, anything they want to establish.
 4. **Create the book directory:**
-   - Generate book GUID
-   - Create `~/Documents/Stories/books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
-   - Initialize `manifest.json` with metadata, empty chapters array, `br-main` branch
+   - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
+   - Initialize `manifest.json` with metadata, empty chapters array, and a `main` branch entry
    - Initialize `story-bible.md` with premise, tone, genre, empty sections
 5. Write the opening chapter. The prose goes to the file, not to chat — see Chat Output Discipline.
 6. **Save all files** (chapter, proposal, bible update, manifest update).
@@ -433,8 +419,8 @@ When the user wants to continue a book (names it, or says "continue" and there's
 1. **Read `manifest.json`** — understand the book state, chapter count, active branch.
 2. **Read the active branch's `story-bible.md`** — load continuity.
 3. **Read the most recent 1-2 chapter files** — get voice, momentum, last scene.
-4. **Read the planning file for the current chapter** (`planning/ch-[current_chapter]-proposal.md`) — look for the CHAPTER HANDOFF section.
-5. **Check for a feedback file** (`planning/ch-[current_chapter]-feedback.md`).
+4. **Read the planning file for the current chapter** (`planning/NN-proposal.md` where NN is `current_chapter` zero-padded) — look for the CHAPTER HANDOFF section.
+5. **Check for a feedback file** (`planning/NN-feedback.md`).
 6. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter using that feedback as the user's input — same as if they had typed it in the chat. Do not re-present the handoff choices or wait for input.
 7. **If no feedback file but a CHAPTER HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
 8. **If neither exists** (legacy import, interrupted session, or migration): generate a handoff now — best effort from the manifest, story bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
@@ -458,13 +444,13 @@ When the user provides a treatment (file or pasted text):
 When the user wants to migrate an existing book from a Chat conversation:
 
 1. **Create the book directory.**
-2. **Accept chapter prose** — the user will paste chapter text. Save each as a numbered chapter file with a generated GUID.
+2. **Accept chapter prose** — the user will paste chapter text. Save each as a numbered chapter file (`chapters/NN.md`) in sequence order.
 3. **After all chapters are populated**, read them in order and synthesize:
    - `story-bible.md` from the accumulated narrative state
    - `treatment.md` if the book is completed, or skip if active
 4. **Build the manifest** from what was populated.
 5. **Orient** — confirm the reconstructed state with the user and ask for corrections.
-6. If the book is active: generate a CHAPTER HANDOFF for the current (final) chapter — best effort from the manifest, story bible, and last two chapters. Write it to `planning/ch-[current_chapter]-proposal.md`. This becomes the resume anchor going forward.
+6. If the book is active: generate a CHAPTER HANDOFF for the current (final) chapter — best effort from the manifest, story bible, and last two chapters. Write it to `planning/NN-proposal.md` (NN is `current_chapter` zero-padded). This becomes the resume anchor going forward.
 7. If the book is completed, mark as archived.
 
 ### Ongoing Loop
@@ -505,16 +491,15 @@ Branching lets the user fork the story at any point and explore an alternate pat
 
 When the user says "branch here" or "what if instead...":
 
-1. Generate a branch GUID.
-2. Ask for a branch name (or accept what they've given).
-3. Create `branches/br-[guid]/` with `chapters/` and `planning/` subdirectories.
-4. **Copy the current story bible** to `branches/br-[guid]/story-bible.md`.
-5. Update `manifest.json`:
-   - Add the branch to `branches` with `forked_from` and `forked_at_chapter` set
-   - Set `active_branch` to the new branch
-6. Proceed — the next chapter goes into the branch's `chapters/` directory.
+1. Ask for a branch name and slugify it (e.g. "what if Marcus dies" → `what-if-marcus-dies`). If a branch with that slug already exists, ask for a different name.
+2. Create `branches/[branch-slug]/` with `chapters/` and `planning/` subdirectories.
+3. **Copy the current story bible** to `branches/[branch-slug]/story-bible.md`.
+4. Update `manifest.json`:
+   - Add the branch to `branches` keyed by slug, with `forked_from` (parent branch slug) and `forked_at_chapter` (integer) set
+   - Set `active_branch` to the new slug
+5. Proceed — the next chapter goes into the branch's `chapters/` directory.
 
-Branch chapters continue the sequence numbering from the fork point. If the branch forks after chapter 5, the first branch chapter is `06-ch-[guid].md`.
+Branch chapters continue the sequence numbering from the fork point. If the branch forks after chapter 5, the first branch chapter is `06.md` inside the branch directory.
 
 ### Switching Branches
 
@@ -530,7 +515,7 @@ When the user says "switch to main" or "switch to [branch name]":
 - Branches share all chapters *before* the fork point (those files live in main's `chapters/`).
 - Each branch has its own story bible reflecting only that branch's continuity.
 - The manifest tracks all branches and which is active.
-- Chapter GUIDs are globally unique — no collisions across branches.
+- Chapter numbers collide across branches by design — they live in separate branch directories, so `chapters/06.md` in main and `branches/alt/chapters/06.md` are different files.
 - A branch can be abandoned without deleting it. Just switch away.
 
 ### Compiling a Branch
@@ -647,7 +632,7 @@ This file is always regenerable from chapter files. It's a convenience output, n
 
 These work at any time:
 
-- **"List books"** — List all books in `~/Documents/Stories/books/` with status and chapter count.
+- **"List books"** — List all books in `~/Documents/Stories/Books/` with status and chapter count.
 - **"Open [book]"** — Start a session with that book (runs resume initialization).
 - **"Compile book"** — Generate/regenerate `book.md`.
 - **"Show bible"** — Display current story bible.

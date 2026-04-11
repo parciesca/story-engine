@@ -698,22 +698,27 @@ function isHistoryBook(m) {
 // Each item: { kind: 'chapter'|'addendum', id, number, title, file, word_count, written, after_chapter? }
 function buildItems(m) {
   const items = [];
-  const chapters = m.chapters || [];
+  const chapters = (m.chapters || []).slice().sort((a, b) => (a.number || 0) - (b.number || 0));
   const addenda = (m.addenda || []).slice().sort((a, b) => (a.number || 0) - (b.number || 0));
 
+  // Derived string ids used for planning file paths: chapters are "01", addenda are "a01".
+  const pad = n => String(n).padStart(2, '0');
+  const chId = ch => pad(ch.number);
+  const adId = ad => 'a' + pad(ad.number);
+
   for (const ch of chapters) {
-    items.push({ kind: 'chapter', ...ch });
-    // Append any addenda that follow this chapter, in order
+    items.push({ kind: 'chapter', ...ch, id: chId(ch) });
+    // Append any addenda that hang off this chapter, in order
     for (const ad of addenda) {
-      if (ad.after_chapter === ch.id) {
-        items.push({ kind: 'addendum', ...ad });
+      if (ad.after_chapter === ch.number) {
+        items.push({ kind: 'addendum', ...ad, id: adId(ad) });
       }
     }
   }
   // Any orphaned addenda (after_chapter not matched) — append at end
   for (const ad of addenda) {
-    if (!chapters.some(c => c.id === ad.after_chapter)) {
-      items.push({ kind: 'addendum', ...ad });
+    if (!chapters.some(c => c.number === ad.after_chapter)) {
+      items.push({ kind: 'addendum', ...ad, id: adId(ad) });
     }
   }
   return items;
@@ -902,8 +907,8 @@ async function renderChapter() {
 
   // For addenda, show which chapter they follow
   let labelText = `${kindLabel} ${ch.number}`;
-  if (ch.kind === 'addendum' && ch.after_chapter) {
-    const parentCh = (manifest.chapters || []).find(c => c.id === ch.after_chapter);
+  if (ch.kind === 'addendum' && ch.after_chapter != null) {
+    const parentCh = (manifest.chapters || []).find(c => c.number === ch.after_chapter);
     if (parentCh) {
       labelText += ` · after Ch. ${parentCh.number}: ${parentCh.title}`;
     }
@@ -1179,12 +1184,15 @@ async function openBook(dirHandle, manifestData) {
   // Build unified item list (chapters + addenda interleaved)
   items = buildItems(manifest);
 
-  // Jump to current item (history uses current_item, fiction uses current_chapter)
-  const currentId = manifest.current_item || manifest.current_chapter;
-  if (currentId) {
-    const idx = items.findIndex(it => it.id === currentId);
-    if (idx >= 0) currentIdx = idx;
+  // Jump to current item. History uses current_item ({kind, number}); fiction uses current_chapter (integer).
+  let targetIdx = -1;
+  if (manifest.current_item && typeof manifest.current_item === 'object') {
+    targetIdx = items.findIndex(it =>
+      it.kind === manifest.current_item.kind && it.number === manifest.current_item.number);
+  } else if (typeof manifest.current_chapter === 'number') {
+    targetIdx = items.findIndex(it => it.kind === 'chapter' && it.number === manifest.current_chapter);
   }
+  if (targetIdx >= 0) currentIdx = targetIdx;
 
   // Characters tab only applies to fiction (story-bible.md). History books use research-bible.md.
   const charsTabBtn = document.querySelector('.sidebar-tabs button[data-tab="characters"]');
@@ -1196,7 +1204,7 @@ async function openBook(dirHandle, manifestData) {
     if (charsTabBtn) charsTabBtn.style.display = '';
     // Load story bible for characters
     let biblePath = 'story-bible.md';
-    if (manifest.active_branch && manifest.active_branch !== 'br-main') {
+    if (manifest.active_branch && manifest.active_branch !== 'main') {
       const branchBible = `branches/${manifest.active_branch}/story-bible.md`;
       const branchText = await readTextFile(bookDir, branchBible);
       if (branchText) biblePath = branchBible;
