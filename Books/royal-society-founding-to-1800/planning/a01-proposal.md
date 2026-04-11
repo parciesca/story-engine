@@ -1,7 +1,6 @@
 ADDENDUM PROPOSAL
-  ID: ad-576c22fe
   Addendum: 1
-  After chapter: ch-406a7741
+  After chapter: 2
   Topic: What it meant, in 1665, to suddenly be able to see the small world — Micrographia and the cultural impact of the microscope
   This addendum covers: The physical experience of the book itself (the foldouts, the scale), the specific moments of revelation it produced, the skeptics who thought Hooke was making things up, and the deeper shift — that ordinary familiar things (a flea, a piece of cork, the edge of a razor) turned out to have whole architectures inside them that nobody had suspected.
   Key elements:

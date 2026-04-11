@@ -201,6 +201,9 @@ def migrate_book(book_dir: Path, planner: Planner) -> str:
     # Build branch id -> slug map.
     branches = manifest.get("branches") or {}
     branch_id_to_slug: dict[str, str] = {}
+    # Always seed br-main -> main, even if absent from the branches map
+    # (hi-story books may declare `branch: br-main` on chapters without a branches map at all).
+    branch_id_to_slug["br-main"] = "main"
     for bid, bdata in branches.items():
         name = (bdata or {}).get("name") or bid
         # Special-case: br-main always becomes "main" regardless of name

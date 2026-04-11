@@ -1,5 +1,4 @@
 {
-  "id": "bk-a9f0bd2a",
   "title": "China: Empire to Republic",
   "slug": "china-empire-to-republic",
   "status": "active",
@@ -8,13 +7,15 @@
   "geographic_focus": "China",
   "created": "2026-04-09T00:00:00Z",
   "last_modified": "2026-04-09T00:00:00Z",
-  "current_item": "ch-4746096c",
+  "current_item": {
+    "kind": "chapter",
+    "number": 1
+  },
   "chapters": [
     {
-      "id": "ch-4746096c",
       "number": 1,
       "title": "The Weight of Heaven",
-      "file": "chapters/01-ch-4746096c.md",
+      "file": "chapters/01.md",
       "written": "2026-04-09T00:00:00Z",
       "word_count": 970
     }

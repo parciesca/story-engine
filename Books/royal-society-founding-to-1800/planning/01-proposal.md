@@ -1,5 +1,4 @@
 CHAPTER PROPOSAL
-  ID: ch-eee1b4a9
   Chapter: 1
   Topic: The informal circles of the 1640s–1650s and their convergence on 28 November 1660
   Time Period: c. 1645–1662

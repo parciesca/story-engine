@@ -1,5 +1,4 @@
 CHAPTER PROPOSAL
-  ID: ch-4746096c
   Chapter: 1
   Topic: The late Qing dynasty as a living system — who governed, who obeyed, who starved — and the early fractures that the 1895 Japan defeat would crack wide open
   Time Period: Qing dynasty broadly (1644-1912), with focus on the 1870s-1895 period

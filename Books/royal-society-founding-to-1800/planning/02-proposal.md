@@ -1,5 +1,4 @@
 CHAPTER PROPOSAL
-  ID: ch-406a7741
   Chapter: 2
   Topic: How the Society got its two engines — Oldenburg's correspondence/Philosophical Transactions and Hooke's weekly experiments
   Time Period: 1662–c. 1670
