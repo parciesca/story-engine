@@ -568,7 +568,7 @@
 
 <header>
   <h1>Book Viewer</h1>
-  <a class="back-link" id="backToLibrary">&larr; Library</a>
+  <a class="back-link" id="backToLibrary">&larr; Back</a>
   <span class="book-title" id="headerTitle"></span>
   <span class="meta" id="headerMeta"></span>
 </header>
@@ -576,8 +576,8 @@
 <div id="landing" class="centered">
   <div class="open-prompt" id="openPrompt">
     <h2>Book Viewer</h2>
-    <p>Select a library folder (<strong>Books</strong> or <strong>History</strong>) to browse available books.</p>
-    <button id="openBtn">Open Library</button>
+    <p>Point this at your repo root (or a book directory directly). On a <code>book/&lt;slug&gt;</code> branch the viewer will load the book automatically.</p>
+    <button id="openBtn">Open Book</button>
     <p style="font-size:12px; color:#999;">Uses File System Access API &mdash; Chrome or Edge required.</p>
   </div>
   <div class="library-grid" id="libraryGrid" style="display:none;"></div>
@@ -1073,51 +1073,125 @@ async function saveFeedback(chapterId) {
   }
 }
 
-// ---- Library: scan Books folder ----
-let booksDir = null;  // handle to the Books/ directory
+// ---- Open: detect a single book, fall back to library grid ----
+// rootDir is whatever the user picked — may be a book dir, a repo root, or a
+// legacy library folder (Books/ or History/). We only keep it around so the
+// "Back" link works when the fallback grid is shown.
+let rootDir = null;
+let showingFallbackGrid = false;
 
-async function openLibrary() {
+async function tryReadManifest(handle) {
   try {
-    booksDir = await window.showDirectoryPicker({
-      id: 'books-library',
-      mode: 'readwrite'
-    });
-    await scanLibrary();
-  } catch (e) {
-    if (e.name !== 'AbortError') {
-      console.error(e);
-      alert('Error opening library: ' + e.message);
-    }
+    const fh = await handle.getFileHandle('manifest.json');
+    const file = await fh.getFile();
+    const buf = await file.arrayBuffer();
+    return JSON.parse(new TextDecoder('utf-8').decode(buf));
+  } catch {
+    return null;
   }
 }
 
-async function scanLibrary() {
-  const books = [];
-  for await (const [name, handle] of booksDir) {
+// Scan a parent directory (e.g. Books/ or History/) for book subdirectories.
+async function scanBookParent(parentHandle, prefix) {
+  const found = [];
+  for await (const [name, handle] of parentHandle) {
     if (handle.kind !== 'directory') continue;
-    // Check for manifest.json in this subdirectory
+    const m = await tryReadManifest(handle);
+    if (m) found.push({ dirHandle: handle, manifest: m, dirName: (prefix ? prefix + '/' : '') + name });
+  }
+  return found;
+}
+
+// Scan a repo root — look inside Books/ and History/ for book subdirectories.
+async function scanRepoRoot(rootHandle) {
+  const books = [];
+  for (const parent of ['Books', 'History']) {
     try {
-      const manifestHandle = await handle.getFileHandle('manifest.json');
-      const file = await manifestHandle.getFile();
-      const buf = await file.arrayBuffer();
-      const text = new TextDecoder('utf-8').decode(buf);
-      const data = JSON.parse(text);
-      books.push({ dirHandle: handle, manifest: data, dirName: name });
+      const parentHandle = await rootHandle.getDirectoryHandle(parent);
+      const found = await scanBookParent(parentHandle, parent);
+      books.push(...found);
     } catch {
-      // No manifest.json — skip (legacy book or non-book folder)
+      // Parent dir not present — fine.
     }
   }
+  return books;
+}
 
-  // Sort: active first, then by last_modified descending
+async function openDirectory() {
+  let picked;
+  try {
+    picked = await window.showDirectoryPicker({
+      id: 'stories-viewer',
+      mode: 'readwrite'
+    });
+  } catch (e) {
+    if (e.name !== 'AbortError') {
+      console.error(e);
+      alert('Error opening directory: ' + e.message);
+    }
+    return;
+  }
+
+  rootDir = picked;
+
+  // 1. Is the picked dir itself a book? (contains manifest.json)
+  const ownManifest = await tryReadManifest(picked);
+  if (ownManifest) {
+    openBook(picked, ownManifest);
+    return;
+  }
+
+  // 2. Is it a repo root? (contains Books/ or History/ with book subdirs)
+  let books = await scanRepoRoot(picked);
+
+  // 3. Fall back: is it a legacy library folder (direct children are books)?
+  if (books.length === 0) {
+    books = await scanBookParent(picked, '');
+  }
+
+  if (books.length === 0) {
+    showNoBook(picked.name);
+    return;
+  }
+
+  if (books.length === 1) {
+    openBook(books[0].dirHandle, books[0].manifest);
+    return;
+  }
+
+  // More than one — fall back to the library grid.
   books.sort((a, b) => {
     if (a.manifest.status !== b.manifest.status) {
       return a.manifest.status === 'active' ? -1 : 1;
     }
     return (b.manifest.last_modified || '').localeCompare(a.manifest.last_modified || '');
   });
-
   renderLibrary(books);
 }
+
+function showNoBook(dirName) {
+  const grid = document.getElementById('libraryGrid');
+  const prompt = document.getElementById('openPrompt');
+  const landing = document.getElementById('landing');
+  landing.classList.remove('centered');
+  prompt.style.display = 'none';
+  grid.style.display = '';
+  showingFallbackGrid = false;
+  grid.innerHTML = `<h2>No book here</h2>
+    <p style="color:var(--muted); text-align:left; max-width:560px;">
+      <strong>${escHtml(dirName)}</strong> doesn't contain a book. This branch may be
+      <code>main</code> or an engine-only branch. Check out a <code>book/&lt;slug&gt;</code>
+      branch, or pick a directory that contains <code>manifest.json</code> (or a
+      <code>Books/</code> / <code>History/</code> folder with books inside).
+    </p>
+    <p style="margin-top:16px;"><button id="retryOpenBtn">Pick another directory</button></p>`;
+  document.getElementById('retryOpenBtn').addEventListener('click', openDirectory);
+}
+
+// Fallback view when a picked directory contains more than one book.
+// Should be rare under the one-branch-one-book model, but kept as a defensive
+// path (legacy library folders, future aggregator branches, migration states).
+let fallbackBooks = [];
 
 function renderLibrary(books) {
   const grid = document.getElementById('libraryGrid');
@@ -1127,14 +1201,11 @@ function renderLibrary(books) {
   landing.classList.remove('centered');
   prompt.style.display = 'none';
   grid.style.display = '';
+  showingFallbackGrid = true;
+  fallbackBooks = books;
 
-  if (!books.length) {
-    grid.innerHTML = `<h2>Library</h2>
-      <p style="color:var(--muted); text-align:left;">No books with manifest.json found in this folder.</p>`;
-    return;
-  }
-
-  let html = '<h2>Library</h2>';
+  let html = '<h2>Multiple books found</h2>'
+    + '<p style="color:var(--muted); margin-bottom:24px;">This directory has more than one book. Pick one to read.</p>';
   for (const book of books) {
     const m = book.manifest;
     const chCount = (m.chapters || []).length;
@@ -1227,7 +1298,8 @@ async function openBook(dirHandle, manifestData) {
   }
   metaBits.push(manifest.status);
   document.getElementById('headerMeta').textContent = metaBits.join(' \u00b7 ');
-  document.getElementById('backToLibrary').style.display = booksDir ? '' : 'none';
+  // Back link only makes sense when we came from the multi-book fallback grid.
+  document.getElementById('backToLibrary').style.display = showingFallbackGrid ? '' : 'none';
 
   // Show app, hide landing
   document.getElementById('landing').style.display = 'none';
@@ -1247,8 +1319,7 @@ function showLibrary() {
   document.getElementById('backToLibrary').style.display = 'none';
   manifest = null;
   bookDir = null;
-  // Re-scan in case books changed
-  if (booksDir) scanLibrary();
+  if (fallbackBooks.length) renderLibrary(fallbackBooks);
 }
 
 // Wire up sidebar tabs
@@ -1265,7 +1336,7 @@ document.querySelectorAll('.sidebar-tabs button').forEach(btn => {
   });
 });
 
-document.getElementById('openBtn').addEventListener('click', openLibrary);
+document.getElementById('openBtn').addEventListener('click', openDirectory);
 document.getElementById('backToLibrary').addEventListener('click', showLibrary);
 
 // Keyboard nav
