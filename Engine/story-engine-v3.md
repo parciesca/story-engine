@@ -367,6 +367,7 @@ After presenting the chapter and choices to the user, perform all mandatory writ
 2. **Planning file** — write the full file: CHAPTER PROPOSAL (pre-chapter) followed by CHAPTER HANDOFF (choices or turning point question, verbatim as presented). This is the resume anchor.
 3. **Story bible** — updated state
 4. **Manifest** — updated last, references the chapter file
+5. **Commit** — `git add` the book's directory and commit with message `Ch N: <chapter title>` (unpadded number, verbatim chapter title). Include any feedback-file disposition changes from this chapter in the same commit so the commit fully reflects the state transition. Push opportunistically; do not block or surface an error if the push fails (offline is fine — commits accumulate locally and flush next time).
 
 The CHAPTER HANDOFF must be written every session, every chapter, without exception. It is the primary mechanism by which "pick up where we left off" works.
 
