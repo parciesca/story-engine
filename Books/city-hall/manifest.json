@@ -6,8 +6,8 @@
   "tone": "Warm, wry, observational humor. Gentle irreverence — Twain's instinct for the absurd in the ordinary, Osman's affection for characters. Witty but never mean. No caricatures.",
   "perspective": "3rd person",
   "created": "2026-04-08T00:00:00Z",
-  "last_modified": "2026-04-08T00:00:00Z",
-  "current_chapter": 1,
+  "last_modified": "2026-04-15T00:00:00Z",
+  "current_chapter": 2,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -24,6 +24,14 @@
       "file": "chapters/01.md",
       "written": "2026-04-08",
       "word_count": 1120
+    },
+    {
+      "number": 2,
+      "branch": "main",
+      "title": "A Full Day",
+      "file": "chapters/02.md",
+      "written": "2026-04-15",
+      "word_count": 1058
     }
   ],
   "treatment_source": null
