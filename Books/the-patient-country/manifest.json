@@ -6,8 +6,8 @@
   "tone": "slow-burn, paranoid, literary — le Carré register",
   "perspective": "3rd person",
   "created": "2026-04-14T00:00:00Z",
-  "last_modified": "2026-04-14T00:00:00Z",
-  "current_chapter": 2,
+  "last_modified": "2026-04-15T00:00:00Z",
+  "current_chapter": 3,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -32,6 +32,14 @@
       "file": "chapters/02.md",
       "written": "2026-04-14",
       "word_count": 1021
+    },
+    {
+      "number": 3,
+      "branch": "main",
+      "title": "The Registry",
+      "file": "chapters/03.md",
+      "written": "2026-04-15",
+      "word_count": 978
     }
   ],
   "treatment_source": null

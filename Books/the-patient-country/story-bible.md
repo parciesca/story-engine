@@ -4,66 +4,73 @@ STORY BIBLE
 PREMISE & TONE
   Genre: Cold War spy thriller
   Tone: Slow-burn, paranoid, literary — le Carré register. Tension through inference and implication, not action. Institutional paranoia. Moral ambiguity without resolution.
-  Core premise: In Helsinki, autumn 1972, British SIS Head of Station Elias Vane receives a walk-in claiming a 15-year Soviet asset sits inside Finland's foreign ministry — timed perfectly to poison the approaching CSCE talks. But the walk-in knew a classified contact protocol, and someone is already watching Elias watch the walk-in. Now a second name has surfaced — Shevelev, a GRU officer from an old closed case — and Elias has told his first lie to an ally.
+  Core premise: In Helsinki, autumn 1972, British SIS Head of Station Elias Vane receives a walk-in claiming a 15-year Soviet asset sits inside Finland's foreign ministry — timed perfectly to poison the approaching CSCE talks. The mole is likely Paavo Lindqvist, handled by GRU officer Shevelev. Eleven years ago, a London official named Hartley closed the case that might have uncovered this — three weeks after Oslo station recommended pressing forward. Elias is now sitting alone with all of it, having told no one.
 
 DRAMATIS PERSONAE
-  Elias Vane — British SIS Head of Station, Helsinki. Cover: First Secretary (Commercial), British Embassy. Age 49. Former classicist (Oxford). Recruited late 1940s. Has spent his career as an analyst and assessor — a reader of people, not a field officer. Gift for languages: Finnish, Russian, German. Speaks them with a slight delay, as if translating in his head; people underestimate him for it. Precise, still, socially graceful at a distance. Has now told his first lie — to Seija — about knowing the name Shevelev.
-    Voice anchor: Asks questions by not asking them — silence and posture as technique. Rarely commits to a conclusion in company. "Tell me" is his preferred opener.
+  Elias Vane — British SIS Head of Station, Helsinki. Cover: First Secretary (Commercial), British Embassy. Age 49. Former classicist (Oxford). Recruited late 1940s. Has spent his career as an analyst and assessor — a reader of people, not a field officer. Gift for languages: Finnish, Russian, German. Speaks them with a slight delay, as if translating in his head; people underestimate him for it. Precise, still, socially graceful at a distance. Has now lied to Seija (about Shevelev), withheld from London, and opened the envelope alone. He has not acted on any of it.
+    Voice anchor: Asks questions by not asking them. Rarely commits to a conclusion in company. Sits with a problem until it resolves or until he runs out of time.
     Status: active
 
-  Viktor Gromov — Soviet Trade Representative, Helsinki Residency. Age ~50. Six years in Helsinki posting, two prior postings. Wife and daughter (age 17) in Leningrad. Compact build, grey Soviet-cut suit. Walk-in: claims knowledge of a 15-year-deep Soviet asset inside the Finnish foreign ministry, active ahead of CSCE preliminary talks. Passed Elias a summary document containing a name. Knew SIS Helsinki Station's internal contact protocol — provenance unexplained: claims a dead friend from Leningrad taught him. Per SUPO: not KGB officially, genuinely works trade side, has a reputation for being careful. Self-reported an approach by a Finnish journalist 18 months ago — either very clean, very careful, or very instructed.
-    Voice anchor: Speaks in the abstract before reaching substance. Does not call himself a patriot. Uses words like "proof" with careful deliberateness.
-    Status: active (relationship to service unclear — defector? dangle? something else?)
+  Viktor Gromov — Soviet Trade Representative, Helsinki Residency. Walk-in. Passed Elias a document naming Paavo Lindqvist as a Soviet asset (recruited Oslo 1961, handler Shevelev, active). Knew SIS internal contact protocol; origin of that knowledge remains unexplained. Not KGB per SUPO; genuinely works trade side; self-reporting; careful.
+    Voice anchor: Speaks in the abstract before reaching substance. Deliberate with words like "proof."
+    Status: active (relationship to service unclear)
 
-  Seija Mäkinen — Finnish intelligence (SUPO), Elias's liaison contact. Age ~38. Interior Ministry cover, fourth floor. Spare, functional, controlled. Pragmatic; deeply conversant with Finland's geopolitical tightrope. Understands that Finland's neutrality is a position maintained at real cost — she will not allow it to be compromised by third-party intelligence operations without warning. Extended credit to Elias despite knowing he withheld something. Dropped the name Shevelev — appeared in Finnish signals in August and again last week, provenance unclear.
-    Voice anchor: Speaks plainly. Does not soften things or elaborate unnecessarily. Delivers weight in small, precise amounts. The fog metaphor was a warning.
+  Paavo Lindqvist — Senior Adviser, CSCE Preparatory Secretariat, Finnish Ministry of Foreign Affairs. Named in Gromov's document as a Soviet asset: recruited Oslo 1961, handler K. Shevelev, active. Was in Oslo on a Nordic liaison rotation during the period Shevelev was operating there. The asset the Oslo case never identified. Has not yet appeared on page.
+    Status: active (probable mole; unconfirmed)
+
+  Konstantin Shevelev — GRU officer. Oslo 1961-62, commercial cover, suspected asset-runner in Norwegian MFA. Oslo case closed by London before the asset was identified. Now in Helsinki — appearing in Finnish signals (August 2026, then again October). Presumably managing Lindqvist through the CSCE talks.
+    Status: active (in Helsinki; purpose now understood — handler for Lindqvist)
+
+  J. Hartley — British SIS, D/Operations, London. Signed the Oslo case closure, December 3, 1962, three weeks after Oslo station chief Carrington recommended continuing surveillance. Not yet placed: Elias cannot locate a face, career, or current role for this name. Could be retired, dead, or still in an institutional position.
+    Status: unknown (possibly still operational in some capacity)
+
+  Seija Mäkinen — Finnish intelligence (SUPO), Elias's liaison contact. Age ~38. Pragmatic, neutrality-conscious. Dropped the name Shevelev. Suspects Elias is withholding. Extended credit anyway.
+    Voice anchor: Plainspoken. Delivers weight in small amounts. "The fog doesn't lift — you stop waiting for it to lift."
     Status: active
 
-  Konstantin Shevelev — Soviet officer. GRU, per old SIS records (Oslo, 1961-62). Operated under commercial cover running an asset in the Norwegian foreign ministry; the asset was never identified; the case was closed inconclusive. Now appearing in Finnish signals, Helsinki, 1972. His presence here is unexplained. Elias has not told Seija he knows this name.
-    Status: active (in Helsinki; purpose unknown)
+  The Watcher — Unnamed woman on Esplanadi bench after the Gromov café meeting. Cover-to-front newspaper page-turn. Unknown affiliation.
+    Status: active (unidentified)
 
-  The Watcher — Unnamed woman, observed on Esplanadi bench as Elias departed the café after the Gromov meeting. Read a newspaper cover-to-front — trained surveillance behavior. Identity unknown.
-    Status: active (unknown affiliation)
-
-  Pamela Secker — Elias's controller, London. Complicated prior history (nature unspecified). Has not yet appeared on page. Elias has not yet cabled her about any of this.
-    Status: active (introduced in bible only)
+  Pamela Secker — Elias's controller, London. In the service since the late 1950s — meaning she was present during the period of the Hartley closure. Elias has not cabled her. Her proximity to the Hartley timeline has occurred to him without becoming an accusation.
+    Status: active (not yet appeared on page; now structurally suspect)
 
 WORLD RULES
-  - Setting: Helsinki, Finland, October 1972.
-  - Finland's geopolitical position: officially neutral, subject to significant Soviet pressure (Finlandization). Must balance diplomatic relationship with Moscow against Western alignment. Finnish intelligence (SUPO) operates in this constraint — they want to know what's happening on their territory but cannot be seen to actively assist Western operations.
-  - The CSCE (Conference on Security and Co-operation in Europe) preliminary talks are approaching — approximately three months away. Helsinki has been designated host. Every intelligence service in Europe will be swarming in.
-  - SIS contact protocols are distributed on limited circulation — station-level, with named recipients. The Helsinki Station protocol was distributed to Helsinki, Stockholm, and Oslo in June 1972.
-  - Intelligence that arrives pre-packaged with personal resonance (a name the recipient will recognize) is, in Elias's experience, a red flag. Good intelligence is rarely flattering to its recipient.
-  - The Oslo case (1961-62): GRU officer Shevelev ran a suspected asset in the Norwegian foreign ministry. Asset never identified. Case closed inconclusive by SIS — either shelved or buried.
+  - Setting: Helsinki, Finland, October 1972. CSCE preliminary talks ~3 months away.
+  - Finland officially neutral; SUPO operates under the constraint of not being seen to assist Western operations.
+  - SIS contact protocols: station-level, limited distribution (Helsinki, Stockholm, Oslo — June 1972).
+  - The Oslo case (1961-62): GRU officer Shevelev, commercial cover, suspected asset in Norwegian MFA. Asset never identified. Case closed December 1962 by London (Hartley, D/Ops), overriding Oslo station's recommendation to continue.
+  - The mole operation: Shevelev recruited Lindqvist in Oslo in 1961; has run him for eleven years. Lindqvist is now a senior adviser on the CSCE preparatory secretariat — positioned to shape Finnish positions at the most consequential diplomatic event in decades.
 
 THEMATIC THREADS
-  - The texture of rehearsed truth vs. genuine truth — the unreliability of sincerity as a test
-  - Institutional loyalty and its costs (Elias is now withholding from an ally; the question of where his loyalty ultimately sits deepens)
-  - Finland as metaphor: the neutral country that survives by watching carefully and saying little; Seija's fog — you stop waiting for it to lift
-  - The past as structural threat: closed cases don't stay closed
+  - The texture of rehearsed truth vs. genuine truth
+  - Institutional loyalty and its costs — Elias has now withheld from ally and from his own service
+  - Finland as metaphor: neutrality as survival strategy; the fog that doesn't lift
+  - The past as structural threat: closed cases don't stay closed; institutions bury what they cannot afford to surface
+  - The problem of trust when every channel is suspect
 
 UNRESOLVED TENSIONS
-  - Is Gromov genuine, a provocation (dangle), or something in between?
+  - Is Gromov genuine, a provocation, or something else? (His document appears accurate, but that could mean the provocation is more sophisticated)
   - How did Gromov know the SIS Helsinki contact protocol?
-  - Who is the watcher on Esplanadi, and who sent her?
-  - What name is in the envelope Elias still hasn't opened, and what is his history with them?
-  - Is there actually a Soviet asset inside the Finnish foreign ministry?
-  - Why is Shevelev in Helsinki now — and is his presence connected to Gromov?
-  - What happened in the Oslo case that Elias is not saying?
-  - What is Elias's history with Pamela Secker, and why hasn't he cabled her?
+  - Who is the watcher on Esplanadi?
+  - Who is J. Hartley, and where are they now?
+  - Is Pamela Secker connected to the Hartley closure?
+  - What does Elias do now — and who, if anyone, does he tell?
+  - What is Shevelev's role beyond handler — is he here to manage Lindqvist, or to manage something larger?
+  - Why did Gromov bring this to the British rather than approach the Finns directly?
 
 TIMELINE & STATE
   Current location: Helsinki, Finland
-  Time position: October 1972, approximately three months before CSCE preliminary talks
+  Time position: October 1972, ~3 months before CSCE preliminary talks
   Key events so far:
-    Ch. 1 — Elias meets walk-in Gromov in South Harbour café. Gromov claims 15-year Soviet asset in Finnish MFA; passes a document. Elias probes Gromov's knowledge of internal protocol; explanation (dead friend) is unsatisfying. Elias departs; spots a surveillance watcher. Document unread; contains a name.
-    Ch. 2 — Elias consults SUPO liaison Seija Mäkinen under cover of a background query. Seija's read on Gromov: careful, self-reporting, not flagged as KGB. Seija presses (indirectly) for disclosure; Elias withholds. Seija drops Shevelev — a Soviet name appearing in Finnish signals. Elias recognises it from the Oslo case and lies. Closes chapter carrying two secrets from an ally.
+    Ch. 1 — Elias meets walk-in Gromov. Gromov claims 15-year Soviet asset in Finnish MFA; passes sealed document. Elias spots a watcher on departure.
+    Ch. 2 — Elias consults Seija (SUPO). Read on Gromov: careful, self-reporting. Seija drops Shevelev. Elias lies about recognising it.
+    Ch. 3 — Elias pulls the Oslo file. Finds Hartley's closure note, overriding station chief's recommendation. Opens envelope: Lindqvist, CSCE prep, recruited Oslo 1961 by Shevelev, active. Elias alone with all of it. Hasn't told anyone.
 
 READER PROMISES
-  - The name in the envelope will be revealed and will matter
+  - Lindqvist will have to be confronted or protected — the story cannot leave him in suspension
   - The watcher will be identified
-  - The question of Gromov's true status (genuine/provocation/other) will be answered, eventually
-  - Elias's history with London (and Pamela Secker specifically) will become relevant
-  - The CSCE talks will be the pressure point around which the story turns
-  - Shevelev's Oslo history will surface — what was buried there is load-bearing
-  - Elias's lie to Seija will cost him something
+  - Hartley's identity and current position will surface
+  - Pamela Secker will appear and her proximity to the Hartley timeline will become an active question
+  - Elias's isolation will cost him something
+  - Gromov's true status will be resolved
+  - The CSCE talks are the deadline — something has to give before or during them
