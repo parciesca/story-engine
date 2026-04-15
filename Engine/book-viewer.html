@@ -727,8 +727,12 @@
     <h2>Settings</h2>
 
     <label for="repoInput">Repository (owner/name)</label>
-    <input type="text" id="repoInput" placeholder="parciesca/story-engine">
-    <p class="hint">The GitHub repo to browse. Defaults to <code>parciesca/story-engine</code>.</p>
+    <input type="text" id="repoInput" placeholder="owner/name">
+    <p class="hint">
+      The GitHub repo to browse. Resolved in order: this field &rarr;
+      <code>&lt;owner&gt;.github.io/&lt;repo&gt;</code> URL auto-detection &rarr;
+      <code>Engine/viewer-config.json</code>.
+    </p>
 
     <label for="tokenInput">GitHub Token (optional)</label>
     <input type="password" id="tokenInput" placeholder="ghp_... or github_pat_...">
@@ -788,12 +792,45 @@ let characters = [];          // parsed character entries
 let isHistory = false;
 
 // ---- Config / settings ----
-const DEFAULT_REPO = 'parciesca/story-engine';
+// Repo resolution precedence:
+//   1. localStorage override (user picked one via Settings)
+//   2. URL auto-detect when served from GitHub Pages (<owner>.github.io/<repo>/...)
+//   3. viewer-config.json sibling file (forkers edit this)
+//   4. empty → first-run gate forces the Settings modal open
 const LS_TOKEN = 'bookviewer.github.token';
 const LS_REPO  = 'bookviewer.github.repo';
+let CONFIGURED_REPO = '';  // populated by loadViewerConfig() at startup
+
+function detectRepoFromUrl() {
+  try {
+    const h = window.location.hostname;
+    const m = h.match(/^([^.]+)\.github\.io$/i);
+    if (!m) return '';
+    const owner = m[1];
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    if (!pathParts.length) return '';
+    // First path segment is the repo name on a project Pages site.
+    // User/org Pages (<owner>.github.io itself) host the repo of the same name.
+    const repo = pathParts[0];
+    return `${owner}/${repo}`;
+  } catch { return ''; }
+}
+
+async function loadViewerConfig() {
+  try {
+    const res = await fetch('viewer-config.json', { cache: 'no-cache' });
+    if (!res.ok) return '';
+    const data = await res.json();
+    return (data && typeof data.repo === 'string') ? data.repo.trim() : '';
+  } catch { return ''; }
+}
 
 function getRepo() {
-  return (localStorage.getItem(LS_REPO) || DEFAULT_REPO).trim();
+  const stored = (localStorage.getItem(LS_REPO) || '').trim();
+  if (stored) return stored;
+  const detected = detectRepoFromUrl();
+  if (detected) return detected;
+  return CONFIGURED_REPO;
 }
 function getToken() {
   return localStorage.getItem(LS_TOKEN) || '';
@@ -1449,6 +1486,11 @@ async function scanFilesystemLibrary() {
 }
 
 async function browseGitHub() {
+  if (!getRepo()) {
+    setLandingStatus('No repository configured. Open Settings to set one.', true);
+    openSettings();
+    return;
+  }
   setLandingStatus('Loading books from GitHub...');
   try {
     const remoteBooks = await fetchBookBranches();
@@ -1624,7 +1666,11 @@ function showLibrary() {
 
 // ---- Settings modal ----
 function openSettings() {
-  document.getElementById('repoInput').value = getRepo();
+  const stored = (localStorage.getItem(LS_REPO) || '').trim();
+  const repoInput = document.getElementById('repoInput');
+  repoInput.value = stored;
+  const resolvedDefault = detectRepoFromUrl() || CONFIGURED_REPO;
+  repoInput.placeholder = resolvedDefault || 'owner/name';
   document.getElementById('tokenInput').value = getToken() ? '••••••••' : '';
   document.getElementById('settingsModal').classList.add('open');
   // Probe rate limit
@@ -1684,6 +1730,15 @@ document.getElementById('clearTokenBtn').addEventListener('click', clearToken);
 document.getElementById('settingsModal').addEventListener('click', (e) => {
   if (e.target.id === 'settingsModal') closeSettings();
 });
+
+// Startup: load viewer-config.json, then nudge first-run users if no repo resolves.
+(async () => {
+  CONFIGURED_REPO = await loadViewerConfig();
+  if (!getRepo()) {
+    setLandingStatus('No repository configured yet. Opening Settings...');
+    openSettings();
+  }
+})();
 
 // Keyboard nav
 document.addEventListener('keydown', (e) => {
