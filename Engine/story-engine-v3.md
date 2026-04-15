@@ -174,6 +174,15 @@ If anything interrupts mid-write, the chapter prose is safe.
 
 File I/O happens silently. The user doesn't need to see "saving chapter..." or "updating manifest..." confirmations. If something fails, mention it. Otherwise, just do it.
 
+### Git Branch Per Book
+
+Each book lives on its own git branch named `book/<slug>` (matching its directory under `Books/`). Per-chapter commits never land on `main` directly — they accumulate on the book's branch and merge when the book is done.
+
+- **New book:** immediately after creating the book directory, create and check out the git branch: `git checkout -b book/<slug>` (forked from whatever branch the user is currently on, typically `main`). If the git branch already exists, treat it as a slug collision and stop to ask the user.
+- **Resume / open book:** before any writes, ensure the working tree is on `book/<slug>`. If not, `git checkout book/<slug>` (creating it from `origin/book/<slug>` if it exists remotely, otherwise from `main`).
+- **All chapter commits land on `book/<slug>`.** Push opportunistically with `git push -u origin book/<slug>` — the `-u` is harmless after the first push and ensures upstream is set the first time.
+- The engine's own **story-fork "branches"** (under `Books/<slug>/branches/`) are unrelated to git branches. They stay on the same `book/<slug>` git branch.
+
 ### Chat Output Discipline
 
 **This is a hard rule, not a preference.** A book-viewer frontend (`Engine/book-viewer.html`) handles prose display. The chat is for navigation only.
@@ -367,7 +376,7 @@ After presenting the chapter and choices to the user, perform all mandatory writ
 2. **Planning file** — write the full file: CHAPTER PROPOSAL (pre-chapter) followed by CHAPTER HANDOFF (choices or turning point question, verbatim as presented). This is the resume anchor.
 3. **Story bible** — updated state
 4. **Manifest** — updated last, references the chapter file
-5. **Commit** — `git add` the book's directory and commit with message `Ch N: <chapter title>` (unpadded number, verbatim chapter title). Include any feedback-file disposition changes from this chapter in the same commit so the commit fully reflects the state transition. Push opportunistically; do not block or surface an error if the push fails (offline is fine — commits accumulate locally and flush next time).
+5. **Commit** — first verify the working tree is on `book/<slug>` (see Git Branch Per Book); if not, check it out before staging. Then `git add` the book's directory and commit with message `Ch N: <chapter title>` (unpadded number, verbatim chapter title). Include any feedback-file disposition changes from this chapter in the same commit so the commit fully reflects the state transition. Push opportunistically with `git push -u origin book/<slug>`; do not block or surface an error if the push fails (offline is fine — commits accumulate locally and flush next time).
 
 The CHAPTER HANDOFF must be written every session, every chapter, without exception. It is the primary mechanism by which "pick up where we left off" works.
 
@@ -409,6 +418,7 @@ When the user wants to start a new story:
    - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
    - Initialize `manifest.json` with metadata, empty chapters array, and a `main` branch entry
    - Initialize `story-bible.md` with premise, tone, genre, empty sections
+   - **Create the book's git branch:** `git checkout -b book/<slug>` (see Git Branch Per Book). All subsequent chapter commits land here.
 5. Write the opening chapter. The prose goes to the file, not to chat — see Chat Output Discipline.
 6. **Save all files** (chapter, proposal, bible update, manifest update).
 7. Chat output: 1–2 sentence scene summary + dramatis personae (brief) + first choices. **Do not paste the chapter prose into chat** — it's already on disk for the viewer.
@@ -418,13 +428,14 @@ When the user wants to start a new story:
 When the user wants to continue a book (names it, or says "continue" and there's only one active book):
 
 1. **Read `manifest.json`** — understand the book state, chapter count, active branch.
-2. **Read the active branch's `story-bible.md`** — load continuity.
-3. **Read the most recent 1-2 chapter files** — get voice, momentum, last scene.
-4. **Read the planning file for the current chapter** (`planning/NN-proposal.md` where NN is `current_chapter` zero-padded) — look for the CHAPTER HANDOFF section.
-5. **Check for a feedback file** (`planning/NN-feedback.md`).
-6. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter using that feedback as the user's input — same as if they had typed it in the chat. Do not re-present the handoff choices or wait for input.
-7. **If no feedback file but a CHAPTER HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
-8. **If neither exists** (legacy import, interrupted session, or migration): generate a handoff now — best effort from the manifest, story bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
+2. **Check out the book's git branch** — ensure the working tree is on `book/<slug>` (see Git Branch Per Book). Do this before any reads or writes touch the book directory.
+3. **Read the active branch's `story-bible.md`** — load continuity.
+4. **Read the most recent 1-2 chapter files** — get voice, momentum, last scene.
+5. **Read the planning file for the current chapter** (`planning/NN-proposal.md` where NN is `current_chapter` zero-padded) — look for the CHAPTER HANDOFF section.
+6. **Check for a feedback file** (`planning/NN-feedback.md`).
+7. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter using that feedback as the user's input — same as if they had typed it in the chat. Do not re-present the handoff choices or wait for input.
+8. **If no feedback file but a CHAPTER HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
+9. **If neither exists** (legacy import, interrupted session, or migration): generate a handoff now — best effort from the manifest, story bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
 
 ### Initialization — From Treatment
 
@@ -433,7 +444,7 @@ When the user provides a treatment (file or pasted text):
 1. **Acknowledge the treatment.** "I see you're refining [Title]. Let me review what we're working with."
 2. **Read the treatment as a brief**, not a script. It informs — it doesn't constrain.
 3. **Ask what's changing.** "What do you want to do differently this time?"
-4. **Create the book directory** (same as new book).
+4. **Create the book directory** (same as new book), including the `book/<slug>` git branch.
 5. **Save the treatment** as `treatment.md`. Set `treatment_source` in manifest.
 6. **Initialize the story bible** from the treatment's world rules, tone, and premise — adapted by whatever the user wants to change.
 7. **Write the opening chapter** informed by hindsight.

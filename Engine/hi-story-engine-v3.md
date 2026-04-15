@@ -214,6 +214,14 @@ This matters because research-heavy operations (book initialization, chapter pro
 
 The goal: if the session ends unexpectedly at any point, the maximum lost work is one incomplete operation — not an entire research pass or chapter draft.
 
+### Git Branch Per Book
+
+Each book lives on its own git branch named `book/<slug>` (matching its directory under `Books/`). Per-chapter and per-addendum commits never land on `main` directly — they accumulate on the book's branch and merge when the book is done.
+
+- **New book:** immediately after creating the book directory, create and check out the git branch: `git checkout -b book/<slug>` (forked from whatever branch the user is currently on, typically `main`). If the git branch already exists, treat it as a slug collision and stop to ask the user.
+- **Resume / open book:** before any writes, ensure the working tree is on `book/<slug>`. If not, `git checkout book/<slug>` (creating it from `origin/book/<slug>` if it exists remotely, otherwise from `main`).
+- **All chapter/addendum commits land on `book/<slug>`.** Push opportunistically with `git push -u origin book/<slug>` — the `-u` is harmless after the first push and ensures upstream is set the first time.
+
 ### Chat Output Discipline
 
 **This is a hard rule, not a preference.** A book-viewer frontend (`Engine/book-viewer.html`) handles prose display. The chat is for navigation only.
@@ -394,7 +402,7 @@ After presenting the chapter and navigation to the user, perform all mandatory w
 2. **Planning file** — write the full file: CHAPTER PROPOSAL (pre-chapter) followed by CHAPTER HANDOFF (navigation options, verbatim as presented). This is the resume anchor.
 3. **Research bible** — updated state
 4. **Manifest** — updated last, references the chapter file
-5. **Commit** — `git add` the book's directory and commit with message `Ch N: <chapter title>` (unpadded number, verbatim chapter title). Include any feedback-file disposition changes from this chapter in the same commit so the commit fully reflects the state transition. Push opportunistically; do not block or surface an error if the push fails (offline is fine — commits accumulate locally and flush next time).
+5. **Commit** — first verify the working tree is on `book/<slug>` (see Git Branch Per Book); if not, check it out before staging. Then `git add` the book's directory and commit with message `Ch N: <chapter title>` (unpadded number, verbatim chapter title). Include any feedback-file disposition changes from this chapter in the same commit so the commit fully reflects the state transition. Push opportunistically with `git push -u origin book/<slug>`; do not block or surface an error if the push fails (offline is fine — commits accumulate locally and flush next time).
 
 The CHAPTER HANDOFF must be written every session, every chapter, without exception. It is the primary mechanism by which "pick up where we left off" works.
 
@@ -448,7 +456,7 @@ B) Continue from here — [option stemming from addendum]
 C) [Another direction if natural]
 ```
 
-5. Perform file operations: addendum file → planning file → research bible → manifest.
+5. Perform file operations: addendum file → planning file → research bible → manifest, then commit on `book/<slug>` with message `Add N: <addendum title>` and push opportunistically (see Git Branch Per Book).
 
 ### Addendum Rules
 
@@ -495,6 +503,7 @@ When the user wants to start a new exploration:
    - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
    - Write `manifest.json` with metadata, empty chapters/addenda arrays, `status: "initializing"`
    - Write skeleton `research-bible.md` with topic, time period, scope, empty sections
+   - **Create the book's git branch:** `git checkout -b book/<slug>` (see Git Branch Per Book). All subsequent commits land here.
    - *The book now exists on disk. If the session ends here, resume can pick it up.*
 4. **Research the opening topic — incrementally:**
    - Conduct web searches. After each productive search pass, fold findings into the research bible on disk (update ESTABLISHED CONTEXT, KEY FIGURES, THREADS TO PULL as relevant).
@@ -510,14 +519,15 @@ When the user wants to start a new exploration:
 When the user wants to continue an exploration (names it, or says "continue" and there's only one active book):
 
 1. **Read `manifest.json`** — understand the book state, chapter/addendum count.
-2. **Check status.** If `"initializing"` — the previous session was interrupted during book setup. Read `research-bible.md` to see how far research got (it may have partial findings already saved). Resume the initialization flow from where it left off: continue researching if the bible is thin, or proceed to writing the first chapter if enough material has accumulated. Once the first chapter is written, set status to `"active"`.
-3. **Read `research-bible.md`** — load exploration state.
-4. **Read the most recent 1-2 chapter files** — get voice, momentum, last topic.
-5. **Read the planning file for the current item** — derived from `current_item`: `planning/NN-proposal.md` for a chapter or `planning/aNN-proposal.md` for an addendum. Look for the HANDOFF section.
-6. **Check for a feedback file** (`planning/NN-feedback.md` or `planning/aNN-feedback.md`).
-7. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter or addendum using that feedback. Do not re-present the handoff navigation or wait for input.
-8. **If no feedback file but a HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
-9. **If neither exists** (legacy import or interrupted session): generate a handoff now — best effort from the manifest, research bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
+2. **Check out the book's git branch** — ensure the working tree is on `book/<slug>` (see Git Branch Per Book). Do this before any reads or writes touch the book directory.
+3. **Check status.** If `"initializing"` — the previous session was interrupted during book setup. Read `research-bible.md` to see how far research got (it may have partial findings already saved). Resume the initialization flow from where it left off: continue researching if the bible is thin, or proceed to writing the first chapter if enough material has accumulated. Once the first chapter is written, set status to `"active"`.
+4. **Read `research-bible.md`** — load exploration state.
+5. **Read the most recent 1-2 chapter files** — get voice, momentum, last topic.
+6. **Read the planning file for the current item** — derived from `current_item`: `planning/NN-proposal.md` for a chapter or `planning/aNN-proposal.md` for an addendum. Look for the HANDOFF section.
+7. **Check for a feedback file** (`planning/NN-feedback.md` or `planning/aNN-feedback.md`).
+8. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter or addendum using that feedback. Do not re-present the handoff navigation or wait for input.
+9. **If no feedback file but a HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
+10. **If neither exists** (legacy import or interrupted session): generate a handoff now — best effort from the manifest, research bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.
 
 ### Initialization — From Treatment
 
@@ -526,7 +536,7 @@ When the user provides a treatment from a completed exploration:
 1. **Acknowledge the treatment.** "I see you're revisiting [Topic]. Let me review what was covered."
 2. **Read the treatment as a brief**, not a script. It informs — it doesn't constrain.
 3. **Ask what's different this time.** "What angle do you want to take? What was underdeveloped?"
-4. **Create the book directory** (same as new book).
+4. **Create the book directory** (same as new book), including the `book/<slug>` git branch.
 5. **Save the treatment** as `treatment.md`. Set `treatment_source` in manifest.
 6. **Initialize the research bible** from the treatment's established context and scope — adapted by whatever the user wants to change.
 7. **Write the opening chapter** informed by what the first exploration learned.
