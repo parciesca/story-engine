@@ -1,0 +1,30 @@
+{
+  "title": "The Patient Country",
+  "slug": "the-patient-country",
+  "status": "active",
+  "genre": "Cold War spy thriller",
+  "tone": "slow-burn, paranoid, literary — le Carré register",
+  "perspective": "3rd person",
+  "created": "2026-04-14T00:00:00Z",
+  "last_modified": "2026-04-14T00:00:00Z",
+  "current_chapter": 1,
+  "active_branch": "main",
+  "branches": {
+    "main": {
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-04-14T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "branch": "main",
+      "title": "First Principles",
+      "file": "chapters/01.md",
+      "written": "2026-04-14",
+      "word_count": 913
+    }
+  ],
+  "treatment_source": null
+}
