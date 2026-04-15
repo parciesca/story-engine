@@ -7,7 +7,7 @@
   "perspective": "3rd person",
   "created": "2026-04-14T00:00:00Z",
   "last_modified": "2026-04-14T00:00:00Z",
-  "current_chapter": 1,
+  "current_chapter": 2,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -24,6 +24,14 @@
       "file": "chapters/01.md",
       "written": "2026-04-14",
       "word_count": 913
+    },
+    {
+      "number": 2,
+      "branch": "main",
+      "title": "The Neutral Party",
+      "file": "chapters/02.md",
+      "written": "2026-04-14",
+      "word_count": 1021
     }
   ],
   "treatment_source": null
