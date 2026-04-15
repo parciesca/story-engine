@@ -55,6 +55,141 @@
     color: var(--muted);
     margin-left: auto;
   }
+  header .settings-link {
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: none;
+    margin-left: 12px;
+  }
+  header .settings-link:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+
+  /* --- Source picker on landing --- */
+  .source-picker {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .source-picker button.secondary {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--border);
+  }
+  .source-picker button.secondary:hover {
+    background: var(--hover);
+    color: var(--text);
+    border-color: var(--muted);
+  }
+  .landing-status {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+  .landing-error {
+    color: #a04040;
+  }
+  .book-card-source {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-right: 6px;
+  }
+
+  /* --- Settings modal --- */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--bg);
+    padding: 24px 28px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    max-width: 520px;
+    width: 90%;
+    font-family: var(--font-ui);
+  }
+  .modal h2 {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .modal label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    margin-top: 14px;
+  }
+  .modal input[type="text"], .modal input[type="password"] {
+    width: 100%;
+    padding: 8px 10px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--text);
+  }
+  .modal input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .modal p.hint {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 6px;
+  }
+  .modal p.hint a {
+    color: var(--accent);
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+  }
+  .modal-actions button {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-family: var(--font-ui);
+    border: 1px solid var(--accent);
+    cursor: pointer;
+  }
+  .modal-actions button.primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .modal-actions button.secondary {
+    background: transparent;
+    color: var(--accent);
+  }
+  .modal-actions button.danger {
+    border-color: #a04040;
+    color: #a04040;
+    background: transparent;
+    margin-right: auto;
+  }
+  .rate-limit-line {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 12px;
+    font-style: italic;
+  }
 
   /* --- Landing / Library --- */
   #landing {
@@ -571,16 +706,48 @@
   <a class="back-link" id="backToLibrary">&larr; Library</a>
   <span class="book-title" id="headerTitle"></span>
   <span class="meta" id="headerMeta"></span>
+  <a class="settings-link" id="settingsLink">Settings</a>
 </header>
 
 <div id="landing" class="centered">
   <div class="open-prompt" id="openPrompt">
     <h2>Book Viewer</h2>
-    <p>Select a library folder (<strong>Books</strong> or <strong>History</strong>) to browse available books.</p>
-    <button id="openBtn">Open Library</button>
-    <p style="font-size:12px; color:#999;">Uses File System Access API &mdash; Chrome or Edge required.</p>
+    <p>Browse books hosted on GitHub, or open a local library from disk.</p>
+    <div class="source-picker">
+      <button id="browseGithubBtn">Browse on GitHub</button>
+      <button id="openBtn" class="secondary">Open from Disk</button>
+    </div>
+    <div class="landing-status" id="landingStatus"></div>
   </div>
   <div class="library-grid" id="libraryGrid" style="display:none;"></div>
+</div>
+
+<div class="modal-backdrop" id="settingsModal">
+  <div class="modal">
+    <h2>Settings</h2>
+
+    <label for="repoInput">Repository (owner/name)</label>
+    <input type="text" id="repoInput" placeholder="parciesca/story-engine">
+    <p class="hint">The GitHub repo to browse. Defaults to <code>parciesca/story-engine</code>.</p>
+
+    <label for="tokenInput">GitHub Token (optional)</label>
+    <input type="password" id="tokenInput" placeholder="ghp_... or github_pat_...">
+    <p class="hint">
+      Stored in your browser's localStorage only &mdash; never transmitted anywhere except
+      <code>api.github.com</code>. Required to save feedback; raises your rate limit from
+      60 req/hr to 5000 req/hr.
+      <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">Create a token</a>
+      (fine-grained PAT with <em>Contents: Read &amp; Write</em> scope on this repo).
+    </p>
+
+    <div class="rate-limit-line" id="rateLimitLine"></div>
+
+    <div class="modal-actions">
+      <button class="danger" id="clearTokenBtn">Clear Token</button>
+      <button class="secondary" id="cancelSettingsBtn">Cancel</button>
+      <button class="primary" id="saveSettingsBtn">Save</button>
+    </div>
+  </div>
 </div>
 
 <div id="app">
@@ -609,7 +776,7 @@
 
 <script>
 // ---- State ----
-let bookDir = null;
+let source = null;            // active BookSource for the current book
 let manifest = null;
 let items = [];               // unified chapters+addenda reading order
 let currentIdx = 0;
@@ -620,32 +787,186 @@ let storyBible = null;
 let characters = [];          // parsed character entries
 let isHistory = false;
 
-// ---- File helpers ----
-async function readTextFile(dirHandle, path) {
-  const parts = path.replace(/\\/g, '/').split('/');
-  let handle = dirHandle;
-  for (let i = 0; i < parts.length - 1; i++) {
-    try { handle = await handle.getDirectoryHandle(parts[i]); }
-    catch { return null; }
-  }
-  try {
-    const fileHandle = await handle.getFileHandle(parts[parts.length - 1]);
-    const file = await fileHandle.getFile();
-    const buf = await file.arrayBuffer();
-    return new TextDecoder('utf-8').decode(buf);
-  } catch { return null; }
+// ---- Config / settings ----
+const DEFAULT_REPO = 'parciesca/story-engine';
+const LS_TOKEN = 'bookviewer.github.token';
+const LS_REPO  = 'bookviewer.github.repo';
+
+function getRepo() {
+  return (localStorage.getItem(LS_REPO) || DEFAULT_REPO).trim();
+}
+function getToken() {
+  return localStorage.getItem(LS_TOKEN) || '';
+}
+function parseRepo(r) {
+  const m = r.match(/^([^\/\s]+)\/([^\/\s]+)$/);
+  return m ? { owner: m[1], repo: m[2] } : null;
 }
 
-async function writeTextFile(dirHandle, path, content) {
-  const parts = path.replace(/\\/g, '/').split('/');
-  let handle = dirHandle;
-  for (let i = 0; i < parts.length - 1; i++) {
-    handle = await handle.getDirectoryHandle(parts[i], { create: true });
+// ---- BookSource abstraction ----
+// Each source exposes: readText(path) -> string|null, writeText(path, content) -> void, kind, canWrite
+class FileSystemSource {
+  constructor(dirHandle) {
+    this.dirHandle = dirHandle;
+    this.kind = 'fs';
+    this.canWrite = true;
   }
-  const fileHandle = await handle.getFileHandle(parts[parts.length - 1], { create: true });
-  const writable = await fileHandle.createWritable();
-  await writable.write(content);
-  await writable.close();
+  async readText(path) {
+    const parts = path.replace(/\\/g, '/').split('/');
+    let handle = this.dirHandle;
+    for (let i = 0; i < parts.length - 1; i++) {
+      try { handle = await handle.getDirectoryHandle(parts[i]); }
+      catch { return null; }
+    }
+    try {
+      const fileHandle = await handle.getFileHandle(parts[parts.length - 1]);
+      const file = await fileHandle.getFile();
+      const buf = await file.arrayBuffer();
+      return new TextDecoder('utf-8').decode(buf);
+    } catch { return null; }
+  }
+  async writeText(path, content) {
+    const parts = path.replace(/\\/g, '/').split('/');
+    let handle = this.dirHandle;
+    for (let i = 0; i < parts.length - 1; i++) {
+      handle = await handle.getDirectoryHandle(parts[i], { create: true });
+    }
+    const fileHandle = await handle.getFileHandle(parts[parts.length - 1], { create: true });
+    const writable = await fileHandle.createWritable();
+    await writable.write(content);
+    await writable.close();
+  }
+}
+
+class GitHubSource {
+  constructor({ owner, repo, branch, bookSlug, token }) {
+    this.owner = owner;
+    this.repo = repo;
+    this.branch = branch;      // e.g. 'book/the-patient-country'
+    this.bookSlug = bookSlug;  // e.g. 'the-patient-country'
+    this.token = token || '';
+    this.kind = 'github';
+    this.canWrite = !!token;
+    this._shaCache = {};       // path -> sha (for updates)
+  }
+  _prefix(path) {
+    // All book-relative paths live under Books/<slug>/
+    return `Books/${this.bookSlug}/${path}`;
+  }
+  _apiHeaders() {
+    const h = { 'Accept': 'application/vnd.github+json' };
+    if (this.token) h['Authorization'] = `Bearer ${this.token}`;
+    return h;
+  }
+  async readText(path) {
+    const full = this._prefix(path);
+    // Use contents API (captures sha for subsequent writes) rather than raw, so updates work.
+    const url = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${encodeURIComponent(full).replace(/%2F/g, '/')}?ref=${encodeURIComponent(this.branch)}`;
+    try {
+      const res = await fetch(url, { headers: this._apiHeaders() });
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`GitHub ${res.status}: ${await res.text()}`);
+      const data = await res.json();
+      if (data && data.sha) this._shaCache[full] = data.sha;
+      if (data && typeof data.content === 'string') {
+        // base64 with newlines
+        const b64 = data.content.replace(/\n/g, '');
+        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        return new TextDecoder('utf-8').decode(bytes);
+      }
+      return null;
+    } catch (e) {
+      console.error('GitHub readText failed', path, e);
+      return null;
+    }
+  }
+  async writeText(path, content) {
+    if (!this.token) throw new Error('A GitHub token is required to save. Open Settings to configure one.');
+    const full = this._prefix(path);
+    const url = `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${encodeURIComponent(full).replace(/%2F/g, '/')}`;
+    // Need current sha if file exists. Try cache first, then probe.
+    let sha = this._shaCache[full];
+    if (!sha) {
+      const probe = await fetch(`${url}?ref=${encodeURIComponent(this.branch)}`, { headers: this._apiHeaders() });
+      if (probe.ok) {
+        const probeData = await probe.json();
+        sha = probeData.sha;
+      } // 404 is fine — file doesn't exist yet
+    }
+    const bytes = new TextEncoder().encode(content);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+    const body = {
+      message: `viewer: save ${path}`,
+      content: btoa(binary),
+      branch: this.branch
+    };
+    if (sha) body.sha = sha;
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { ...this._apiHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`GitHub ${res.status}: ${text}`);
+    }
+    const data = await res.json();
+    if (data.content && data.content.sha) this._shaCache[full] = data.content.sha;
+  }
+}
+
+// ---- GitHub API helpers (library listing) ----
+async function ghFetch(path, init) {
+  const url = path.startsWith('http') ? path : `https://api.github.com${path}`;
+  const headers = { 'Accept': 'application/vnd.github+json', ...(init && init.headers || {}) };
+  const token = getToken();
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  const res = await fetch(url, { ...init, headers });
+  return res;
+}
+
+async function fetchBookBranches() {
+  const repoStr = getRepo();
+  const parsed = parseRepo(repoStr);
+  if (!parsed) throw new Error(`Invalid repo setting: "${repoStr}". Expected "owner/name".`);
+  const { owner, repo } = parsed;
+
+  const res = await ghFetch(`/repos/${owner}/${repo}/branches?per_page=100`);
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Could not list branches (${res.status}): ${txt}`);
+  }
+  const branches = await res.json();
+  const bookBranches = branches.filter(b => b.name.startsWith('book/'));
+
+  // Fetch manifest for each in parallel
+  const books = await Promise.all(bookBranches.map(async (b) => {
+    const slug = b.name.slice('book/'.length);
+    const manifestUrl = `/repos/${owner}/${repo}/contents/${encodeURIComponent(`Books/${slug}/manifest.json`).replace(/%2F/g, '/')}?ref=${encodeURIComponent(b.name)}`;
+    try {
+      const mRes = await ghFetch(manifestUrl);
+      if (!mRes.ok) return null;
+      const mData = await mRes.json();
+      const b64 = (mData.content || '').replace(/\n/g, '');
+      const text = new TextDecoder('utf-8').decode(Uint8Array.from(atob(b64), c => c.charCodeAt(0)));
+      const m = JSON.parse(text);
+      return { owner, repo, branch: b.name, slug, commitSha: b.commit.sha, manifest: m };
+    } catch {
+      return null;
+    }
+  }));
+
+  return books.filter(Boolean);
+}
+
+async function fetchRateLimit() {
+  try {
+    const res = await ghFetch('/rate_limit');
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.resources && data.resources.core;
+  } catch { return null; }
 }
 
 // ---- Parsing ----
@@ -794,8 +1115,8 @@ async function loadPlanning(chapterId) {
   const feedbackPath = `planning/${chapterId}-feedback.md`;
 
   const [proposalText, feedbackText] = await Promise.all([
-    readTextFile(bookDir, proposalPath),
-    readTextFile(bookDir, feedbackPath)
+    source.readText(proposalPath),
+    source.readText(feedbackPath)
   ]);
 
   const result = {
@@ -889,7 +1210,7 @@ async function renderChapter() {
   const col = document.getElementById('readingCol');
   const mainEl = document.querySelector('main');
 
-  const chapterText = await readTextFile(bookDir, ch.file);
+  const chapterText = await source.readText(ch.file);
   const kindLabel = ch.kind === 'addendum' ? 'Addendum' : 'Chapter';
   if (!chapterText) {
     col.innerHTML = `<div class="chapter-heading"><h2>${kindLabel} not found</h2></div>
@@ -1053,6 +1374,13 @@ async function saveFeedback(chapterId) {
     return;
   }
 
+  if (!source.canWrite) {
+    status.innerHTML = 'Read-only source. <a href="#" id="openSettingsFromFeedback" style="color:var(--accent);">Configure a GitHub token</a> in Settings to save feedback.';
+    const link = document.getElementById('openSettingsFromFeedback');
+    if (link) link.addEventListener('click', (e) => { e.preventDefault(); openSettings(); });
+    return;
+  }
+
   btn.disabled = true;
   status.textContent = 'Saving...';
 
@@ -1061,7 +1389,7 @@ async function saveFeedback(chapterId) {
   const path = `planning/${chapterId}-feedback.md`;
 
   try {
-    await writeTextFile(bookDir, path, content);
+    await source.writeText(path, content);
     delete planningCache[chapterId];
     status.textContent = 'Saved.';
     btn.disabled = false;
@@ -1073,8 +1401,10 @@ async function saveFeedback(chapterId) {
   }
 }
 
-// ---- Library: scan Books folder ----
-let booksDir = null;  // handle to the Books/ directory
+// ---- Library: scan Books folder (filesystem) or branches (GitHub) ----
+let booksDir = null;          // handle to the Books/ directory (fs mode)
+let currentLibrary = [];      // [{ source-builder, manifest, label, sourceKind, ... }]
+let lastLibraryMode = null;   // 'fs' | 'github'
 
 async function openLibrary() {
   try {
@@ -1082,44 +1412,83 @@ async function openLibrary() {
       id: 'books-library',
       mode: 'readwrite'
     });
-    await scanLibrary();
+    await scanFilesystemLibrary();
   } catch (e) {
     if (e.name !== 'AbortError') {
       console.error(e);
-      alert('Error opening library: ' + e.message);
+      setLandingStatus('Error opening library: ' + e.message, true);
     }
   }
 }
 
-async function scanLibrary() {
+async function scanFilesystemLibrary() {
+  lastLibraryMode = 'fs';
   const books = [];
   for await (const [name, handle] of booksDir) {
     if (handle.kind !== 'directory') continue;
-    // Check for manifest.json in this subdirectory
     try {
       const manifestHandle = await handle.getFileHandle('manifest.json');
       const file = await manifestHandle.getFile();
       const buf = await file.arrayBuffer();
       const text = new TextDecoder('utf-8').decode(buf);
       const data = JSON.parse(text);
-      books.push({ dirHandle: handle, manifest: data, dirName: name });
+      books.push({
+        sourceKind: 'fs',
+        manifest: data,
+        label: name,
+        buildSource: () => new FileSystemSource(handle)
+      });
     } catch {
-      // No manifest.json — skip (legacy book or non-book folder)
+      // No manifest.json — skip
     }
   }
 
-  // Sort: active first, then by last_modified descending
+  sortBooks(books);
+  currentLibrary = books;
+  renderLibrary(books, 'fs');
+}
+
+async function browseGitHub() {
+  setLandingStatus('Loading books from GitHub...');
+  try {
+    const remoteBooks = await fetchBookBranches();
+    lastLibraryMode = 'github';
+    const books = remoteBooks.map(rb => ({
+      sourceKind: 'github',
+      manifest: rb.manifest,
+      label: rb.branch,
+      buildSource: () => new GitHubSource({
+        owner: rb.owner, repo: rb.repo, branch: rb.branch,
+        bookSlug: rb.slug, token: getToken()
+      })
+    }));
+    sortBooks(books);
+    currentLibrary = books;
+    setLandingStatus('');
+    renderLibrary(books, 'github');
+  } catch (e) {
+    console.error(e);
+    setLandingStatus('GitHub error: ' + e.message + '. Check your repo/token in Settings.', true);
+  }
+}
+
+function sortBooks(books) {
   books.sort((a, b) => {
     if (a.manifest.status !== b.manifest.status) {
       return a.manifest.status === 'active' ? -1 : 1;
     }
     return (b.manifest.last_modified || '').localeCompare(a.manifest.last_modified || '');
   });
-
-  renderLibrary(books);
 }
 
-function renderLibrary(books) {
+function setLandingStatus(msg, isError) {
+  const el = document.getElementById('landingStatus');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.classList.toggle('landing-error', !!isError);
+}
+
+function renderLibrary(books, mode) {
   const grid = document.getElementById('libraryGrid');
   const prompt = document.getElementById('openPrompt');
   const landing = document.getElementById('landing');
@@ -1128,14 +1497,15 @@ function renderLibrary(books) {
   prompt.style.display = 'none';
   grid.style.display = '';
 
+  const modeLabel = mode === 'github' ? `GitHub · ${getRepo()}` : 'Local Disk';
   if (!books.length) {
-    grid.innerHTML = `<h2>Library</h2>
-      <p style="color:var(--muted); text-align:left;">No books with manifest.json found in this folder.</p>`;
+    grid.innerHTML = `<h2>Library <span style="font-size:13px; color:var(--muted); font-weight:400;">(${escHtml(modeLabel)})</span></h2>
+      <p style="color:var(--muted); text-align:left;">No books found${mode === 'github' ? ' (no <code>book/*</code> branches with a valid manifest).' : ' with manifest.json in this folder.'}</p>`;
     return;
   }
 
-  let html = '<h2>Library</h2>';
-  for (const book of books) {
+  let html = `<h2>Library <span style="font-size:13px; color:var(--muted); font-weight:400;">(${escHtml(modeLabel)})</span></h2>`;
+  books.forEach((book, idx) => {
     const m = book.manifest;
     const chCount = (m.chapters || []).length;
     const totalWords = (m.chapters || []).reduce((sum, ch) => sum + (ch.word_count || 0), 0);
@@ -1150,30 +1520,30 @@ function renderLibrary(books) {
       categoryBits.push(escHtml(m.genre));
     }
     html += `
-      <div class="book-card" data-dir="${escHtml(book.dirName)}">
-        <div class="book-card-title">${escHtml(m.title || book.dirName)}</div>
+      <div class="book-card" data-idx="${idx}">
+        <div class="book-card-title">${escHtml(m.title || book.label)}</div>
         <div class="book-card-meta">
+          <span class="book-card-source">${book.sourceKind === 'github' ? 'GitHub' : 'Local'}</span>
           <span>${chCount} chapter${chCount !== 1 ? 's' : ''}${adCount ? ` · ${adCount} addend${adCount !== 1 ? 'a' : 'um'}` : ''}</span>
           <span>${totalWords.toLocaleString()} words</span>
           ${categoryBits.map(b => `<span>${b}</span>`).join('')}
           <span class="book-card-status ${statusCls}">${escHtml(m.status || 'active')}</span>
         </div>
       </div>`;
-  }
+  });
   grid.innerHTML = html;
 
-  // Wire up clicks
   grid.querySelectorAll('.book-card').forEach(card => {
     card.addEventListener('click', () => {
-      const dirName = card.dataset.dir;
-      const book = books.find(b => b.dirName === dirName);
-      if (book) openBook(book.dirHandle, book.manifest);
+      const idx = parseInt(card.dataset.idx);
+      const book = books[idx];
+      if (book) openBook(book.buildSource(), book.manifest);
     });
   });
 }
 
-async function openBook(dirHandle, manifestData) {
-  bookDir = dirHandle;
+async function openBook(bookSource, manifestData) {
+  source = bookSource;
   manifest = manifestData;
   planningCache = {};
   currentIdx = 0;
@@ -1206,10 +1576,10 @@ async function openBook(dirHandle, manifestData) {
     let biblePath = 'story-bible.md';
     if (manifest.active_branch && manifest.active_branch !== 'main') {
       const branchBible = `branches/${manifest.active_branch}/story-bible.md`;
-      const branchText = await readTextFile(bookDir, branchBible);
+      const branchText = await source.readText(branchBible);
       if (branchText) biblePath = branchBible;
     }
-    storyBible = await readTextFile(bookDir, biblePath);
+    storyBible = await source.readText(biblePath);
     characters = parseCharacters(storyBible);
   }
 
@@ -1227,7 +1597,7 @@ async function openBook(dirHandle, manifestData) {
   }
   metaBits.push(manifest.status);
   document.getElementById('headerMeta').textContent = metaBits.join(' \u00b7 ');
-  document.getElementById('backToLibrary').style.display = booksDir ? '' : 'none';
+  document.getElementById('backToLibrary').style.display = (currentLibrary && currentLibrary.length) ? '' : 'none';
 
   // Show app, hide landing
   document.getElementById('landing').style.display = 'none';
@@ -1246,9 +1616,48 @@ function showLibrary() {
   document.getElementById('headerMeta').textContent = '';
   document.getElementById('backToLibrary').style.display = 'none';
   manifest = null;
-  bookDir = null;
+  source = null;
   // Re-scan in case books changed
-  if (booksDir) scanLibrary();
+  if (lastLibraryMode === 'fs' && booksDir) scanFilesystemLibrary();
+  else if (lastLibraryMode === 'github') browseGitHub();
+}
+
+// ---- Settings modal ----
+function openSettings() {
+  document.getElementById('repoInput').value = getRepo();
+  document.getElementById('tokenInput').value = getToken() ? '••••••••' : '';
+  document.getElementById('settingsModal').classList.add('open');
+  // Probe rate limit
+  const rl = document.getElementById('rateLimitLine');
+  rl.textContent = 'Checking rate limit...';
+  fetchRateLimit().then(core => {
+    if (!core) { rl.textContent = ''; return; }
+    const reset = new Date(core.reset * 1000).toLocaleTimeString();
+    rl.textContent = `Rate limit: ${core.remaining} / ${core.limit} remaining (resets ${reset})`;
+  });
+}
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('open');
+}
+function saveSettings() {
+  const repo = document.getElementById('repoInput').value.trim();
+  const tokenField = document.getElementById('tokenInput').value;
+  if (repo) {
+    if (!parseRepo(repo)) {
+      alert('Repo must be in the form "owner/name".');
+      return;
+    }
+    localStorage.setItem(LS_REPO, repo);
+  }
+  // Only overwrite token if the user typed something other than the placeholder mask
+  if (tokenField && tokenField !== '••••••••') {
+    localStorage.setItem(LS_TOKEN, tokenField.trim());
+  }
+  closeSettings();
+}
+function clearToken() {
+  localStorage.removeItem(LS_TOKEN);
+  document.getElementById('tokenInput').value = '';
 }
 
 // Wire up sidebar tabs
@@ -1266,7 +1675,15 @@ document.querySelectorAll('.sidebar-tabs button').forEach(btn => {
 });
 
 document.getElementById('openBtn').addEventListener('click', openLibrary);
+document.getElementById('browseGithubBtn').addEventListener('click', browseGitHub);
 document.getElementById('backToLibrary').addEventListener('click', showLibrary);
+document.getElementById('settingsLink').addEventListener('click', openSettings);
+document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+document.getElementById('cancelSettingsBtn').addEventListener('click', closeSettings);
+document.getElementById('clearTokenBtn').addEventListener('click', clearToken);
+document.getElementById('settingsModal').addEventListener('click', (e) => {
+  if (e.target.id === 'settingsModal') closeSettings();
+});
 
 // Keyboard nav
 document.addEventListener('keydown', (e) => {
