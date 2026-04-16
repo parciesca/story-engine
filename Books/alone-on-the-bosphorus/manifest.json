@@ -122,5 +122,7 @@
       "word_count": 1850
     }
   ],
-  "treatment_source": null
+  "treatment_source": null,
+  "engine": "story",
+  "engine_commit": "7cd92c1"
 }
