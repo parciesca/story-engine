@@ -194,5 +194,7 @@
       "word_count": 768
     }
   ],
-  "treatment_source": "treatment.md"
+  "treatment_source": "treatment.md",
+  "engine": "story",
+  "engine_commit": "7cd92c1"
 }
