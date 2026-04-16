@@ -178,7 +178,7 @@ File I/O happens silently. The user doesn't need to see "saving chapter..." or "
 
 Each book lives on its own git branch named `book/<slug>` (matching its directory under `Books/`). Per-chapter commits never land on `main` directly — they accumulate on the book's branch and merge when the book is done.
 
-- **New book:** immediately after creating the book directory, create and check out the git branch: `git checkout -b book/<slug>` (forked from whatever branch the user is currently on, typically `main`). If the git branch already exists, treat it as a slug collision and stop to ask the user.
+- **New book:** immediately after creating the book directory, create and check out the git branch: `git checkout -b book/<slug>` (forked from `main` — the Branch Guard ensures sessions always start there). If the git branch already exists, treat it as a slug collision and stop to ask the user.
 - **Resume / open book:** before any writes, ensure the working tree is on `book/<slug>`. If not, `git checkout book/<slug>` (creating it from `origin/book/<slug>` if it exists remotely, otherwise from `main`).
 - **All chapter commits land on `book/<slug>`.** Push opportunistically with `git push -u origin book/<slug>` — the `-u` is harmless after the first push and ensures upstream is set the first time.
 - The engine's own **story-fork "branches"** (under `Books/<slug>/branches/`) are unrelated to git branches. They stay on the same `book/<slug>` git branch.
@@ -404,6 +404,23 @@ Keep it clean. Name, role, enough to remind. Voice anchors live in the story bib
 ---
 
 ## Session Flow
+
+### Branch Guard (Run First)
+
+Before any other initialization, verify the working tree is on `main`:
+
+```bash
+git branch --show-current
+```
+
+- **`main`** — correct. Proceed to the appropriate init flow below.
+- **`book/<slug>`** — wrong branch. Take the following steps in order:
+  1. **Preferred:** Run `git checkout main`. If successful, re-read `Engine/story-engine-v3.md` from `main` and begin the full session flow from scratch. (The book branch is not lost — it exists as `book/<slug>` and will be checked out internally during resume or chapter writes as normal.)
+  2. **Fallback** (if checkout fails): Stop immediately and tell the user:
+     > **Wrong branch.** This session started on `book/<slug>`, but sessions must start on `main`. `Engine/` does not exist on book branches. Please open a new session from the repo root while on `main`.
+- **Anything else** — warn the user that this is an unexpected branch state and ask how to proceed before continuing.
+
+Never proceed with session initialization on a `book/*` branch. `Engine/` does not exist on book branches; attempting to run the engine there will corrupt state or fail silently.
 
 ### Initialization — New Book
 
