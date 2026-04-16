@@ -96,11 +96,13 @@ The book's state machine. Read at session start, updated after every chapter or 
       "word_count": 500
     }
   ],
-  "treatment_source": null
+  "treatment_source": null,
+  "engine": "hi-story",
+  "engine_commit": "abc1234"
 }
 ```
 
-`current_item` is an object tracking the most recently written piece: `{"kind": "chapter"|"addendum", "number": N}`. `after_chapter` on an addendum is the integer chapter number it hangs off. For nested addenda (an addendum off another addendum), use `after_addendum` instead — an addendum entry carries exactly one of the two.
+`engine` identifies which engine wrote the book (`"hi-story"` or `"story"`). `engine_commit` is the short SHA of the engine branch (`main`) at the time the chapter or addendum was written — updated on every write commit. `current_item` is an object tracking the most recently written piece: `{"kind": "chapter"|"addendum", "number": N}`. `after_chapter` on an addendum is the integer chapter number it hangs off. For nested addenda (an addendum off another addendum), use `after_addendum` instead — an addendum entry carries exactly one of the two.
 
 ### Chapter Files
 
@@ -180,7 +182,7 @@ Feedback files are **read-only for the engine** — never overwrite or modify th
 1. **Chapter/addendum file** → `chapters/NN.md` or `addenda/NN.md` (zero-padded)
 2. **Planning file** → `planning/NN-proposal.md` or `planning/aNN-proposal.md`
 3. **Research bible** → overwrite `research-bible.md` with updated state
-4. **Manifest** → overwrite `manifest.json` with new entry and updated metadata
+4. **Manifest** → overwrite `manifest.json` with new entry, updated metadata, and `engine_commit` set to the output of `git rev-parse --short main`
 
 ### Write Order
 
@@ -501,7 +503,7 @@ When the user wants to start a new exploration:
 2. If the starting point is very broad, briefly confirm scope or ask one orienting question. If it's specific enough to start, just start.
 3. **Checkpoint — create the book on disk immediately:**
    - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
-   - Write `manifest.json` with metadata, empty chapters/addenda arrays, `status: "initializing"`
+   - Write `manifest.json` with metadata, empty chapters/addenda arrays, `status: "initializing"`, `engine: "hi-story"`, and `engine_commit` set to `git rev-parse --short main`
    - Write skeleton `research-bible.md` with topic, time period, scope, empty sections
    - **Create the book's git branch:** `git checkout -b book/<slug>` (see Git Branch Per Book). All subsequent commits land here.
    - *The book now exists on disk. If the session ends here, resume can pick it up.*

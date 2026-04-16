@@ -190,7 +190,7 @@ def migrate_book(book_dir: Path, planner: Planner) -> str:
         if cid.startswith("ch-"):
             chapter_guid_to_num[cid[3:]] = ch["number"]
 
-    # Build addendum guid -> number map (addenda are present when manifest.engine == 'hi-story'; TODO(#34))
+    # Build addendum guid -> number map (addenda are present when manifest.engine == 'hi-story')
     addenda = manifest.get("addenda") or []
     addendum_guid_to_num: dict[str, int] = {}
     for ad in addenda:
@@ -254,7 +254,7 @@ def migrate_book(book_dir: Path, planner: Planner) -> str:
                     planner.rename(p, new_p)
                 continue
 
-    # ---- Addenda files (present when manifest.engine == 'hi-story'; TODO(#34)) ----
+    # ---- Addenda files (present when manifest.engine == 'hi-story') ----
     addenda_dir = book_dir / "addenda"
     for ad in addenda:
         old_file = book_dir / ad["file"]

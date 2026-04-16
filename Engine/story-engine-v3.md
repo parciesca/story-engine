@@ -87,11 +87,13 @@ The book's state machine. Read at session start, updated after every chapter.
       "word_count": 1050
     }
   ],
-  "treatment_source": null
+  "treatment_source": null,
+  "engine": "story",
+  "engine_commit": "abc1234"
 }
 ```
 
-`current_chapter` is an integer — the sequence number of the most recently written chapter on the active branch. `active_branch` is the branch slug. The `branches` map is keyed by slug; `main` is the default branch and is always present.
+`engine` identifies which engine wrote the book (`"story"` or `"hi-story"`). `engine_commit` is the short SHA of the engine branch (`main`) at the time the chapter was written — updated on every chapter-write commit. `current_chapter` is an integer — the sequence number of the most recently written chapter on the active branch. `active_branch` is the branch slug. The `branches` map is keyed by slug; `main` is the default branch and is always present.
 
 ### Chapter Files
 
@@ -153,7 +155,7 @@ Feedback files are **read-only for the engine** — never overwrite or modify th
 1. **Chapter file** → `chapters/NN.md` (NN is the chapter number, zero-padded)
 2. **Planning file** → `planning/NN-proposal.md`
 3. **Story bible** → overwrite `story-bible.md` with updated state
-4. **Manifest** → overwrite `manifest.json` with new chapter entry and updated metadata
+4. **Manifest** → overwrite `manifest.json` with new chapter entry, updated metadata, and `engine_commit` set to the output of `git rev-parse --short main`
 
 ### Write Order
 
@@ -433,7 +435,7 @@ When the user wants to start a new story:
 3. Optional: tone/theme notes, content preferences, anything they want to establish.
 4. **Create the book directory:**
    - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
-   - Initialize `manifest.json` with metadata, empty chapters array, and a `main` branch entry
+   - Initialize `manifest.json` with metadata, empty chapters array, a `main` branch entry, `engine: "story"`, and `engine_commit` set to `git rev-parse --short main`
    - Initialize `story-bible.md` with premise, tone, genre, empty sections
    - **Create the book's git branch:** `git checkout -b book/<slug>` (see Git Branch Per Book). All subsequent chapter commits land here.
 5. Write the opening chapter. The prose goes to the file, not to chat — see Chat Output Discipline.
