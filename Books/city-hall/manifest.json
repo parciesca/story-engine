@@ -34,5 +34,7 @@
       "word_count": 1058
     }
   ],
-  "treatment_source": null
+  "treatment_source": null,
+  "engine": "story",
+  "engine_commit": "7cd92c1"
 }
