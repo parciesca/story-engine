@@ -1048,6 +1048,7 @@ function parseFeedbackContent(text) {
 }
 
 // ---- History vs fiction detection + item list ----
+// TODO(#34): replace heuristic with manifest.engine === 'hi-story' once that field lands
 function isHistoryBook(m) {
   return !!(m && (m.topic || m.time_period || m.geographic_focus || Array.isArray(m.addenda)));
 }

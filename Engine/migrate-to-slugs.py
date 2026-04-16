@@ -190,7 +190,7 @@ def migrate_book(book_dir: Path, planner: Planner) -> str:
         if cid.startswith("ch-"):
             chapter_guid_to_num[cid[3:]] = ch["number"]
 
-    # Build addendum guid -> number map (hi-story only)
+    # Build addendum guid -> number map (addenda are present when manifest.engine == 'hi-story'; TODO(#34))
     addenda = manifest.get("addenda") or []
     addendum_guid_to_num: dict[str, int] = {}
     for ad in addenda:
@@ -202,7 +202,7 @@ def migrate_book(book_dir: Path, planner: Planner) -> str:
     branches = manifest.get("branches") or {}
     branch_id_to_slug: dict[str, str] = {}
     # Always seed br-main -> main, even if absent from the branches map
-    # (hi-story books may declare `branch: br-main` on chapters without a branches map at all).
+    # (some books declare `branch: br-main` on chapters without a branches map at all).
     branch_id_to_slug["br-main"] = "main"
     for bid, bdata in branches.items():
         name = (bdata or {}).get("name") or bid
@@ -254,7 +254,7 @@ def migrate_book(book_dir: Path, planner: Planner) -> str:
                     planner.rename(p, new_p)
                 continue
 
-    # ---- Addenda files (hi-story) ----
+    # ---- Addenda files (present when manifest.engine == 'hi-story'; TODO(#34)) ----
     addenda_dir = book_dir / "addenda"
     for ad in addenda:
         old_file = book_dir / ad["file"]

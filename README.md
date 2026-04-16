@@ -1,10 +1,10 @@
-# Story Engine — `hi-story` branch
+# Story Engine
 
-A file-backed collaborative writing engine for Claude Code. This branch extends the project beyond fiction: alongside the original **Story Engine** (collaborative novels), it adds a **History Spelunking Engine** (collaborative non-fiction history exploration, research-driven, with web search).
+A file-backed collaborative writing engine for Claude Code. Two engines share the same infrastructure: the **Story Engine** (collaborative fiction) and the **History Spelunking Engine** (collaborative non-fiction history exploration, research-driven, with web search).
 
 Both engines share the same file-backed philosophy — persistent disk state, a living continuity document, resume-anywhere via handoff files, and a book viewer for reading. What differs is genre, vocabulary, and whether the model is inventing or researching.
 
-**Status:** Alpha. Single-author project, actively developed. `hi-story` is the working branch where the History engine is being built out toward an eventual merge into `main`. Interfaces and file layouts may still shift without deprecation notices.
+**Status:** Alpha. Single-author project, actively developed. Interfaces and file layouts may still shift without deprecation notices.
 
 ---
 
@@ -15,15 +15,13 @@ Both engines share the same file-backed philosophy — persistent disk state, a 
 | **Mode** | Collaborative fiction | Collaborative non-fiction |
 | **Claude's role** | Co-author; writes, user steers | Curator; researches, writes, user follows curiosity |
 | **Content origin** | Invented | Web-researched, fact-checked |
-| **Library root** | `Books/` | `History/` |
+| **Library root** | `Books/` | `Books/` |
 | **Continuity doc** | `story-bible.md` | `research-bible.md` |
 | **Unit of work** | Chapters, with branches for alternate timelines | Chapters, with **addenda** for tangential deep dives |
 | **Session trigger** | "start a new book", "continue [book]" | "start a new exploration", "continue [exploration]" |
 | **Brief template** | `Engine/new-book-template.md` | `Engine/new-exploration-template.md` |
 
-Both engines write to disk every chapter, read from disk on resume, and use the same GUID scheme (`bk-`, `ch-`, plus `br-` for story branches and `ad-` for history addenda). The book viewer (`Engine/book-viewer.html`) renders both.
-
-> **Known gap on this branch:** `CLAUDE.md` currently points Claude at `story-engine-v3.md` only. Until that's updated, starting a history session explicitly ("start a new exploration" or similar) is the clearest way to land on the right engine.
+Both engines write to disk every chapter, read from disk on resume, and use the same slug-based identity scheme. The book viewer (`Engine/book-viewer.html`) renders both.
 
 ---
 
@@ -54,27 +52,21 @@ story-engine/
 ├── CLAUDE.md                        # Claude Code session config
 ├── Engine/
 │   ├── story-engine-v3.md           # Fiction engine prompt
-│   ├── hi-story-engine-v3.md        # History engine prompt (this branch)
+│   ├── hi-story-engine-v3.md        # History engine prompt
 │   ├── book-viewer.html             # Local browser UI for reading chapters
 │   ├── new-book-template.md         # Brief for starting a new fiction book
 │   ├── new-exploration-template.md  # Brief for starting a new history exploration
-│   ├── guidgen.py                   # GUID generator (bk/ch/br/ad)
+│   ├── migrate-to-slugs.py          # Migration: GUID-keyed → slug-keyed files
 │   ├── migrate-book.py              # Migration: compiled book.md → v3 chapter files
-│   └── Archive/                     # Previous engine versions (including hi-story-engine-v1)
+│   └── Archive/                     # Previous engine versions
 ├── Books/
-│   └── [book-slug]/                 # Fiction books
+│   └── [book-slug]/                 # All books (fiction and history), on book/<slug> branches
 │       ├── manifest.json
-│       ├── story-bible.md
+│       ├── story-bible.md           # or research-bible.md for history explorations
 │       ├── chapters/
 │       ├── planning/
-│       └── branches/                # Alternate-timeline forks
-├── History/
-│   └── [exploration-slug]/          # History explorations
-│       ├── manifest.json
-│       ├── research-bible.md
-│       ├── chapters/
-│       ├── addenda/                 # Tangential deep dives
-│       └── planning/
+│       ├── addenda/                 # History explorations only: tangential deep dives
+│       └── branches/                # Fiction only: alternate-timeline forks
 └── Archive/                         # Older book versions migrated from Chat
 ```
 
@@ -148,7 +140,7 @@ The history engine uses web search before every chapter, folding findings into t
 
 ## Book Viewer
 
-Open `Engine/book-viewer.html` in a browser. It reads from `Books/` and `History/` and renders chapters as formatted prose. Chapter prose does not appear in chat by default — only the summary and navigation options do. The viewer is the reading interface.
+Open `Engine/book-viewer.html` in a browser. It reads from `Books/` and renders chapters as formatted prose. Chapter prose does not appear in chat by default — only the summary and navigation options do. The viewer is the reading interface.
 
 It also supports writing feedback files — leaving steering notes that Claude picks up on next resume.
 
@@ -156,18 +148,11 @@ It also supports writing feedback files — leaving steering notes that Claude p
 
 ## Utility Scripts
 
-### guidgen.py
-Generates the 8-character hex GUIDs used for all IDs.
-
-```bash
-python3 Engine/guidgen.py 1 bk    # one book GUID: bk-a1b2c3d4
-python3 Engine/guidgen.py 5 ch    # five chapter GUIDs
-python3 Engine/guidgen.py 1 br    # one fiction branch GUID
-python3 Engine/guidgen.py 1 ad    # one history addendum GUID
-```
-
 ### migrate-book.py
-Splits a compiled `book.md` into individual v3 chapter files with YAML front matter, generates a manifest, and sets up the full directory structure. Originally for fiction; may need extension for history-engine explorations.
+Splits a compiled `book.md` into individual v3 chapter files with YAML front matter, generates a manifest, and sets up the full directory structure.
+
+### migrate-to-slugs.py
+Migrates an older GUID-keyed book (where files were named `ch-<guid>.md`) to the current slug/number-keyed layout. Run once per book that was created before the v3 identity scheme was finalized.
 
 ---
 
@@ -204,18 +189,15 @@ History-only:
 
 ## Branch Model
 
-The repo's branches are about **engine versions**, not books. The library of books and explorations is its own space — it is not enumerated here and does not belong to any particular engine branch.
+The repo's branches are about **engine versions**, not books. Each book lives on its own `book/<slug>` branch and is separate from engine development branches.
 
-- **`main`** — stable fiction engine only. Books initialize from here when the history engine isn't needed.
-- **`hi-story`** *(this branch)* — adds the History Spelunking Engine alongside the fiction engine. Working toward an eventual merge into `main` once the history engine is stable and CLAUDE.md / session-routing is figured out.
+- **`main`** — stable engine. Sessions always start here; the engine dispatches to `book/<slug>` for reads and writes.
+- **`book/<slug>`** — data-only branches, one per book. Carry no `Engine/` directory. Created by the engine at book initialization.
 - **`claude/*` branches** — ephemeral branches created by Claude Code review / PR workflows. Not intended for direct work.
 
 **Working conventions (alpha posture):**
 - Commit issue fixes and small changes directly to the working branch. Don't spin up sub-branches for individual issues.
 - Only create a new branch when you're starting a genuinely distinct project (a new engine variant, a major rework, etc.).
-- A book or exploration initialized while a given engine branch is active is effectively pinned to that engine version until you choose to update it.
-
-**Future direction:** Issue #13 (backlogged) proposes a git-native backend where each book lives on its own `book/<slug>` branch, with the engine version pinned at branch-creation time. That model is **not** in effect yet. Today, books and explorations exist as folders under `Books/` and `History/` on whatever branch they were created on; the long-term direction is to separate the library entirely from engine branches.
 
 ---
 
@@ -229,7 +211,7 @@ The engine is the set of files under `Engine/` plus `CLAUDE.md`. Which file to e
 
 Conventions:
 
-- **Small fixes and edits** — commit directly to `hi-story` (this branch) or `main`, whichever the change belongs to.
+- **Small fixes and edits** — commit directly to `v4` or `main`, whichever the change belongs to.
 - **Larger reworks or experiments** — start a new engine feature branch off `main`. Merge back when stable.
 - **Book/exploration initialization** should always happen from a stable engine state — don't initialize new work mid-experiment unless you're deliberately pinning to that in-progress version.
 - **Book viewer** (`Engine/book-viewer.html`) is a static file — open it in a browser, no build step.
