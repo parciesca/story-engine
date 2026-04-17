@@ -6,11 +6,13 @@ Both engines share the same file-backed philosophy — persistent disk state, a 
 
 **Status:** Alpha. Single-author project, actively developed. Interfaces and file layouts may still shift without deprecation notices.
 
+**v4 shipped 2026-04-17.** Manifest engine, `/open` dispatcher, branch-worktree write flow, always-start-on-main, push-button chapter commit. The last v3 state is tagged [`v3-final`](https://github.com/parciesca/story-engine/releases/tag/v3-final).
+
 ---
 
 ## The Two Engines
 
-| | **Story Engine** (`story-engine-v3.md`) | **History Spelunking Engine** (`hi-story-engine-v3.md`) |
+| | **Story Engine** (`story-engine.md`) | **History Spelunking Engine** (`hi-story-engine.md`) |
 |---|---|---|
 | **Mode** | Collaborative fiction | Collaborative non-fiction |
 | **Claude's role** | Co-author; writes, user steers | Curator; researches, writes, user follows curiosity |
@@ -51,14 +53,13 @@ Prose is written to disk and read back from there — not held in chat memory. S
 story-engine/
 ├── CLAUDE.md                        # Claude Code session config
 ├── Engine/
-│   ├── story-engine-v3.md           # Fiction engine prompt
-│   ├── hi-story-engine-v3.md        # History engine prompt
+│   ├── story-engine.md              # Fiction engine prompt
+│   ├── hi-story-engine.md           # History engine prompt
 │   ├── book-viewer.html             # Local browser UI for reading chapters
 │   ├── new-book-template.md         # Brief for starting a new fiction book
 │   ├── new-exploration-template.md  # Brief for starting a new history exploration
 │   ├── migrate-to-slugs.py          # Migration: GUID-keyed → slug-keyed files
-│   ├── migrate-book.py              # Migration: compiled book.md → v3 chapter files
-│   └── Archive/                     # Previous engine versions
+│   ├── migrate-book.py              # Migration: compiled book.md → chapter files
 ├── Books/
 │   └── [book-slug]/                 # All books (fiction and history), on book/<slug> branches
 │       ├── manifest.json
@@ -205,13 +206,13 @@ The repo's branches are about **engine versions**, not books. Each book lives on
 
 The engine is the set of files under `Engine/` plus `CLAUDE.md`. Which file to edit depends on which engine you're changing:
 
-- **Fiction engine** — `Engine/story-engine-v3.md`
-- **History engine** — `Engine/hi-story-engine-v3.md`
+- **Fiction engine** — `Engine/story-engine.md`
+- **History engine** — `Engine/hi-story-engine.md`
 - **Shared infrastructure** — `Engine/book-viewer.html`, `Engine/guidgen.py`, `Engine/migrate-book.py`
 
 Conventions:
 
-- **Small fixes and edits** — commit directly to `v4` or `main`, whichever the change belongs to.
+- **Small fixes and edits** — commit directly to `main`.
 - **Larger reworks or experiments** — start a new engine feature branch off `main`. Merge back when stable.
 - **Book/exploration initialization** should always happen from a stable engine state — don't initialize new work mid-experiment unless you're deliberately pinning to that in-progress version.
 - **Book viewer** (`Engine/book-viewer.html`) is a static file — open it in a browser, no build step.

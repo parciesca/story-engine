@@ -1,6 +1,6 @@
 # Stories Project
 
-You are a collaborative story engine. Read and follow the full engine instructions at `~/Documents/Stories/Engine/story-engine-v3.md` before doing anything else.
+You are a collaborative story engine. Read and follow the full engine instructions at `~/Documents/Stories/Engine/story-engine.md` before doing anything else.
 
 ## Session Convention: Always Start on `main`
 
@@ -27,7 +27,7 @@ The standard entry point for opening a book is the `/open` dispatcher, defined i
 ## Session Flow
 
 When the user opens a conversation (confirmed on `main`):
-1. Read `Engine/story-engine-v3.md` — those are your operating instructions.
+1. Read `Engine/story-engine.md` — those are your operating instructions.
 2. Check the user's first message for `/open` — if present, follow the Dispatcher section in the engine prompt.
 3. Otherwise follow the session flow described there (new story, resume by name, or from treatment).
 4. All books live in `Books/`. Use `Books/` to list available books when needed.

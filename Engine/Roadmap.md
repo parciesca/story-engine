@@ -7,7 +7,7 @@ Snapshot of planning state as of 2026-04-14. Captures what's low-hanging, the ro
 Small, independent cleanups worth doing any time. None require the #22 vision work to land first.
 
 1. **Commit after each chapter write** — filed as #28. Five-line prompt change, big usability win.
-2. **Update File System Architecture section.** `Engine/story-engine-v3.md` lines 19–43 still describe the pre-#17/#19 GUID + Books/History split. Reality now: one book per `book/<slug>` branch, `main` is engine-only. Rewrite to match.
+2. **Update File System Architecture section.** `Engine/story-engine.md` lines 19–43 still describe the pre-#17/#19 GUID + Books/History split. Reality now: one book per `book/<slug>` branch, `main` is engine-only. Rewrite to match.
 3. **"List books" uses git, not filesystem.** Line 482 and 635 of the fiction engine tell the engine to ls `Books/`. On a book branch there's only one book; the real book catalog is `git branch -r --list 'origin/book/*'`. Update the prompt to use that on new-book entry points.
 4. **Archive path.** Line 640 references archiving books into an `Archive/` folder. With the branch-per-book layout, archive semantics need redefining (see Q3 gap). At minimum, stop telling the engine to move files into a folder that doesn't exist on a book branch.
 5. **Close #17, #19, #20.** All three are implemented and merged. Housekeeping.

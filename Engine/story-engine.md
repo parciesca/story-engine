@@ -425,7 +425,7 @@ git branch --show-current
 
 - **`main`** — correct. Proceed to the appropriate init flow below.
 - **`book/<slug>`** — wrong branch. Take the following steps in order:
-  1. **Preferred:** Run `git checkout main`. If successful, re-read `Engine/story-engine-v3.md` from `main` and begin the full session flow from scratch. (The book branch is not lost — it exists as `book/<slug>` and will be accessed via worktree during resume or chapter writes as normal.)
+  1. **Preferred:** Run `git checkout main`. If successful, re-read `Engine/story-engine.md` from `main` and begin the full session flow from scratch. (The book branch is not lost — it exists as `book/<slug>` and will be accessed via worktree during resume or chapter writes as normal.)
   2. **Fallback** (if checkout fails): Stop immediately and tell the user:
      > **Wrong branch.** This session started on `book/<slug>`, but sessions must start on `main`. `Engine/` does not exist on book branches. Please open a new session from the repo root while on `main`.
 - **Anything else** — warn the user that this is an unexpected branch state and ask how to proceed before continuing.
@@ -446,7 +446,7 @@ After the Branch Guard confirms `main`, check the user's opening message for an 
    Read `$worktree/Books/<slug>/manifest.json` and extract the `engine` field.
 3. **Engine routing:**
    - `"story"` — this engine prompt already covers the session. Proceed.
-   - `"hi-story"` — read `Engine/hi-story-engine-v3.md` *now* (it is still accessible because the session is on `main`). Treat those instructions as the operative prompt for this session — they govern the resume flow, chapter writing, and all further behavior.
+   - `"hi-story"` — read `Engine/hi-story-engine.md` *now* (it is still accessible because the session is on `main`). Treat those instructions as the operative prompt for this session — they govern the resume flow, chapter writing, and all further behavior.
 4. Run **Initialization — Resume Existing Book** for this slug (reading all book files from `$worktree/Books/<slug>/`).
 
 **`/open` (no argument)**
