@@ -424,6 +424,48 @@ git branch --show-current
 
 Never proceed with session initialization on a `book/*` branch. `Engine/` does not exist on book branches; attempting to run the engine there will corrupt state or fail silently.
 
+### Dispatcher — `/open`
+
+After the Branch Guard confirms `main`, check the user's opening message for an `/open` command. This is the standard session entry point for v4.
+
+**`/open <slug>`**
+
+1. Validate: run `git ls-remote origin refs/heads/book/<slug>`. If not found, report "No book branch `book/<slug>` found" and offer to list available books (`/open` with no argument).
+2. Read the manifest from the remote before checkout: `git show origin/book/<slug>:Books/<slug>/manifest.json`. Extract the `engine` field.
+3. **Engine routing:**
+   - `"story"` — this engine prompt already covers the session. Proceed.
+   - `"hi-story"` — read `Engine/hi-story-engine-v3.md` *now*, while `Engine/` is still accessible on `main`. Treat those instructions as the operative prompt for this session — they govern the resume flow, chapter writing, and all further behavior.
+4. Check out the book branch: if a local `book/<slug>` exists, `git checkout book/<slug>`; otherwise `git checkout -b book/<slug> origin/book/<slug>`.
+5. Run **Initialization — Resume Existing Book** for this slug.
+
+**`/open` (no argument)**
+
+1. Fetch remote book refs: `git fetch --prune origin 'refs/heads/book/*:refs/remotes/origin/book/*'` (silent).
+2. List branches: `git branch -r --list 'origin/book/*'` — extract the slug from each ref (strip `origin/book/`). Sort alphabetically.
+3. If no branches found, go to **Empty Library** below.
+4. Display a numbered menu and wait for the user to pick:
+
+```
+Books available:
+  1. alone-on-the-bosphorus
+  2. city-hall
+  3. the-patient-country
+
+Pick a number:
+```
+
+5. User picks a number → proceed as `/open <slug>` for the chosen slug.
+
+**Empty library**
+
+No `book/*` branches exist. Say "No books found. Want to start one?" and offer the new-book flow.
+
+**No `/open` command**
+
+If the user's first message is not an `/open` command, fall through to the existing session prompts (new book, resume by name, treatment import, etc.).
+
+---
+
 ### Initialization — New Book
 
 **Optional entry point:** The user may provide a filled-out `Engine/new-book-template.md` brief. If they do, read it in full before asking any questions — extract whatever is filled in and skip those questions. Only ask about what's genuinely missing and needed to begin.
