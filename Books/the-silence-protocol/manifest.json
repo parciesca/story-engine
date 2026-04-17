@@ -1,0 +1,32 @@
+{
+  "title": "The Silence Protocol",
+  "slug": "the-silence-protocol",
+  "status": "active",
+  "genre": "science fiction",
+  "tone": "contemplative, slow-burn tension, first-contact dread",
+  "perspective": "3rd person",
+  "created": "2026-04-17T00:00:00Z",
+  "last_modified": "2026-04-17T00:00:00Z",
+  "current_chapter": 1,
+  "active_branch": "main",
+  "branches": {
+    "main": {
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-04-17T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "branch": "main",
+      "title": "Signal",
+      "file": "chapters/01.md",
+      "written": "2026-04-17",
+      "word_count": 1041
+    }
+  ],
+  "treatment_source": null,
+  "engine": "story",
+  "engine_commit": "3699801"
+}
