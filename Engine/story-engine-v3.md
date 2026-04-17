@@ -155,7 +155,7 @@ Feedback files are **read-only for the engine** — never overwrite or modify th
 1. **Chapter file** → `chapters/NN.md` (NN is the chapter number, zero-padded)
 2. **Planning file** → `planning/NN-proposal.md`
 3. **Story bible** → overwrite `story-bible.md` with updated state
-4. **Manifest** → overwrite `manifest.json` with new chapter entry, updated metadata, and `engine_commit` set to the output of `git rev-parse --short main`
+4. **Manifest** → overwrite `manifest.json` with new chapter entry and updated metadata. Leave `engine_commit` as a placeholder (`""`); the commit script injects the real SHA during `--commit`.
 
 ### Write Order
 
@@ -180,9 +180,13 @@ File I/O happens silently. The user doesn't need to see "saving chapter..." or "
 
 Each book lives on its own git branch named `book/<slug>` (matching its directory under `Books/`). Per-chapter commits never land on `main` directly — they accumulate on the book's branch and merge when the book is done.
 
-- **New book:** immediately after creating the book directory, create and check out the git branch: `git checkout -b book/<slug>` (forked from `main` — the Branch Guard ensures sessions always start there). If the git branch already exists, treat it as a slug collision and stop to ask the user.
-- **Resume / open book:** before any writes, ensure the working tree is on `book/<slug>`. If not, `git checkout book/<slug>` (creating it from `origin/book/<slug>` if it exists remotely, otherwise from `main`).
-- **All chapter commits land on `book/<slug>`.** Push opportunistically with `git push -u origin book/<slug>` — the `-u` is harmless after the first push and ensures upstream is set the first time.
+**The session always stays on `main`.** Git mechanics (worktree creation, staging, commit, push, teardown) are handled by `Engine/scripts/commit-chapter.sh` — never inline. Do not run `git checkout book/<slug>` or switch HEAD during a session.
+
+- **New book:** call `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug> --create)` — this forks the branch from the current HEAD and creates the worktree. If the branch already exists, treat that as a slug collision and stop to ask the user.
+- **Resume / open book:** call `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug>)` — this fetches the branch if needed and creates the worktree. Read all book files from `$worktree/Books/<slug>/`.
+- **All writes** (chapter, planning, bible, manifest) go to `$worktree/Books/<slug>/`. Never write book files to the main working tree.
+- **All chapter commits** are made via `bash Engine/scripts/commit-chapter.sh --commit --slug <slug> --message "..."`. The script injects `engine_commit`, stages, commits, pushes, and tears down the worktree on success.
+- **Read-only sessions** (no chapter written): call `bash Engine/scripts/commit-chapter.sh --teardown --slug <slug>` at session end to clean up the worktree.
 - The engine's own **story-fork "branches"** (under `Books/<slug>/branches/`) are unrelated to git branches. They stay on the same `book/<slug>` git branch.
 
 ### Chat Output Discipline
@@ -378,7 +382,11 @@ After presenting the chapter and choices to the user, perform all mandatory writ
 2. **Planning file** — write the full file: CHAPTER PROPOSAL (pre-chapter) followed by CHAPTER HANDOFF (choices or turning point question, verbatim as presented). This is the resume anchor.
 3. **Story bible** — updated state
 4. **Manifest** — updated last, references the chapter file
-5. **Commit** — first verify the working tree is on `book/<slug>` (see Git Branch Per Book); if not, check it out before staging. Then `git add` the book's directory and commit with message `Ch N: <chapter title>` (unpadded number, verbatim chapter title). Include any feedback-file disposition changes from this chapter in the same commit so the commit fully reflects the state transition. Push opportunistically with `git push -u origin book/<slug>`; do not block or surface an error if the push fails (offline is fine — commits accumulate locally and flush next time).
+5. **Commit** — run the commit script:
+   ```
+   bash Engine/scripts/commit-chapter.sh --commit --slug <slug> --message "Ch N: <chapter title>"
+   ```
+   Use the unpadded chapter number and verbatim chapter title. Include any feedback-file disposition changes in the same write pass so they are staged together. If the script exits 2 (push failed), tell the user the commit is saved locally and will push next session — do not treat it as a hard error.
 
 The CHAPTER HANDOFF must be written every session, every chapter, without exception. It is the primary mechanism by which "pick up where we left off" works.
 
@@ -417,7 +425,7 @@ git branch --show-current
 
 - **`main`** — correct. Proceed to the appropriate init flow below.
 - **`book/<slug>`** — wrong branch. Take the following steps in order:
-  1. **Preferred:** Run `git checkout main`. If successful, re-read `Engine/story-engine-v3.md` from `main` and begin the full session flow from scratch. (The book branch is not lost — it exists as `book/<slug>` and will be checked out internally during resume or chapter writes as normal.)
+  1. **Preferred:** Run `git checkout main`. If successful, re-read `Engine/story-engine-v3.md` from `main` and begin the full session flow from scratch. (The book branch is not lost — it exists as `book/<slug>` and will be accessed via worktree during resume or chapter writes as normal.)
   2. **Fallback** (if checkout fails): Stop immediately and tell the user:
      > **Wrong branch.** This session started on `book/<slug>`, but sessions must start on `main`. `Engine/` does not exist on book branches. Please open a new session from the repo root while on `main`.
 - **Anything else** — warn the user that this is an unexpected branch state and ask how to proceed before continuing.
@@ -431,12 +439,15 @@ After the Branch Guard confirms `main`, check the user's opening message for an 
 **`/open <slug>`**
 
 1. Validate: run `git ls-remote origin refs/heads/book/<slug>`. If not found, report "No book branch `book/<slug>` found" and offer to list available books (`/open` with no argument).
-2. Read the manifest from the remote before checkout: `git show origin/book/<slug>:Books/<slug>/manifest.json`. Extract the `engine` field.
+2. Set up the worktree:
+   ```
+   worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug>)
+   ```
+   Read `$worktree/Books/<slug>/manifest.json` and extract the `engine` field.
 3. **Engine routing:**
    - `"story"` — this engine prompt already covers the session. Proceed.
-   - `"hi-story"` — read `Engine/hi-story-engine-v3.md` *now*, while `Engine/` is still accessible on `main`. Treat those instructions as the operative prompt for this session — they govern the resume flow, chapter writing, and all further behavior.
-4. Check out the book branch: if a local `book/<slug>` exists, `git checkout book/<slug>`; otherwise `git checkout -b book/<slug> origin/book/<slug>`.
-5. Run **Initialization — Resume Existing Book** for this slug.
+   - `"hi-story"` — read `Engine/hi-story-engine-v3.md` *now* (it is still accessible because the session is on `main`). Treat those instructions as the operative prompt for this session — they govern the resume flow, chapter writing, and all further behavior.
+4. Run **Initialization — Resume Existing Book** for this slug (reading all book files from `$worktree/Books/<slug>/`).
 
 **`/open` (no argument)**
 
@@ -477,9 +488,9 @@ When the user wants to start a new story:
 3. Optional: tone/theme notes, content preferences, anything they want to establish.
 4. **Create the book directory:**
    - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
-   - Initialize `manifest.json` with metadata, empty chapters array, a `main` branch entry, `engine: "story"`, and `engine_commit` set to `git rev-parse --short main`
+   - Initialize `manifest.json` with metadata, empty chapters array, a `main` branch entry, `engine: "story"`, and `engine_commit: ""` (the commit script fills this in)
    - Initialize `story-bible.md` with premise, tone, genre, empty sections
-   - **Create the book's git branch:** `git checkout -b book/<slug>` (see Git Branch Per Book). All subsequent chapter commits land here.
+   - **Create the book worktree:** `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug> --create)`. All book files are written to `$worktree/Books/<slug>/`.
 5. Write the opening chapter. The prose goes to the file, not to chat — see Chat Output Discipline.
 6. **Save all files** (chapter, proposal, bible update, manifest update).
 7. Chat output: 1–2 sentence scene summary + dramatis personae (brief) + first choices. **Do not paste the chapter prose into chat** — it's already on disk for the viewer.
@@ -489,7 +500,7 @@ When the user wants to start a new story:
 When the user wants to continue a book (names it, or says "continue" and there's only one active book):
 
 1. **Read `manifest.json`** — understand the book state, chapter count, active branch.
-2. **Check out the book's git branch** — ensure the working tree is on `book/<slug>` (see Git Branch Per Book). Do this before any reads or writes touch the book directory.
+2. **Set up the book worktree** — `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug>)`. Do this before any reads or writes touch the book directory. All book files are read from and written to `$worktree/Books/<slug>/`.
 3. **Read the active branch's `story-bible.md`** — load continuity.
 4. **Read the most recent 1-2 chapter files** — get voice, momentum, last scene.
 5. **Read the planning file for the current chapter** (`planning/NN-proposal.md` where NN is `current_chapter` zero-padded) — look for the CHAPTER HANDOFF section.
@@ -505,7 +516,7 @@ When the user provides a treatment (file or pasted text):
 1. **Acknowledge the treatment.** "I see you're refining [Title]. Let me review what we're working with."
 2. **Read the treatment as a brief**, not a script. It informs — it doesn't constrain.
 3. **Ask what's changing.** "What do you want to do differently this time?"
-4. **Create the book directory** (same as new book), including the `book/<slug>` git branch.
+4. **Create the book directory** (same as new book), including the book worktree via `commit-chapter.sh --setup --create` (see Git Branch Per Book).
 5. **Save the treatment** as `treatment.md`. Set `treatment_source` in manifest.
 6. **Initialize the story bible** from the treatment's world rules, tone, and premise — adapted by whatever the user wants to change.
 7. **Write the opening chapter** informed by hindsight.
