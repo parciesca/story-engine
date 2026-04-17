@@ -57,18 +57,15 @@ story-engine/
 │   ├── hi-story-engine.md           # History engine prompt
 │   ├── book-viewer.html             # Local browser UI for reading chapters
 │   ├── new-book-template.md         # Brief for starting a new fiction book
-│   ├── new-exploration-template.md  # Brief for starting a new history exploration
-│   ├── migrate-to-slugs.py          # Migration: GUID-keyed → slug-keyed files
-│   ├── migrate-book.py              # Migration: compiled book.md → chapter files
-├── Books/
-│   └── [book-slug]/                 # All books (fiction and history), on book/<slug> branches
-│       ├── manifest.json
-│       ├── story-bible.md           # or research-bible.md for history explorations
-│       ├── chapters/
-│       ├── planning/
-│       ├── addenda/                 # History explorations only: tangential deep dives
-│       └── branches/                # Fiction only: alternate-timeline forks
-└── Archive/                         # Older book versions migrated from Chat
+│   └── new-exploration-template.md  # Brief for starting a new history exploration
+└── Books/
+    └── [book-slug]/                 # All books (fiction and history), on book/<slug> branches
+        ├── manifest.json
+        ├── story-bible.md           # or research-bible.md for history explorations
+        ├── chapters/
+        ├── planning/
+        ├── addenda/                 # History explorations only: tangential deep dives
+        └── branches/                # Fiction only: alternate-timeline forks
 ```
 
 ---
@@ -147,16 +144,6 @@ It also supports writing feedback files — leaving steering notes that Claude p
 
 ---
 
-## Utility Scripts
-
-### migrate-book.py
-Splits a compiled `book.md` into individual v3 chapter files with YAML front matter, generates a manifest, and sets up the full directory structure.
-
-### migrate-to-slugs.py
-Migrates an older GUID-keyed book (where files were named `ch-<guid>.md`) to the current slug/number-keyed layout. Run once per book that was created before the v3 identity scheme was finalized.
-
----
-
 ## Commands (say these in chat)
 
 Shared:
@@ -208,7 +195,7 @@ The engine is the set of files under `Engine/` plus `CLAUDE.md`. Which file to e
 
 - **Fiction engine** — `Engine/story-engine.md`
 - **History engine** — `Engine/hi-story-engine.md`
-- **Shared infrastructure** — `Engine/book-viewer.html`, `Engine/guidgen.py`, `Engine/migrate-book.py`
+- **Shared infrastructure** — `Engine/book-viewer.html`, `Engine/scripts/commit-chapter.sh`
 
 Conventions:
 

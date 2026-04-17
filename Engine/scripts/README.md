@@ -1,6 +1,6 @@
 # Engine/scripts
 
-One-off and recurring utility scripts for the story engine.
+Utility scripts for the story engine.
 
 ---
 
@@ -44,17 +44,3 @@ bash Engine/scripts/commit-chapter.sh --teardown --slug <slug>
 during `--commit`, so the engine never needs to call `git rev-parse` itself.
 
 Worktrees live under `.worktrees/book/<slug>/` (git-ignored).
-
----
-
-## migrate-34-engine-fields.sh
-
-Backfills `engine` and `engine_commit` fields into existing book manifests.
-One-shot migration for issue [#34](https://github.com/parciesca/story-engine/issues/34). Do not re-run.
-
----
-
-## purge-book-branches-32.sh
-
-Removes stale `Engine/` and `CLAUDE.md` copies from all `book/*` branches.
-One-shot migration for issue [#32](https://github.com/parciesca/story-engine/issues/32). Do not re-run.
