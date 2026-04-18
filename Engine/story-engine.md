@@ -126,17 +126,28 @@ These accumulate and are never overwritten — they're a record of how the story
 
 A separate file per chapter: `planning/01-feedback.md`
 
-These are written by the user outside of a session (via the book viewer or manually). They contain the user's steering response to a CHAPTER HANDOFF — the same kind of input the user would give in a chat prompt (a letter choice, custom direction, or open-ended steering).
+These contain the user's steering response to a CHAPTER HANDOFF — the same kind of input the user would give in a chat prompt (a letter choice, custom direction, or open-ended steering). Two paths produce them: the book viewer (when the user steers between sessions) and the engine itself (when the user steers in chat).
 
 ```
 CHAPTER FEEDBACK
-  For: [chapter number]
-  Written: [date]
+  For: NN
+  Written: YYYY-MM-DD
 
-[User's free-text response to the handoff choices]
+[User's verbatim response to the handoff]
 ```
 
-Feedback files are **read-only for the engine** — never overwrite or modify them. They are consumed during resume (see below).
+`NN` is the chapter number the feedback responds to, zero-padded (`01`, `02`, `13`).
+
+**Engine write carve-out.** When the user steers in chat in response to the prior chapter's handoff, write their message verbatim to `planning/NN-feedback.md` as part of the next chapter's write pass — so in-chat steering leaves the same archival artifact as viewer-written steering.
+
+Rules:
+- Write only if the file does not already exist. If the viewer already wrote one, trust it — do not overwrite.
+- Write the user's message **verbatim**. A letter choice (`"B"`), `"keep going"`, or a full direction paragraph all go in as-is.
+- Use the exact format above.
+- Stage it in the same commit as the next chapter — no separate commit.
+- Off-book / meta chat ("show bible", "who's who?", tonal notes between chapters) is not handoff steering and does not produce a feedback file.
+
+Outside this carve-out, feedback files are read-only for the engine — never overwrite or modify them. They are consumed during resume (see below).
 
 ---
 
@@ -154,16 +165,18 @@ Feedback files are **read-only for the engine** — never overwrite or modify th
 ### Mandatory Writes (Per Chapter)
 1. **Chapter file** → `chapters/NN.md` (NN is the chapter number, zero-padded)
 2. **Planning file** → `planning/NN-proposal.md`
-3. **Story bible** → overwrite `story-bible.md` with updated state
-4. **Manifest** → overwrite `manifest.json` with new chapter entry and updated metadata. Leave `engine_commit` as a placeholder (`""`); the commit script injects the real SHA during `--commit`.
+3. **Feedback file for the prior chapter** (conditional) → `planning/NN-feedback.md`, where NN is the chapter the user's in-chat steering responded to. Only if the user gave handoff steering in chat and the file does not already exist. See Feedback Files for format and rules.
+4. **Story bible** → overwrite `story-bible.md` with updated state
+5. **Manifest** → overwrite `manifest.json` with new chapter entry and updated metadata. Leave `engine_commit` as a placeholder (`""`); the commit script injects the real SHA during `--commit`.
 
 ### Write Order
 
 After writing a chapter, perform file operations in this order:
 1. Save chapter file (prose is preserved first)
 2. Save planning file
-3. Update story bible
-4. Update manifest (last, because it references the chapter file)
+3. Save prior-chapter feedback file (conditional — see Mandatory Writes)
+4. Update story bible
+5. Update manifest (last, because it references the chapter file)
 
 If anything interrupts mid-write, the chapter prose is safe.
 
@@ -382,13 +395,14 @@ After presenting the chapter and choices to the user, perform all mandatory writ
 
 1. **Chapter file** — prose is safe first
 2. **Planning file** — write the full file: CHAPTER PROPOSAL (pre-chapter) followed by CHAPTER HANDOFF (choices or turning point question, verbatim as presented). This is the resume anchor.
-3. **Story bible** — updated state
-4. **Manifest** — updated last, references the chapter file
-5. **Commit** — run the commit script:
+3. **Prior-chapter feedback file** (conditional) — if the user steered in chat in response to the prior chapter's handoff and `planning/NN-feedback.md` does not already exist (NN = the chapter responded to), write their message verbatim in the viewer format. See Feedback Files for rules. Skip for meta/off-book chat or when a viewer-written file is already present.
+4. **Story bible** — updated state
+5. **Manifest** — updated last, references the chapter file
+6. **Commit** — run the commit script:
    ```
    bash Engine/scripts/commit-chapter.sh --commit --slug <slug> --message "Ch N: <chapter title>"
    ```
-   Use the unpadded chapter number and verbatim chapter title. Include any feedback-file disposition changes in the same write pass so they are staged together. If the script exits 2 (push failed), tell the user the commit is saved locally and will push next session — do not treat it as a hard error.
+   Use the unpadded chapter number and verbatim chapter title. All writes above (including the feedback file) are staged in this single commit. If the script exits 2 (push failed), tell the user the commit is saved locally and will push next session — do not treat it as a hard error.
 
 The CHAPTER HANDOFF must be written every session, every chapter, without exception. It is the primary mechanism by which "pick up where we left off" works.
 
