@@ -6,8 +6,8 @@
   "tone": "contemplative, slow-burn tension, first-contact dread",
   "perspective": "3rd person",
   "created": "2026-04-17T00:00:00Z",
-  "last_modified": "2026-04-17T00:00:00Z",
-  "current_chapter": 1,
+  "last_modified": "2026-04-18T00:00:00Z",
+  "current_chapter": 2,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -24,9 +24,17 @@
       "file": "chapters/01.md",
       "written": "2026-04-17",
       "word_count": 1041
+    },
+    {
+      "number": 2,
+      "branch": "main",
+      "title": "Nomenclature",
+      "file": "chapters/02.md",
+      "written": "2026-04-18",
+      "word_count": 951
     }
   ],
   "treatment_source": null,
   "engine": "story",
-  "engine_commit": "3699801"
+  "engine_commit": "2e6dd7e"
 }
