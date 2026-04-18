@@ -555,31 +555,47 @@ When the user wants to migrate an existing book from a Chat conversation:
 
 ### Ongoing Loop
 
-1. User provides input (letter choice, custom direction, "keep going", detailed steering)
-2. **Read story bible** (if not already in context from this session)
-3. Assess turning point level
-4. If major turning point: pause and ask before writing
-5. Otherwise: produce chapter proposal, write chapter to file, present summary + choices in chat (no prose in chat — see Chat Output Discipline)
-6. **Save all files** (chapter, proposal, bible, manifest)
-7. Repeat
+After the opening (or resume) chapter is on disk, the session sits in a continuation state: the most recent chapter has a CHAPTER HANDOFF, no next chapter is in flight, and the worktree is clean and torn down (the commit script tears it down on a successful push).
 
-### User Steering Modes
+Every subsequent user message is classified into one of three modes. Classify before doing anything else — the mode determines whether a chapter gets written this turn.
 
-The engine handles all of these naturally:
+#### Mode 1 — In-chat steering
 
-- **"B"** — Pick the option, write the next chapter.
-- **"B, but make it so that..."** — Pick the option with modifications.
-- **Custom direction paragraph** — Ignore presented options entirely, follow the user's lead.
-- **"Keep going" / "continue"** — You pick the most natural continuation and write it.
-- **"Resume"** — Always triggers the full resume initialization flow (read manifest → bible → recent chapters → planning file → check for feedback file). Never treat as "keep going." If a feedback file exists, confirm its direction and proceed to write. If not, present the handoff and wait.
-- **"What are my options?"** — Present choices (useful after a turning point pause).
-- **"Who's who?" / "Where are we?" / "What's happened?"** — Read from story bible and present.
-- **Meta-direction** — "Make it darker", "slow the pacing down", "I want more dialogue in this next stretch." Apply to subsequent chapters as a tonal adjustment.
-- **"Compile book"** — Generate `book.md` from all chapter files in sequence.
-- **"Show bible"** — Display the current story bible.
-- **"Branch here"** — Fork the story (see Branching).
-- **"Switch to [branch]"** — Change active branch.
-- **"List books"** — Show all books with status.
+The user's message is a response to the prior chapter's handoff: a letter choice (`"B"`), a choice with a tweak (`"B, but make it so that..."`), a custom direction paragraph, `"keep going"` / `"continue"` / `"again"` accompanied by direction, or a meta-tonal note that's clearly meant to shape the next chapter (`"make it darker"`, `"slow the pacing"`).
+
+Action:
+1. Run `--setup` to get a fresh worktree.
+2. Assess turning point level. If major turning point, pause and ask before writing.
+3. Otherwise produce the proposal and write the next chapter.
+4. Per Mandatory Writes #3, write `planning/NN-feedback.md` for the just-responded-to chapter (NN = the prior chapter), verbatim, only if it does not already exist.
+5. Save chapter, proposal, bible, manifest. Commit via `--commit` — the feedback file is staged in the same commit.
+
+#### Mode 2 — Prod
+
+The user's message is a bare prod with no inline direction: `"next"`, `"continue"`, `"resume"`, `"again"`, `"go"`, `"keep going"` on its own. The likely cause is that they've left steering in the viewer between turns.
+
+Action:
+1. Run `--setup` — this fast-forwards the worktree to `origin/book/<slug>` and picks up any viewer commits made since the last write.
+2. Read `planning/NN-feedback.md` where NN = `current_chapter` (zero-padded).
+3. **Feedback file present:** confirm the direction in one short line ("You left a note steering toward… — writing it now."), then write the next chapter as in Mode 1, using the feedback as the steering input. Do not re-write the feedback file (it already exists).
+4. **Feedback file absent:** re-present the prior chapter's CHAPTER HANDOFF verbatim and wait. Do not invent a continuation.
+
+`"resume"` mid-session is a Mode 2 prod, not a fresh session boot. The full resume initialization flow only runs at session start (see Initialization — Resume Existing Book).
+
+#### Mode 3 — Meta / off-book
+
+The user's message is about the engine, an issue, the story bible, the cast, an unrelated question, or any discussion that isn't responding to the handoff. Examples: `"who's who?"`, `"show bible"`, `"what happened in chapter 3?"`, `"explain how branching works"`, `"continue what you were saying about issue 45"`, `"list books"`, `"compile book"`, `"branch here"`, `"switch to [branch]"`.
+
+Action: answer the question or run the requested command. Do not write a chapter, do not write a feedback file, do not run `--setup` unless the request itself needs the worktree (e.g. `"compile book"`, `"show bible"` when the bible isn't already in context, `"branch here"`). The session stays in the continuation state — the next message is classified again from scratch.
+
+Note that "continue" inside a Mode 3 thread (`"continue what you were saying about issue 45"`) is part of the meta discussion, not a Mode 2 prod. Read the whole message, not just the trigger word.
+
+#### Disambiguation
+
+- A bare `"continue"` / `"next"` / `"resume"` after a chapter handoff is **Mode 2**.
+- The same word inside a sentence about something else is **Mode 3**.
+- Steering with content (a letter, a paragraph, a tonal note meant for the next chapter) is **Mode 1**.
+- When genuinely ambiguous, ask one short clarifying question rather than guessing.
 
 ---
 
