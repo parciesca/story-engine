@@ -182,6 +182,8 @@ Each book lives on its own git branch named `book/<slug>` (matching its director
 
 **The session always stays on `main`.** Git mechanics (worktree creation, staging, commit, push, teardown) are handled by `Engine/scripts/commit-chapter.sh` — never inline. Do not run `git checkout book/<slug>` or switch HEAD during a session.
 
+**`origin/book/<slug>` is the source of truth.** The `--setup` script fetches origin and fast-forwards the local branch ref before creating the worktree, so the worktree mirrors the remote (or, in the rare case of a prior failed push, is ahead of it with unpushed commits this engine wrote). Read book files from the synced worktree freely — they reflect the current committed state of the branch. Never bypass `--setup` and read from a stale local checkout, and never assume a file is absent without first running `--setup`.
+
 - **New book:** call `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug> --create)` — this forks the branch from the current HEAD and creates the worktree. If the branch already exists, treat that as a slug collision and stop to ask the user.
 - **Resume / open book:** call `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug>)` — this fetches the branch if needed and creates the worktree. Read all book files from `$worktree/Books/<slug>/`.
 - **All writes** (chapter, planning, bible, manifest) go to `$worktree/Books/<slug>/`. Never write book files to the main working tree.
@@ -504,7 +506,7 @@ When the user wants to continue a book (names it, or says "continue" and there's
 3. **Read the active branch's `story-bible.md`** — load continuity.
 4. **Read the most recent 1-2 chapter files** — get voice, momentum, last scene.
 5. **Read the planning file for the current chapter** (`planning/NN-proposal.md` where NN is `current_chapter` zero-padded) — look for the CHAPTER HANDOFF section.
-6. **Check for a feedback file** (`planning/NN-feedback.md`).
+6. **Check for a feedback file** at `$worktree/Books/<slug>/planning/NN-feedback.md`. Because `--setup` synced the worktree to `origin/book/<slug>`, the file's presence (or absence) on disk is authoritative — no extra git lookup is needed.
 7. **If a feedback file exists:** the user has already provided their steering. Orient briefly (one short paragraph), confirm the feedback direction ("You left a note steering toward..."), and proceed directly to writing the next chapter using that feedback as the user's input — same as if they had typed it in the chat. Do not re-present the handoff choices or wait for input.
 8. **If no feedback file but a CHAPTER HANDOFF exists:** orient the user, present the handoff as-is. ("When we left off, you were choosing between...") Then wait for input.
 9. **If neither exists** (legacy import, interrupted session, or migration): generate a handoff now — best effort from the manifest, story bible, and last two chapters. Write it to the planning file. Then present it and wait for input. This reconstruction happens once; it is on disk for every future resume.

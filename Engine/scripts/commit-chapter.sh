@@ -53,19 +53,43 @@ WORKTREE="$REPO_ROOT/.worktrees/$BRANCH"
 # ── setup ─────────────────────────────────────────────────────────────────────
 if [[ "$MODE" == "setup" ]]; then
 
+  # Refresh the remote-tracking ref so the worktree reflects committed state
+  # written outside this session (e.g. feedback files saved by the book viewer).
+  REMOTE_EXISTS=false
+  if git ls-remote --exit-code --heads origin "$BRANCH" &>/dev/null; then
+    REMOTE_EXISTS=true
+    git fetch origin "$BRANCH"
+  fi
+
   if ! git show-ref --verify --quiet "refs/heads/$BRANCH"; then
     if $CREATE_BRANCH; then
       git branch "$BRANCH"
-    elif git ls-remote --exit-code --heads origin "$BRANCH" &>/dev/null; then
-      git fetch origin "$BRANCH:$BRANCH"
+    elif $REMOTE_EXISTS; then
+      git branch "$BRANCH" "refs/remotes/origin/$BRANCH"
     else
       echo "Error: branch '$BRANCH' not found locally or at origin." >&2
       echo "  For a new book, add --create to create the branch from the current HEAD." >&2
       exit 1
     fi
+  elif $REMOTE_EXISTS; then
+    LOCAL_SHA=$(git rev-parse "refs/heads/$BRANCH")
+    REMOTE_SHA=$(git rev-parse "refs/remotes/origin/$BRANCH")
+    if [[ "$LOCAL_SHA" != "$REMOTE_SHA" ]]; then
+      if git merge-base --is-ancestor "$LOCAL_SHA" "$REMOTE_SHA"; then
+        # Local behind origin — fast-forward so the worktree mirrors the remote.
+        git update-ref "refs/heads/$BRANCH" "$REMOTE_SHA"
+      elif git merge-base --is-ancestor "$REMOTE_SHA" "$LOCAL_SHA"; then
+        # Local ahead — preserve unpushed commits from a prior failed push.
+        :
+      else
+        echo "Warning: local '$BRANCH' has diverged from origin." >&2
+        echo "  Local:  $LOCAL_SHA" >&2
+        echo "  Remote: $REMOTE_SHA" >&2
+        echo "  Worktree will use local HEAD; resolve manually before committing." >&2
+      fi
+    fi
   fi
 
-  # Remove stale worktree if present
   if [[ -d "$WORKTREE" ]]; then
     git worktree remove --force "$WORKTREE" 2>/dev/null || true
   fi
