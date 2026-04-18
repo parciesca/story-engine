@@ -7,7 +7,7 @@
   "perspective": "3rd person",
   "created": "2026-04-17T00:00:00Z",
   "last_modified": "2026-04-18T00:00:00Z",
-  "current_chapter": 3,
+  "current_chapter": 4,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -40,9 +40,17 @@
       "file": "chapters/03.md",
       "written": "2026-04-18",
       "word_count": 982
+    },
+    {
+      "number": 4,
+      "branch": "main",
+      "title": "Inventory",
+      "file": "chapters/04.md",
+      "written": "2026-04-18",
+      "word_count": 967
     }
   ],
   "treatment_source": null,
   "engine": "story",
-  "engine_commit": "2e6dd7e"
+  "engine_commit": "1c1940d"
 }
