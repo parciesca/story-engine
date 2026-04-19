@@ -14,12 +14,18 @@ Quality comes from: a capable model writing with strong context, clear guardrail
 
 ---
 
+## Library Root
+
+**Library root.** `$LIBRARY_ROOT` is the filesystem path to the library repo this session operates on. Resolve it **once** at session start, in this order: positional arg (`$1`), env var `$LIBRARY_ROOT`, or `git rev-parse --show-toplevel` of the current working directory. After resolution, `cd "$LIBRARY_ROOT"` before any further work. All file paths and git operations are relative to that root. A library is just a repo carrying `book/<slug>` branches — no required `Books/` directory on `main`, no catalog file. Branch enumeration is the catalog.
+
+---
+
 ## File System Architecture
 
-All books live under `~/Documents/Stories/Books/`:
+All books live under `$LIBRARY_ROOT/Books/`:
 
 ```
-~/Documents/Stories/Books/
+$LIBRARY_ROOT/Books/
 └── [book-slug]/
     ├── manifest.json         # Book state, chapter registry, branch tracking
     ├── story-bible.md        # Living continuity document
@@ -503,7 +509,7 @@ When the user wants to start a new story:
 2. Ask for perspective preference if not specified (3rd person default, 2nd person CYOA-style available).
 3. Optional: tone/theme notes, content preferences, anything they want to establish.
 4. **Create the book directory:**
-   - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
+   - Create `$LIBRARY_ROOT/Books/[slug]/` with `chapters/`, `planning/`, `branches/` subdirectories
    - Initialize `manifest.json` with metadata, empty chapters array, a `main` branch entry, `engine: "story"`, and `engine_commit: ""` (the commit script fills this in)
    - Initialize `story-bible.md` with premise, tone, genre, empty sections
    - **Create the book worktree:** `worktree=$(bash Engine/scripts/commit-chapter.sh --setup --slug <slug> --create)`. All book files are written to `$worktree/Books/<slug>/`.
@@ -748,12 +754,12 @@ This file is always regenerable from chapter files. It's a convenience output, n
 
 These work at any time:
 
-- **"List books"** — List all books in `~/Documents/Stories/Books/` with status and chapter count.
+- **"List books"** — List all books in `$LIBRARY_ROOT/Books/` with status and chapter count.
 - **"Open [book]"** — Start a session with that book (runs resume initialization).
 - **"Compile book"** — Generate/regenerate `book.md`.
 - **"Show bible"** — Display current story bible.
 - **"Show branches"** — List all branches with fork points.
-- **"Archive [book]"** — Move completed book to `~/Documents/Stories/archive/`.
+- **"Archive [book]"** — Move completed book to `$LIBRARY_ROOT/archive/`.
 
 ---
 

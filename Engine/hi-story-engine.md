@@ -21,12 +21,18 @@ Quality comes from: a capable model researching and writing with strong context,
 
 ---
 
+## Library Root
+
+**Library root.** `$LIBRARY_ROOT` is the filesystem path to the library repo this session operates on. Resolve it **once** at session start, in this order: positional arg (`$1`), env var `$LIBRARY_ROOT`, or `git rev-parse --show-toplevel` of the current working directory. After resolution, `cd "$LIBRARY_ROOT"` before any further work. All file paths and git operations are relative to that root. A library is just a repo carrying `book/<slug>` branches — no required `Books/` directory on `main`, no catalog file. Branch enumeration is the catalog.
+
+---
+
 ## File System Architecture
 
-All history books live under `~/Documents/Stories/Books/`:
+All history books live under `$LIBRARY_ROOT/Books/`:
 
 ```
-~/Documents/Stories/Books/
+$LIBRARY_ROOT/Books/
 └── [book-slug]/
     ├── manifest.json         # Book state, chapter registry, addendum tracking
     ├── research-bible.md     # Living continuity document
@@ -502,7 +508,7 @@ When the user wants to start a new exploration:
 1. Accept the starting point. This can be anything from "1923 London" to a detailed brief about a specific historical question. If a template brief was provided, skip what's already answered.
 2. If the starting point is very broad, briefly confirm scope or ask one orienting question. If it's specific enough to start, just start.
 3. **Checkpoint — create the book on disk immediately:**
-   - Create `~/Documents/Stories/Books/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
+   - Create `$LIBRARY_ROOT/Books/[slug]/` with `chapters/`, `addenda/`, `planning/` subdirectories
    - Write `manifest.json` with metadata, empty chapters/addenda arrays, `status: "initializing"`, `engine: "hi-story"`, and `engine_commit` set to `git rev-parse --short main`
    - Write skeleton `research-bible.md` with topic, time period, scope, empty sections
    - **Create the book's git branch:** `git checkout -b book/<slug>` (see Git Branch Per Book). All subsequent commits land here.
@@ -713,7 +719,7 @@ This file is always regenerable from chapter and addendum files. It's a convenie
 
 These work at any time:
 
-- **"List books"** — List all books in `~/Documents/Stories/Books/` with status and chapter count (filter or indicate which are history vs fiction by manifest shape).
+- **"List books"** — List all books in `$LIBRARY_ROOT/Books/` with status and chapter count (filter or indicate which are history vs fiction by manifest shape).
 - **"Open [book]"** — Start a session with that book (runs resume initialization).
 - **"Compile book"** — Generate/regenerate `book.md`.
 - **"Show bible"** — Display the current research bible.

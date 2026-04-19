@@ -23,24 +23,30 @@
 
 set -euo pipefail
 
-REPO_ROOT=$(git rev-parse --show-toplevel)
-
 MODE=""
 SLUG=""
 MESSAGE=""
 CREATE_BRANCH=false
+LIBRARY_ROOT_ARG=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --setup)    MODE="setup";           shift ;;
-    --commit)   MODE="commit";          shift ;;
-    --teardown) MODE="teardown";        shift ;;
-    --slug)     SLUG="$2";              shift 2 ;;
-    --message)  MESSAGE="$2";           shift 2 ;;
-    --create)   CREATE_BRANCH=true;     shift ;;
+    --setup)         MODE="setup";              shift ;;
+    --commit)        MODE="commit";             shift ;;
+    --teardown)      MODE="teardown";           shift ;;
+    --slug)          SLUG="$2";                 shift 2 ;;
+    --message)       MESSAGE="$2";              shift 2 ;;
+    --create)        CREATE_BRANCH=true;        shift ;;
+    --library-root)  LIBRARY_ROOT_ARG="$2";     shift 2 ;;
     *) echo "Unknown argument: $1" >&2; exit 1 ;;
   esac
 done
+
+if [[ -n "$LIBRARY_ROOT_ARG" ]]; then
+  REPO_ROOT=$(cd "$LIBRARY_ROOT_ARG" && git rev-parse --show-toplevel)
+else
+  REPO_ROOT=$(git rev-parse --show-toplevel)
+fi
 
 if [[ -z "$SLUG" ]]; then
   echo "Error: --slug is required." >&2
@@ -68,6 +74,7 @@ if [[ "$MODE" == "setup" ]]; then
       git branch "$BRANCH" "refs/remotes/origin/$BRANCH"
     else
       echo "Error: branch '$BRANCH' not found locally or at origin." >&2
+      echo "  Library root: $REPO_ROOT" >&2
       echo "  For a new book, add --create to create the branch from the current HEAD." >&2
       exit 1
     fi
@@ -108,6 +115,7 @@ elif [[ "$MODE" == "commit" ]]; then
 
   if [[ ! -d "$WORKTREE" ]]; then
     echo "Error: worktree not found at '$WORKTREE'." >&2
+    echo "  Library root: $REPO_ROOT" >&2
     echo "  Run: Engine/scripts/commit-chapter.sh --setup --slug $SLUG" >&2
     exit 1
   fi
