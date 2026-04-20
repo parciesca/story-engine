@@ -3,7 +3,8 @@
 # Issue: https://github.com/parciesca/story-engine/issues/36
 #
 # Manages a git worktree for a book branch so the engine can read, write, and
-# commit chapter files without ever switching HEAD off main.
+# commit chapter files without ever switching HEAD off the library repo's
+# current branch (typically main).
 #
 # Usage:
 #   commit-chapter.sh --setup   --slug <slug>             (existing branch)
@@ -12,35 +13,44 @@
 #       Prints the absolute worktree path to stdout.
 #
 #   commit-chapter.sh --commit  --slug <slug> --message <msg>
-#       Injects engine_commit into manifest.json, stages all changes under
-#       Books/<slug>/, commits with <msg>, pushes to origin/book/<slug>.
-#       On push failure: leaves commit locally; exits 2 with retry hint.
-#       On success: tears down the worktree.
+#       Stages all changes under Books/<slug>/, commits with <msg>, pushes to
+#       origin/book/<slug>. On push failure: leaves commit locally; exits 2
+#       with retry hint. On success: tears down the worktree.
 #
 #   commit-chapter.sh --teardown --slug <slug>
 #       Removes the worktree without committing (read-only or aborted session).
 #       Refuses if unpushed commits exist.
+#
+# The engine stamps manifest.json's engine_version field itself (from the
+# invoking skill's frontmatter version). This script does not touch manifest
+# contents.
 
 set -euo pipefail
-
-REPO_ROOT=$(git rev-parse --show-toplevel)
 
 MODE=""
 SLUG=""
 MESSAGE=""
 CREATE_BRANCH=false
+LIBRARY_ROOT_ARG=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --setup)    MODE="setup";           shift ;;
-    --commit)   MODE="commit";          shift ;;
-    --teardown) MODE="teardown";        shift ;;
-    --slug)     SLUG="$2";              shift 2 ;;
-    --message)  MESSAGE="$2";           shift 2 ;;
-    --create)   CREATE_BRANCH=true;     shift ;;
+    --setup)         MODE="setup";              shift ;;
+    --commit)        MODE="commit";             shift ;;
+    --teardown)      MODE="teardown";           shift ;;
+    --slug)          SLUG="$2";                 shift 2 ;;
+    --message)       MESSAGE="$2";              shift 2 ;;
+    --create)        CREATE_BRANCH=true;        shift ;;
+    --library-root)  LIBRARY_ROOT_ARG="$2";     shift 2 ;;
     *) echo "Unknown argument: $1" >&2; exit 1 ;;
   esac
 done
+
+if [[ -n "$LIBRARY_ROOT_ARG" ]]; then
+  REPO_ROOT=$(cd "$LIBRARY_ROOT_ARG" && git rev-parse --show-toplevel)
+else
+  REPO_ROOT=$(git rev-parse --show-toplevel)
+fi
 
 if [[ -z "$SLUG" ]]; then
   echo "Error: --slug is required." >&2
@@ -68,6 +78,7 @@ if [[ "$MODE" == "setup" ]]; then
       git branch "$BRANCH" "refs/remotes/origin/$BRANCH"
     else
       echo "Error: branch '$BRANCH' not found locally or at origin." >&2
+      echo "  Library root: $REPO_ROOT" >&2
       echo "  For a new book, add --create to create the branch from the current HEAD." >&2
       exit 1
     fi
@@ -108,7 +119,8 @@ elif [[ "$MODE" == "commit" ]]; then
 
   if [[ ! -d "$WORKTREE" ]]; then
     echo "Error: worktree not found at '$WORKTREE'." >&2
-    echo "  Run: Engine/scripts/commit-chapter.sh --setup --slug $SLUG" >&2
+    echo "  Library root: $REPO_ROOT" >&2
+    echo "  Run: bash $0 --setup --slug $SLUG" >&2
     exit 1
   fi
 
@@ -116,23 +128,6 @@ elif [[ "$MODE" == "commit" ]]; then
   if [[ ! -d "$BOOKS_DIR" ]]; then
     echo "Error: book directory not found: $BOOKS_DIR" >&2
     exit 1
-  fi
-
-  # Inject current engine SHA into manifest so every chapter commit records
-  # which engine version wrote it (issue #34).
-  MANIFEST="$BOOKS_DIR/manifest.json"
-  if [[ -f "$MANIFEST" ]]; then
-    ENGINE_SHA=$(git rev-parse --short HEAD)
-    python3 - <<PYEOF
-import json, sys
-path = "$MANIFEST"
-with open(path, "r", encoding="utf-8") as f:
-    m = json.load(f)
-m["engine_commit"] = "$ENGINE_SHA"
-with open(path, "w", encoding="utf-8") as f:
-    json.dump(m, f, indent=2, ensure_ascii=False)
-    f.write("\n")
-PYEOF
   fi
 
   pushd "$WORKTREE" > /dev/null
@@ -154,7 +149,7 @@ PYEOF
     echo "Push failed. The commit is saved locally on '$BRANCH'." >&2
     echo "Retry when connectivity is restored:" >&2
     echo "  git -C '$WORKTREE' push origin $BRANCH" >&2
-    echo "Then clean up: Engine/scripts/commit-chapter.sh --teardown --slug $SLUG" >&2
+    echo "Then clean up: bash $0 --teardown --slug $SLUG" >&2
     exit 2
   fi
 

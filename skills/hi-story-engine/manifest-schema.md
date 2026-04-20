@@ -12,8 +12,14 @@ Every book has a `Books/<slug>/manifest.json` that tracks state. The two engines
 | `created` | ISO 8601 | When the book was first created |
 | `last_modified` | ISO 8601 | Updated on every write |
 | `engine` | string | `"story"` or `"hi-story"` — which engine manages this book |
-| `engine_commit` | string | Short SHA of the engine branch (`main`) when the book was last written. Set on new-book creation; updated on every chapter-write commit. |
+| `engine_version` | string | Semver string from the invoking skill's frontmatter `version`. Stamped on new-book creation and on every chapter-write. |
 | `treatment_source` | string \| null | Filename of the source treatment, or `null` |
+
+### engine_version and lazy migration
+
+`engine_version` replaces the legacy `engine_commit` field (v5, #42). The engine itself stamps `engine_version` in the manifest whenever it writes one — the commit script does not touch the manifest.
+
+**Lazy migration.** When the engine opens an existing manifest that still carries `engine_commit`, it does not migrate eagerly. On the *next* write to that manifest, the engine drops `engine_commit` and sets `engine_version` to the current skill version. No bulk migration script is run; manifests migrate naturally as books see their next chapter.
 
 ## story engine only
 
