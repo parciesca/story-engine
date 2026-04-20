@@ -1,0 +1,27 @@
+{
+  "slug": "dust-and-ink",
+  "title": "Dust and Ink",
+  "genre": "epic fantasy",
+  "perspective": "third person",
+  "status": "active",
+  "engine": "story",
+  "engine_version": "5.0.0",
+  "active_branch": "main",
+  "current_chapter": 1,
+  "chapters": [
+    {
+      "number": 1,
+      "title": "The Aldenmere Road",
+      "branch": "main",
+      "file": "chapters/01.md"
+    }
+  ],
+  "branches": {
+    "main": {
+      "forked_from": null,
+      "forked_at_chapter": null
+    }
+  },
+  "created": "2026-04-20",
+  "last_updated": "2026-04-20"
+}
