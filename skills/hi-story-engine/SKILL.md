@@ -287,7 +287,7 @@ The user can always type a custom topic or question instead of picking a letter 
 
 After presenting the chapter to the user, silently:
 
-1. **Chapter file** → `chapters/NN.md` (prose is safe first).
+1. **Chapter file** → `chapters/NN.md` (prose is safe first). YAML frontmatter (`chapter`, `title`, `branch`, `written`, `word_count`) followed by prose — full shape in [file-formats.md](file-formats.md).
 2. **Planning file** → `planning/NN-proposal.md` (full: CHAPTER PROPOSAL + CHAPTER HANDOFF, verbatim).
 3. **Prior-item feedback file** (conditional) → `planning/NN-feedback.md` or `aNN-feedback.md` for the item the user steered on. Only if in-chat steering and the file does not already exist. See [file-formats.md](file-formats.md) for format and rules.
 4. **Research bible** → updated state.
@@ -327,7 +327,7 @@ B) Continue from here — [option stemming from addendum]
 C) [Another direction if natural]
 ```
 
-5. File operations: addendum file → planning file → research bible → manifest. Commit via `--commit` with message `Add N: <title>`.
+5. File operations: addendum file → planning file → research bible → manifest. Commit via `--commit` with message `Add N: <title>`. Addendum file shape (YAML frontmatter `addendum`, `title`, `after_chapter`/`after_addendum`, `written`, `word_count`): see [file-formats.md](file-formats.md).
 
 ### Rules
 

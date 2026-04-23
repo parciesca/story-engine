@@ -283,7 +283,7 @@ The user can always type whatever they want instead of picking a letter — hand
 
 After presenting the chapter to the user, silently:
 
-1. **Chapter file** → `chapters/NN.md` (prose is safe first).
+1. **Chapter file** → `chapters/NN.md` (prose is safe first). YAML frontmatter (`chapter`, `title`, `branch`, `written`, `word_count`) followed by prose — full shape in [file-formats.md](file-formats.md).
 2. **Planning file** → `planning/NN-proposal.md` (full file: CHAPTER PROPOSAL followed by CHAPTER HANDOFF, verbatim).
 3. **Prior-chapter feedback file** (conditional) → `planning/NN-feedback.md` for the chapter the user steered on. Only if in-chat steering and the file does not already exist. See [file-formats.md](file-formats.md) for rules and format.
 4. **Story bible** → overwrite `story-bible.md` with updated state.
