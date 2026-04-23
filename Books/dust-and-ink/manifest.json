@@ -7,7 +7,7 @@
   "engine": "story",
   "engine_version": "5.0.0",
   "active_branch": "main",
-  "current_chapter": 2,
+  "current_chapter": 3,
   "chapters": [
     {
       "number": 1,
@@ -24,6 +24,14 @@
       "file": "chapters/02.md",
       "written": "2026-04-23",
       "word_count": 1149
+    },
+    {
+      "number": 3,
+      "title": "Scribe's Curiosity",
+      "branch": "main",
+      "file": "chapters/03.md",
+      "written": "2026-04-23",
+      "word_count": 993
     }
   ],
   "branches": {

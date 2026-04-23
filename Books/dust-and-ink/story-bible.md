@@ -31,6 +31,8 @@ The Accord exists in three copies. The Vardene copy was authenticated at signing
 
 **Whetham waystation** — a small stone waystation on the Aldenmere road, a day past Sweetwater. Slate roof, swept yard, sleeping space on the floor by the hearth for three copper. The keeper, **Hollis**, knows Maret by name and does not ask questions.
 
+**Arden Crossroads** — a stop on the Aldenmere road between Whetham and the border. A cider stand run by an old man — cups "the color of tea." Not yet visited; referenced by Maret as "worth stopping for." Reliable reportedly likes the apples.
+
 **The Vrethian Corridor** — the air corridor through which dragons are permitted to pass over Midland territory. Runs northeast to southwest, far from the Aldenmere road. A dragon seen over the road is out of corridor.
 
 ## Characters
@@ -58,10 +60,13 @@ Dragon Warden at Aldenmere. Younger — perhaps eighty years — which is very y
 - Elves are not immortal; they live two to four centuries.
 - Human "small magic" — luck-bending, minor gifts — exists but is not taken seriously by the elder races. This will matter.
 - The Threefold Accord renewal is in ten years. Stakes are high.
+- **Dragon script** exists and appears on sealed Warden-to-Warden dispatches. Rare in human territory; unreadable at gate-level. A Warden's own clerk may be able to read it. (Maret has seen it twice through the glass of the Aldenmere gatehouse in four years.)
+- **Arcanate-to-old-dragon-lineage script** — rumored on old-road talk, used between the elvish Arcanate and signatory dragon lineages. No agreed name. May not exist as described. Unverified.
 
 ## Unresolved Threads
-- What is in the coded addendum? Who signed it and why? (As of Ch. 2, Davan has confirmed two non-standard sigils in the header — not Common, Elvish formal, Old Compact, or Merchant's Mark. Draftsman-precise, unknown origin. The body is formal Compact, unremarkable.)
+- What is in the coded addendum? Who signed it and why? (As of Ch. 2, Davan has confirmed two non-standard sigils in the header — not Common, Elvish formal, Old Compact, or Merchant's Mark. Draftsman-precise, unknown origin. The body is formal Compact, unremarkable. As of Ch. 3, Maret has named two candidate scripts that match the rough shape of the unknowns: dragon script and a rumored Arcanate-to-old-dragon-lineage script. Davan now suspects the two unknown sigils correspond to these — which would mean a human-dragon document authenticated by the Arcanate without elvish knowledge.)
 - Why did Mael himself deliver the Addendum to Davan's desk — three days before the fire — when he never did that?
+- Maret has *filed* Davan's question (Ch. 3) rather than believed his rehearsed answer. What does she do with the filing?
 - Who burned Mael & Sons, and why?
 - Where is Vael Orinth, the elvish Warden? (Six weeks without report)
 - What is Sethverak doing at Aldenmere?
