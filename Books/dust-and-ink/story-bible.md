@@ -31,7 +31,7 @@ The Accord exists in three copies. The Vardene copy was authenticated at signing
 
 **Whetham waystation** — a small stone waystation on the Aldenmere road, a day past Sweetwater. Slate roof, swept yard, sleeping space on the floor by the hearth for three copper. The keeper, **Hollis**, knows Maret by name and does not ask questions.
 
-**Arden Crossroads** — a stop on the Aldenmere road between Whetham and the border. A cider stand run by an old man — cups "the color of tea." Not yet visited; referenced by Maret as "worth stopping for." Reliable reportedly likes the apples.
+**Arden Crossroads** — four roads meeting at a broad paved circle with a Compact marker (interlocked rings, intact as of Ch. 4) at the center. A willow at the southeast corner shades a reed-roofed cider stand on a plank table. Paving stones settled in patterns from generations of bad winters.
 
 **The Vrethian Corridor** — the air corridor through which dragons are permitted to pass over Midland territory. Runs northeast to southwest, far from the Aldenmere road. A dragon seen over the road is out of corridor.
 
@@ -50,6 +50,11 @@ Scribe, late-20s. Attached to the Vardene copying house of Mael & Sons for five 
 ### Ysse (introduced Ch. 1)
 Appears at the Sweetwater waystation on the Aldenmere road. Elvish features, human road clothes, traveling alone. Eats quietly, doesn't invite conversation. Will appear again. Not what she seems.
 
+### Perrin (introduced Ch. 4)
+Old man who runs the cider stand at Arden Crossroads. Any age between seventy and a hundred. Small body, large hands. Knows Maret by name. Quiet, total attention. When Davan asked him about a pattern of nested arcs resolving to a glyph at the center, Perrin answered — in the same flat voice he used to say *it's cider* — with a question: *"Where did you see that?"* He did not show surprise. Interpretation: he knows what the mark is, and he knows enough about it to be careful.
+
+**Voice:** Spare, dry, economical. Does not waste words. Not warm, not cold. A man who has watched this crossroads long enough that nothing is a new kind of thing.
+
 ### Sethverak (mentioned, not yet seen)
 Dragon Warden at Aldenmere. Younger — perhaps eighty years — which is very young for a dragon. Ambitious, contemptuous of the process, believed to be acting outside his remit. The other dragons don't fully trust him. Neither does anyone else.
 
@@ -67,6 +72,7 @@ Dragon Warden at Aldenmere. Younger — perhaps eighty years — which is very y
 - What is in the coded addendum? Who signed it and why? (As of Ch. 2, Davan has confirmed two non-standard sigils in the header — not Common, Elvish formal, Old Compact, or Merchant's Mark. Draftsman-precise, unknown origin. The body is formal Compact, unremarkable. As of Ch. 3, Maret has named two candidate scripts that match the rough shape of the unknowns: dragon script and a rumored Arcanate-to-old-dragon-lineage script. Davan now suspects the two unknown sigils correspond to these — which would mean a human-dragon document authenticated by the Arcanate without elvish knowledge.)
 - Why did Mael himself deliver the Addendum to Davan's desk — three days before the fire — when he never did that?
 - Maret has *filed* Davan's question (Ch. 3) rather than believed his rehearsed answer. What does she do with the filing?
+- What does Perrin know about the third sigil? And: who *else* has asked him about it before?
 - Who burned Mael & Sons, and why?
 - Where is Vael Orinth, the elvish Warden? (Six weeks without report)
 - What is Sethverak doing at Aldenmere?
