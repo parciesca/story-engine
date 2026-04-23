@@ -13,7 +13,9 @@
       "number": 1,
       "title": "The Aldenmere Road",
       "branch": "main",
-      "file": "chapters/01.md"
+      "file": "chapters/01.md",
+      "written": "2026-04-20",
+      "word_count": 1247
     }
   ],
   "branches": {
@@ -23,5 +25,5 @@
     }
   },
   "created": "2026-04-20",
-  "last_updated": "2026-04-20"
+  "last_updated": "2026-04-23"
 }
