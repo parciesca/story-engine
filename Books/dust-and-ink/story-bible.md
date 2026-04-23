@@ -29,6 +29,8 @@ The Accord exists in three copies. The Vardene copy was authenticated at signing
 
 **Aldenmere** — the border town, neutral ground by treaty. Population ~3,000, mostly human but with a permanent elvish diplomatic quarter and a Dragon Warden's hall. The Standing House is the oldest building in town. Maret has a delivery contract here.
 
+**Whetham waystation** — a small stone waystation on the Aldenmere road, a day past Sweetwater. Slate roof, swept yard, sleeping space on the floor by the hearth for three copper. The keeper, **Hollis**, knows Maret by name and does not ask questions.
+
 **The Vrethian Corridor** — the air corridor through which dragons are permitted to pass over Midland territory. Runs northeast to southwest, far from the Aldenmere road. A dragon seen over the road is out of corridor.
 
 ## Characters
@@ -58,7 +60,8 @@ Dragon Warden at Aldenmere. Younger — perhaps eighty years — which is very y
 - The Threefold Accord renewal is in ten years. Stakes are high.
 
 ## Unresolved Threads
-- What is in the coded addendum? Who signed it and why?
+- What is in the coded addendum? Who signed it and why? (As of Ch. 2, Davan has confirmed two non-standard sigils in the header — not Common, Elvish formal, Old Compact, or Merchant's Mark. Draftsman-precise, unknown origin. The body is formal Compact, unremarkable.)
+- Why did Mael himself deliver the Addendum to Davan's desk — three days before the fire — when he never did that?
 - Who burned Mael & Sons, and why?
 - Where is Vael Orinth, the elvish Warden? (Six weeks without report)
 - What is Sethverak doing at Aldenmere?

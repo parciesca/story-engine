@@ -7,7 +7,7 @@
   "engine": "story",
   "engine_version": "5.0.0",
   "active_branch": "main",
-  "current_chapter": 1,
+  "current_chapter": 2,
   "chapters": [
     {
       "number": 1,
@@ -16,6 +16,14 @@
       "file": "chapters/01.md",
       "written": "2026-04-20",
       "word_count": 1247
+    },
+    {
+      "number": 2,
+      "title": "Four Scripts",
+      "branch": "main",
+      "file": "chapters/02.md",
+      "written": "2026-04-23",
+      "word_count": 1149
     }
   ],
   "branches": {
