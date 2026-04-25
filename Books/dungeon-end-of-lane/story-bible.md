@@ -49,8 +49,14 @@ WORLD RULES
     the hexagonal antechamber (vaulted ceiling, spiral glowmoss, four exits).
   - The hexagonal antechamber has a maintained notice board: map of the
     first chambers, a DO NOT FEED THE ECHOES notice, an annotated dialogue.
-  - Echoes: a named dungeon phenomenon. Do not feed them. Do not hum.
-    Nature otherwise unknown.
+  - Echoes: living residents of the gallery beyond the antechamber.
+    They appear as shimmering, vaguely architectural displacements in the
+    air — roughly cat-sized, no fixed shape. They collect sounds and
+    replay them with evident satisfaction. "Feeding" them means giving
+    them interesting audio to repeat; they grow brighter and more
+    numerous when fed. Do not hum. "Right then" was fed to them
+    inadvertently. The protagonist now has an Echo entourage of ~12,
+    who are playing back footsteps and deliberate nose-breathing.
   - There is a knee-height gap in the antechamber wall, rounded edges,
     apparently made with care. Something rustled inside it.
   - The baker's ledger recorded "the green smell getting stronger" in
@@ -72,8 +78,10 @@ THEMATIC THREADS
     That's either reassuring or unsettling depending on who made them.
 
 UNRESOLVED TENSIONS
-  - What are the Echoes, exactly? How does one accidentally feed them?
+  - What happens if the Echoes are fed too much? What's the upper limit?
   - Who maintains the notice board, and what else do they maintain?
+    (The same small, tidy hand has written a note scratched beside the
+    iron-banded door at the end of the gallery.)
   - What rustled behind the knee-height gap?
   - What happened to the Fletcher twins in the left passage?
     What is the "obligation"?
@@ -82,7 +90,9 @@ UNRESOLVED TENSIONS
   - What is the green smell in the second chamber?
 
 TIMELINE & STATE
-  Current location: Hexagonal antechamber, Brackenmoor Delve
+  Current location: Gallery beyond the hexagonal antechamber, approaching
+    an iron-banded oak door with a scratched note beside it. Alcove with
+    unknown shelf object midway down the gallery (left wall).
   Inventory: belt knife, rope (coiled), dried meat, full waterskin,
     second-best boots
   Time position: Mid-morning, day one
@@ -93,12 +103,17 @@ TIMELINE & STATE
     Ch 2: Passed through baker's root cellar (both chambers). Read the
       ledger (the green smell, noted). Entered proper dungeon. Reached
       hexagonal antechamber. Read the notice board. Feeling confident.
+    Ch 3: Took the forward passage. Failed to not hum (said "right then"
+      instead). Fed the Echoes. Now accompanied by ~12 Echoes replaying
+      footsteps and nose-breathing. Reached the gallery's far end:
+      iron-banded door with tidy-hand note; alcove with shelf object.
 
 READER PROMISES
   - Each branch of the dungeon will be genuinely different in tone and content
   - Marta's cryptic "left's faster" will pay off if that path is taken
   - The Fletcher twins' "obligation" will be explained on that path
-  - The Echoes will be encountered (and the no-humming rule will matter)
+  - The Echoes have been encountered. The no-humming rule mattered. Their
+    upper limit / what "too much feeding" does is still promised.
   - The notice-board correspondent(s) will be met or explained
   - The knee-height gap leads somewhere inhabited and worth visiting
   - The story will maintain its light register even when things go
