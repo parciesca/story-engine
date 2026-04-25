@@ -1652,7 +1652,7 @@ async function openBook(bookSource, manifestData, opts) {
   }
   metaBits.push(manifest.status);
   document.getElementById('headerMeta').textContent = metaBits.join(' \u00b7 ');
-  document.getElementById('backToLibrary').style.display = (currentLibrary && currentLibrary.length) ? '' : 'none';
+  document.getElementById('backToLibrary').style.display = (currentLibrary && currentLibrary.length) ? 'inline-block' : 'none';
 
   // Show app, hide landing
   document.getElementById('landing').style.display = 'none';
