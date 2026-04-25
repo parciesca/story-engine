@@ -1,0 +1,26 @@
+{
+  "title": "The Last Wall",
+  "slug": "the-last-wall",
+  "status": "active",
+  "created": "2026-04-25T00:00:00Z",
+  "last_modified": "2026-04-25T00:00:00Z",
+  "engine": "story",
+  "engine_version": "5.0.0",
+  "treatment_source": null,
+  "genre": "Adventure / Historical Fiction",
+  "tone": "Visceral, grounded, morally complex — the texture of a dying world",
+  "perspective": "Third person close (Aleksios Doukanas primary POV)",
+  "current_chapter": 1,
+  "active_branch": "main",
+  "branches": {},
+  "chapters": [
+    {
+      "number": 1,
+      "branch": "main",
+      "title": "Urban's Voice",
+      "file": "chapters/01.md",
+      "written": "2026-04-25T00:00:00Z",
+      "word_count": 1052
+    }
+  ]
+}
