@@ -1,0 +1,29 @@
+{
+  "title": "The Dungeon at the End of the Lane",
+  "slug": "dungeon-end-of-lane",
+  "status": "active",
+  "created": "2026-04-25T00:00:00Z",
+  "last_modified": "2026-04-25T00:00:00Z",
+  "engine": "story",
+  "engine_version": "5.0.0",
+  "genre": "light fantasy adventure / classic CYOA",
+  "tone": "warm, whimsical, gently humorous",
+  "perspective": "second-person",
+  "current_chapter": 1,
+  "active_branch": "main",
+  "branches": {
+    "main": {
+      "created": "2026-04-25T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "branch": "main",
+      "title": "A Perfectly Reasonable Decision",
+      "file": "chapters/01.md",
+      "written": "2026-04-25T00:00:00Z",
+      "word_count": 820
+    }
+  ]
+}
