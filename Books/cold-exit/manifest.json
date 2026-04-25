@@ -10,7 +10,7 @@
   "genre": "sci-fi space adventure",
   "tone": "tense, claustrophobic, wonder-threaded dread",
   "perspective": "first person",
-  "current_chapter": 1,
+  "current_chapter": 2,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -27,6 +27,14 @@
       "file": "chapters/01.md",
       "written": "2026-04-25T00:00:00Z",
       "word_count": 1087
+    },
+    {
+      "number": 2,
+      "branch": "main",
+      "title": "Descent",
+      "file": "chapters/02.md",
+      "written": "2026-04-25T00:00:00Z",
+      "word_count": 1094
     }
   ]
 }

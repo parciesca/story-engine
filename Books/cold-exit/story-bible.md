@@ -13,8 +13,8 @@ DRAMATIS PERSONAE
     Status: deceased (referenced, off-page)
   The Yevgenia — Kez's ship. A Cutter-class converted survey vessel, 22 meters long. Cramped, reliable, smells like ozone and old coffee. Named by Tomasz after his grandmother; Kez kept the name. Sensor suite, a drilling probe (the "Ferret"), two emergency suits, standard comms rig.
     Status: active (vessel)
-  The Object — Designation: Anomaly 4K-7741-A. An artificial structure approximately 800 meters along its principal axis, buried 2.7km under the surface of asteroid 4-Kep-7741. Material composition unknown — apparent density 38,000 tonnes/m³, which is physically implausible for any known matter state at this temperature and pressure. It is powered. As of ch.1, it has reacted to the Yevgenia's scan pulse by emitting a single acoustic/seismic signal through the rock.
-    Status: active (entity of unknown nature)
+  The Object — Designation: Anomaly 4K-7741-A. An artificial structure approximately 800 meters along its principal axis, buried 2.7km under the surface of asteroid 4-Kep-7741. Material composition unknown — apparent density 38,000 tonnes/m³, which is physically implausible for any known matter state at this temperature and pressure. It is powered. Surface is a deep-water color, absorbs light across unusual spectral ranges, bears deliberate ridged geometry and a visible seam (probable hatch) on its principal face. The rock immediately surrounding it (~400m radius) has been altered — fused, structured — likely by long-term proximity effects. It has the capability to briefly take control of external objects (demonstrated: Ferret redirected 14 degrees during a 3.7-second systems blackout). The redirect was purposeful: the Ferret was aimed at the seam.
+    Status: active (entity of unknown nature; demonstrated ability to interact with proximate objects)
 
 WORLD RULES
   - Setting: 2387. The Kepler-442 system, colonized ~60 years ago. Two habitable moons (Keshet and Varro), heavy industrial presence. The outer belt is sparsely surveyed — contract work, mostly solo.
@@ -32,9 +32,10 @@ THEMATIC THREADS
 
 UNRESOLVED TENSIONS
   - What is the Object? What is its purpose? Who built it?
-  - Why is it still powered after — how long? Thousands of years?
-  - The acoustic signal: was it passive (a proximity sensor) or active (a deliberate communication)?
+  - Why is it still powered after — how long? Thousands of years? The altered rock suggests a long residence.
+  - The redirect: the Object aimed the Ferret at its own seam/hatch. An invitation? A test? Something else?
   - Does Kez report this before investigating? The closer she gets, the more she risks; the further she waits, the more another surveyor might stumble onto it.
+  - What is behind the seam? The Object knows where it wants her to look.
   - What happened at Vashti Station? (Background tension, Kez's history — not yet surfaced fully)
 
 TIMELINE & STATE
@@ -43,6 +44,7 @@ TIMELINE & STATE
   Time position: Day 19 of a 60-day survey contract. Sol date approximately 2387.08.14.
   Key events so far:
     Ch.01 — Kez's routine mass scan of 4-Kep-7741 returns impossible density readings from a 2.7km depth. She runs diagnostics, confirms the anomaly is real, and identifies the approximate dimensions of the buried structure (800m axis). As she prepares the Ferret for a closer scan, the Object emits a single seismic pulse through the rock — not natural, not random. It felt like an acknowledgment.
+    Ch.02 — Kez deploys the Ferret and descends through 2.7km of rock. The final 400m show altered, fused geology — proximity effects. She reaches the Object's exterior and confirms the anomaly visually: non-natural geometry, unusual spectral signature, a visible seam on the surface. During a 3.7-second blackout of all Ferret systems, the Object redirects the probe 14 degrees to aim it directly at the seam. Systems restore nominal. The Ferret floats 11 meters from the Object's surface, pointed at what might be a door.
 
 READER PROMISES
   - The Object will be more than a geological mystery — it will confront Kez directly
