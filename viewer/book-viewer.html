@@ -697,11 +697,70 @@
     font-style: italic;
     border-top: 1px solid var(--border);
   }
+
+  /* --- Mobile drawer --- */
+  .drawer-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: var(--font-ui);
+  }
+  .drawer-toggle:hover { background: var(--hover); }
+
+  .drawer-backdrop {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 9;
+  }
+
+  @media (max-width: 720px) {
+    header { padding: 10px 14px; gap: 10px; }
+    header h1 { font-size: 14px; }
+    header .book-title { font-size: 15px; }
+    header .meta { display: none; }
+
+    main { padding: 24px 18px 60px; }
+
+    .columns { position: relative; }
+
+    aside {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 280px;
+      max-width: 85vw;
+      transform: translateX(-100%);
+      transition: transform 0.2s ease;
+      z-index: 10;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+    }
+
+    body.drawer-open aside { transform: translateX(0); }
+    body.drawer-open .drawer-backdrop { display: block; }
+
+    body.in-book .drawer-toggle {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .source-picker { flex-wrap: wrap; }
+    .library-grid { padding: 24px 16px 60px; }
+  }
 </style>
 </head>
 <body>
 
 <header>
+  <button class="drawer-toggle" id="drawerToggle" aria-label="Toggle chapters">&#9776;</button>
   <h1>Book Viewer</h1>
   <a class="back-link" id="backToLibrary">&larr; Library</a>
   <span class="book-title" id="headerTitle"></span>
@@ -756,6 +815,7 @@
 
 <div id="app">
   <div class="columns">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
     <aside>
       <div class="sidebar-tabs">
         <button class="active" data-tab="chapters">Chapters</button>
@@ -1201,6 +1261,7 @@ function renderChapterList() {
       renderChapterList();
       renderCharacterList();
       renderChapter();
+      closeDrawer();
     });
   });
 }
@@ -1238,6 +1299,7 @@ function renderCharacterList() {
       renderChapterList();
       renderCharacterList();
       renderCharacterView();
+      closeDrawer();
     });
   });
 }
@@ -1647,6 +1709,7 @@ async function openBook(bookSource, manifestData) {
   // Show app, hide landing
   document.getElementById('landing').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
+  document.body.classList.add('in-book');
 
   switchSidebarTab('chapters');
   renderChapterList();
@@ -1660,6 +1723,7 @@ function showLibrary() {
   document.getElementById('headerTitle').textContent = '';
   document.getElementById('headerMeta').textContent = '';
   document.getElementById('backToLibrary').style.display = 'none';
+  document.body.classList.remove('in-book', 'drawer-open');
   manifest = null;
   source = null;
   // Re-scan in case books changed
@@ -1743,8 +1807,20 @@ document.getElementById('settingsModal').addEventListener('click', (e) => {
   }
 })();
 
+// ---- Drawer ----
+function openDrawer() { document.body.classList.add('drawer-open'); }
+function closeDrawer() { document.body.classList.remove('drawer-open'); }
+function toggleDrawer() { document.body.classList.toggle('drawer-open'); }
+
+document.getElementById('drawerToggle').addEventListener('click', toggleDrawer);
+document.getElementById('drawerBackdrop').addEventListener('click', closeDrawer);
+
 // Keyboard nav
 document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && document.body.classList.contains('drawer-open')) {
+    closeDrawer();
+    return;
+  }
   if (!manifest) return;
   if (e.target.tagName === 'TEXTAREA') return;
   if (currentView !== 'chapter') return;
