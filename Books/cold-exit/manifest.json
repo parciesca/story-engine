@@ -10,7 +10,7 @@
   "genre": "sci-fi space adventure",
   "tone": "tense, claustrophobic, wonder-threaded dread",
   "perspective": "first person",
-  "current_chapter": 2,
+  "current_chapter": 3,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -35,6 +35,14 @@
       "file": "chapters/02.md",
       "written": "2026-04-25T00:00:00Z",
       "word_count": 1094
+    },
+    {
+      "number": 3,
+      "branch": "main",
+      "title": "Holding Position",
+      "file": "chapters/03.md",
+      "written": "2026-04-25T00:00:00Z",
+      "word_count": 1063
     }
   ]
 }
