@@ -7,9 +7,9 @@
   "engine": "story",
   "engine_version": "5.0.0",
   "genre": "light fantasy adventure / classic CYOA",
-  "tone": "warm, whimsical, gently humorous",
+  "tone": "warm, whimsical, gently humorous with lyrical jauntiness",
   "perspective": "second-person",
-  "current_chapter": 1,
+  "current_chapter": 2,
   "active_branch": "main",
   "branches": {
     "main": {
@@ -24,6 +24,14 @@
       "file": "chapters/01.md",
       "written": "2026-04-25T00:00:00Z",
       "word_count": 820
+    },
+    {
+      "number": 2,
+      "branch": "main",
+      "title": "The Baker's Turnips (and Points Beyond)",
+      "file": "chapters/02.md",
+      "written": "2026-04-25T00:00:00Z",
+      "word_count": 870
     }
   ]
 }
