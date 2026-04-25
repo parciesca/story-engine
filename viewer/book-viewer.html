@@ -842,6 +842,7 @@
 // ---- State ----
 let source = null;            // active BookSource for the current book
 let manifest = null;
+let currentBookSlug = null;   // slug of the open book, for URL deep-link
 let items = [];               // unified chapters+addenda reading order
 let currentIdx = 0;
 let currentView = 'chapter';  // 'chapter' or 'characters'
@@ -859,7 +860,29 @@ let isHistory = false;
 //   4. empty → first-run gate forces the Settings modal open
 const LS_TOKEN = 'bookviewer.github.token';
 const LS_REPO  = 'bookviewer.github.repo';
+const LS_LAST_SOURCE = 'bookviewer.last_source';      // 'github' | 'fs'
+const LS_LAST_BOOK_GITHUB = 'bookviewer.last_book_github';  // slug
 let CONFIGURED_REPO = '';  // populated by loadViewerConfig() at startup
+
+// ---- URL deep-link helpers ----
+function readUrlParams() {
+  const p = new URLSearchParams(window.location.search);
+  const book = (p.get('book') || '').trim();
+  const chRaw = p.get('ch');
+  const ch = chRaw != null && chRaw !== '' ? parseInt(chRaw, 10) : null;
+  return { book: book || null, ch: Number.isFinite(ch) ? ch : null };
+}
+function updateUrl(slug, chapterNum) {
+  const p = new URLSearchParams();
+  if (slug) p.set('book', slug);
+  if (chapterNum != null) p.set('ch', String(chapterNum));
+  const qs = p.toString();
+  const url = qs ? `${location.pathname}?${qs}` : location.pathname;
+  history.replaceState(null, '', url);
+}
+function clearUrl() {
+  history.replaceState(null, '', location.pathname);
+}
 
 function detectRepoFromUrl() {
   try {
@@ -1309,6 +1332,9 @@ async function renderChapter() {
   currentView = 'chapter';
   const ch = items[currentIdx];
   if (!ch) return;
+  if (currentBookSlug) {
+    updateUrl(currentBookSlug, ch.kind === 'chapter' ? ch.number : null);
+  }
   const col = document.getElementById('readingCol');
   const mainEl = document.querySelector('main');
 
@@ -1538,6 +1564,7 @@ async function scanFilesystemLibrary() {
         sourceKind: 'fs',
         manifest: data,
         label: name,
+        slug: (data && data.slug) || name,
         buildSource: () => new FileSystemSource(handle)
       });
     } catch {
@@ -1547,6 +1574,7 @@ async function scanFilesystemLibrary() {
 
   sortBooks(books);
   currentLibrary = books;
+  localStorage.setItem(LS_LAST_SOURCE, 'fs');
   renderLibrary(books, 'fs');
 }
 
@@ -1564,6 +1592,7 @@ async function browseGitHub() {
       sourceKind: 'github',
       manifest: rb.manifest,
       label: rb.branch,
+      slug: rb.slug,
       buildSource: () => new GitHubSource({
         owner: rb.owner, repo: rb.repo, branch: rb.branch,
         bookSlug: rb.slug, token: getToken()
@@ -1571,6 +1600,7 @@ async function browseGitHub() {
     }));
     sortBooks(books);
     currentLibrary = books;
+    localStorage.setItem(LS_LAST_SOURCE, 'github');
     setLandingStatus('');
     renderLibrary(books, 'github');
   } catch (e) {
@@ -1611,7 +1641,7 @@ function renderLibrary(books, mode) {
     return;
   }
 
-  let html = `<h2>Library <span style="font-size:13px; color:var(--muted); font-weight:400;">(${escHtml(modeLabel)})</span></h2>`;
+  let html = `<h2>Library <span style="font-size:13px; color:var(--muted); font-weight:400;">(${escHtml(modeLabel)})</span> <a href="#" id="changeSourceLink" style="font-size:12px; color:var(--muted); margin-left:8px; font-weight:400;">change source</a></h2>`;
   books.forEach((book, idx) => {
     const m = book.manifest;
     const chCount = (m.chapters || []).length;
@@ -1644,12 +1674,16 @@ function renderLibrary(books, mode) {
     card.addEventListener('click', () => {
       const idx = parseInt(card.dataset.idx);
       const book = books[idx];
-      if (book) openBook(book.buildSource(), book.manifest);
+      if (book) openBook(book.buildSource(), book.manifest, { sourceKind: book.sourceKind, slug: book.slug });
     });
   });
+
+  const changeLink = document.getElementById('changeSourceLink');
+  if (changeLink) changeLink.addEventListener('click', (e) => { e.preventDefault(); changeSource(); });
 }
 
-async function openBook(bookSource, manifestData) {
+async function openBook(bookSource, manifestData, opts) {
+  opts = opts || {};
   source = bookSource;
   manifest = manifestData;
   planningCache = {};
@@ -1661,15 +1695,27 @@ async function openBook(bookSource, manifestData) {
   // Build unified item list (chapters + addenda interleaved)
   items = buildItems(manifest);
 
-  // Jump to current item. History uses current_item ({kind, number}); fiction uses current_chapter (integer).
+  // Deep-link override (URL ?ch=N) wins over manifest defaults.
   let targetIdx = -1;
-  if (manifest.current_item && typeof manifest.current_item === 'object') {
+  if (opts.chapter != null) {
+    targetIdx = items.findIndex(it => it.kind === 'chapter' && it.number === opts.chapter);
+  }
+  // Otherwise jump to manifest's current item. History uses current_item ({kind, number});
+  // fiction uses current_chapter (integer).
+  if (targetIdx < 0 && manifest.current_item && typeof manifest.current_item === 'object') {
     targetIdx = items.findIndex(it =>
       it.kind === manifest.current_item.kind && it.number === manifest.current_item.number);
-  } else if (typeof manifest.current_chapter === 'number') {
+  } else if (targetIdx < 0 && typeof manifest.current_chapter === 'number') {
     targetIdx = items.findIndex(it => it.kind === 'chapter' && it.number === manifest.current_chapter);
   }
   if (targetIdx >= 0) currentIdx = targetIdx;
+
+  // Persist last source / book for next session
+  const slug = opts.slug || (manifest && manifest.slug);
+  const sourceKind = opts.sourceKind || (bookSource && bookSource.kind);
+  if (sourceKind) localStorage.setItem(LS_LAST_SOURCE, sourceKind);
+  if (sourceKind === 'github' && slug) localStorage.setItem(LS_LAST_BOOK_GITHUB, slug);
+  currentBookSlug = slug || null;
 
   // Characters tab only applies to fiction (story-bible.md). History books use research-bible.md.
   const charsTabBtn = document.querySelector('.sidebar-tabs button[data-tab="characters"]');
@@ -1726,9 +1772,35 @@ function showLibrary() {
   document.body.classList.remove('in-book', 'drawer-open');
   manifest = null;
   source = null;
+  currentBookSlug = null;
+  localStorage.removeItem(LS_LAST_BOOK_GITHUB);
+  clearUrl();
   // Re-scan in case books changed
   if (lastLibraryMode === 'fs' && booksDir) scanFilesystemLibrary();
   else if (lastLibraryMode === 'github') browseGitHub();
+}
+
+function changeSource() {
+  // Reset persistence so the source picker comes back next load
+  localStorage.removeItem(LS_LAST_SOURCE);
+  localStorage.removeItem(LS_LAST_BOOK_GITHUB);
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('libraryGrid').style.display = 'none';
+  const landing = document.getElementById('landing');
+  landing.style.display = '';
+  landing.classList.add('centered');
+  document.getElementById('openPrompt').style.display = '';
+  document.getElementById('headerTitle').textContent = '';
+  document.getElementById('headerMeta').textContent = '';
+  document.getElementById('backToLibrary').style.display = 'none';
+  document.body.classList.remove('in-book', 'drawer-open');
+  manifest = null;
+  source = null;
+  currentBookSlug = null;
+  currentLibrary = [];
+  lastLibraryMode = null;
+  setLandingStatus('');
+  clearUrl();
 }
 
 // ---- Settings modal ----
@@ -1798,12 +1870,63 @@ document.getElementById('settingsModal').addEventListener('click', (e) => {
   if (e.target.id === 'settingsModal') closeSettings();
 });
 
-// Startup: load viewer-config.json, then nudge first-run users if no repo resolves.
+// Startup: load viewer-config.json, then auto-route via URL ?book= or last session.
 (async () => {
   CONFIGURED_REPO = await loadViewerConfig();
   if (!getRepo()) {
     setLandingStatus('No repository configured yet. Opening Settings...');
     openSettings();
+    return;
+  }
+
+  const urlParams = readUrlParams();
+  const lastSource = localStorage.getItem(LS_LAST_SOURCE);
+  const lastBookGithub = localStorage.getItem(LS_LAST_BOOK_GITHUB);
+
+  // URL deep-link wins; otherwise restore last GitHub book if persisted.
+  // FS source can't auto-restore (directory handle doesn't survive a refresh).
+  const targetSlug = urlParams.book || (lastSource === 'github' ? lastBookGithub : null);
+  const skipPickerForGithub = !!targetSlug || lastSource === 'github';
+  if (!skipPickerForGithub) return;
+
+  if (targetSlug) {
+    setLandingStatus('Loading...');
+    try {
+      const remoteBooks = await fetchBookBranches();
+      lastLibraryMode = 'github';
+      const books = remoteBooks.map(rb => ({
+        sourceKind: 'github',
+        manifest: rb.manifest,
+        label: rb.branch,
+        slug: rb.slug,
+        buildSource: () => new GitHubSource({
+          owner: rb.owner, repo: rb.repo, branch: rb.branch,
+          bookSlug: rb.slug, token: getToken()
+        })
+      }));
+      sortBooks(books);
+      currentLibrary = books;
+      localStorage.setItem(LS_LAST_SOURCE, 'github');
+
+      const match = books.find(b => b.slug === targetSlug);
+      if (match) {
+        setLandingStatus('');
+        openBook(match.buildSource(), match.manifest, {
+          sourceKind: 'github',
+          slug: match.slug,
+          chapter: urlParams.ch
+        });
+      } else {
+        setLandingStatus(`Book "${targetSlug}" not found in this repo.`, true);
+        renderLibrary(books, 'github');
+      }
+    } catch (e) {
+      console.error(e);
+      setLandingStatus('GitHub error: ' + e.message + '. Check your repo/token in Settings.', true);
+    }
+  } else {
+    // Source remembered but no specific book — land on the library list directly.
+    browseGitHub();
   }
 })();
 

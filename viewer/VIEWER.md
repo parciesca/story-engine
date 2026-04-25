@@ -17,6 +17,26 @@ Settings raises the limit to 5000/hr and enables saving feedback.
 picker (Chrome/Edge only). Reads and writes through the directory handle. No
 network calls.
 
+## Returning to where you left off
+
+The viewer remembers your last session and supports URL deep-links so a phone
+bookmark can drop you straight into the latest chapter:
+
+- **Last source** is saved on first successful library load
+  (`bookviewer.last_source` in `localStorage`).
+- **Last GitHub book** is saved when you open a book
+  (`bookviewer.last_book_github`, the slug). On the next cold load, the viewer
+  re-fetches that book and lands on the latest chapter — zero clicks.
+- The "Open from Disk" source can't auto-restore (the browser doesn't keep
+  directory permissions across refreshes), so it always returns to the picker.
+- **URL deep-link** — `book-viewer.html?book=<slug>` opens that book directly
+  on the latest chapter. `book-viewer.html?book=<slug>&ch=<n>` opens chapter
+  *n*. The URL takes precedence over the persisted last book. As you navigate
+  between chapters, the address bar updates via `history.replaceState`, so any
+  bookmark you grab reflects the chapter you're on.
+- A "change source" link on the library page wipes the persisted source/book
+  and returns to the GitHub-vs-Disk picker.
+
 ## Configuring the repo (forkers)
 
 The viewer resolves the target repository in this order:
