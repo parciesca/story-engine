@@ -8,23 +8,26 @@ PREMISE & TONE
   Core premise: Two ordinary humans — a merchant and a scribe — travel the Aldenmere road in a world held together by a forty-year-old treaty between dragon courts, elvish feudal powers, and the human Midland Compact. Small people, small business, small concerns. Except that the scribe carries in his satchel a copy of a document he does not understand, and understanding it may be the difference between peace and the next Burning.
 
 DRAMATIS PERSONAE
-  Maret Ashvale — Merchant, mid-30s. Runs a small concern in goods other merchants overlook: salt-glazed pottery, preserved medicinals, specialty dyes. One wagon, two draft horses — Stub (short-legged, reliable) and Reliable (frequently unreliable, named by her husband). Widowed four years ago when her husband Corren died of a summer fever. Has been running the business alone since. She is not bitter; she is efficient. Has a talent for reading people that she calls common sense. Hired Davan because she needed a literate hand for paperwork at the Aldenmere toll gates, and he was available and affordable. Currently does not know she is carrying him toward danger.
-    Voice anchor: Direct, dry, occasionally kind in a way that appears accidental. Doesn't explain herself. Good at silence.
+  Maret Ashvale — Merchant, mid-30s. Runs a small concern in goods other merchants overlook: salt-glazed pottery, preserved medicinals, specialty dyes. One wagon, two draft horses — Stub (short-legged, reliable) and Reliable (frequently unreliable, named by her husband). Widowed four years ago when her husband Corren died of a summer fever. Has been running the business alone since. She is not bitter; she is efficient. Has a talent for reading people that she calls common sense. Hired Davan because she needed a literate hand for paperwork at the Aldenmere toll gates, and he was available and affordable. As of Ch. 5, knows everything Davan knows: the copy in his satchel, the dead man's commission, Benne Farr, the fire.
+    Voice anchor: Direct, dry, occasionally kind in a way that appears accidental. Doesn't explain herself. Good at silence. When she says "I know" she means she has known for some time.
     Status: active
 
-  Davan Orr — Scribe, late-20s. Attached to the Vardene copying house of Mael & Sons for five years before it burned. Trained in four scripts: Common, Elvish formal (read, not spoken), Old Compact, and Merchant's Mark. Good memory, precise hand, genuinely curious about language. Not adventurous. He's on this road because his house burned, his livelihood is ash, and Maret Ashvale was the only person who offered him work in the three days since. He keeps copies of everything he transcribes — professional habit — which is why he has the document.
+  Davan Orr — Scribe, late-20s. Attached to the Vardene copying house of Mael & Sons for five years before it burned. Trained in four scripts: Common, Elvish formal (read, not spoken), Old Compact, and Merchant's Mark. Good memory, precise hand, genuinely curious about language. Not adventurous. He's on this road because his house burned, his livelihood is ash, and Maret Ashvale was the only person who offered him work in the three days since. He keeps copies of everything he transcribes — professional habit, locked chest in his room — which is why he has the document. As of Ch. 5, has told Maret everything. Carries guilt about Benne Farr alongside the danger.
     Voice anchor: Careful, observant, not sure how to apply what he observes. Notices things other people miss and then doesn't know what to do with them.
     Status: active
 
   Ysse — Appears at the Sweetwater waystation on the Aldenmere road. Elvish features, human road clothes, traveling alone. Eats quietly, doesn't invite conversation. Will appear again. Not what she seems. Introduced Ch. 1.
     Status: active
 
-  Perrin — Old man who runs the cider stand at Arden Crossroads. Any age between seventy and a hundred. Small body, large hands. Knows Maret by name. Quiet, total attention. When Davan asked him about a pattern of nested arcs resolving to a glyph at the center, Perrin answered — in the same flat voice he used to say "it's cider" — with a question: "Where did you see that?" He did not show surprise. Interpretation: he knows what the mark is, and he knows enough about it to be careful. Introduced Ch. 4.
+  Perrin — Old man who runs the cider stand at Arden Crossroads. Any age between seventy and a hundred. Small body, large hands. Knows Maret by name. Quiet, total attention. When Davan asked him about nested arcs resolving to a glyph at the center, Perrin asked "Where did you see that?" — same voice as "it's cider." When Davan couldn't answer and Maret arrived, Perrin closed the encounter: "Another time, then. Good roads to you both." He poured Maret a cup without asking. The door is not locked — it's left ajar.
     Voice anchor: Spare, dry, economical. Does not waste words. Not warm, not cold. A man who has watched this crossroads long enough that nothing is a new kind of thing.
     Status: active
 
   Sethverak — Dragon Warden at Aldenmere. Younger — perhaps eighty years — which is very young for a dragon. Ambitious, contemptuous of the process, believed to be acting outside his remit. The other dragons don't fully trust him. Neither does anyone else. Mentioned, not yet seen.
     Status: active (offscreen)
+
+  Benne Farr — Scribe at Mael & Sons. Copied the second piece from the same client who commissioned Davan's document, when Davan was ill and unavailable. Died in the fire. His death confirms the fire was targeted — and that the client knew who had handled the work.
+    Status: deceased
 
 WORLD RULES
 
@@ -50,7 +53,7 @@ WORLD RULES
   - Elves are not immortal; they live two to four centuries.
 
   Geography
-  - Vardene — the human city where the story begins. Major trade hub, home to the Hall of Records (and the Accord copy). The copying house where Davan worked burned three days before the story opens. The fire was deliberate. Davan does not know this.
+  - Vardene — the human city where the story begins. Major trade hub, home to the Hall of Records (and the Accord copy). The copying house where Davan worked burned three days before the story opens. The fire was deliberate. Davan does not know this yet, but as of Ch. 5, suspects it.
   - The Aldenmere Road — main trade route connecting Vardene to the border town of Aldenmere. Six days by wagon under good conditions. Passes through human farmland, then the border region where elvish and human territory blur. Marker stones at every league.
   - Aldenmere — border town, neutral ground by treaty. Population ~3,000, mostly human but with a permanent elvish diplomatic quarter and a Dragon Warden's hall. The Standing House is the oldest building in town. Maret has a delivery contract here.
   - Whetham waystation — small stone waystation on the Aldenmere road, a day past Sweetwater. Slate roof, swept yard, sleeping space on the floor by the hearth for three copper. The keeper, Hollis, knows Maret by name and does not ask questions.
@@ -64,10 +67,12 @@ THEMATIC THREADS
 
 UNRESOLVED TENSIONS
   - What is in the coded addendum? Who signed it and why? (As of Ch. 2, Davan has confirmed two non-standard sigils in the header — not Common, Elvish formal, Old Compact, or Merchant's Mark. Draftsman-precise, unknown origin. The body is formal Compact, unremarkable. As of Ch. 3, Maret has named two candidate scripts that match the rough shape of the unknowns: dragon script and a rumored Arcanate-to-old-dragon-lineage script. Davan now suspects the two unknown sigils correspond to these — which would mean a human-dragon document authenticated by the Arcanate without elvish knowledge.)
-  - Why did Mael himself deliver the Addendum to Davan's desk — three days before the fire — when he never did that?
-  - Maret has filed Davan's question (Ch. 3) rather than believed his rehearsed answer. What does she do with the filing?
-  - What does Perrin know about the third sigil? And: who else has asked him about it before?
-  - Who burned Mael & Sons, and why?
+  - Who actually commissioned the document? The paperwork used "Aldric Thorne, merchant, Vardene" — dead three years, counting house folded. Client seal: doubled V inside a circle, not guild-registered. Identity unknown.
+  - Why did Mael personally deliver the commission to Davan's desk?
+  - What was in the land survey near the Vrethian Corridor's southern terminus, also commissioned under the same proxy?
+  - What was in the second piece Benne Farr copied? (Benne is dead; the original is ash.)
+  - Who burned Mael & Sons — and did they know about Davan's copying habit? (Maret's formulation: either they don't know, or they're watching where he goes.)
+  - What does Perrin know? Who else has asked him about the nested arcs? ("Another time" is not a closed door.)
   - Where is Vael Orinth, the elvish Warden? (Six weeks without report)
   - What is Sethverak doing at Aldenmere?
   - What is Ysse?
@@ -76,3 +81,4 @@ AUTHOR NOTES
   - The magic system should stay subtle. No fireballs.
   - The document in Davan's satchel is the engine of the plot but should not be revealed quickly. Let it press on him through ignorance first.
   - Maret's horse named "Reliable" is unreliable. This is a recurring small joke and also a metaphor.
+  - Benne Farr's death is the guilt Davan carries alongside the danger. Don't let him process it too cleanly.

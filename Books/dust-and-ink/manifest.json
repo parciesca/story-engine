@@ -7,7 +7,7 @@
   "engine": "story",
   "engine_version": "5.0.0",
   "active_branch": "main",
-  "current_chapter": 4,
+  "current_chapter": 5,
   "chapters": [
     {
       "number": 1,
@@ -40,6 +40,14 @@
       "file": "chapters/04.md",
       "written": "2026-04-23",
       "word_count": 907
+    },
+    {
+      "number": 5,
+      "title": "The Copy",
+      "branch": "main",
+      "file": "chapters/05.md",
+      "written": "2026-04-27",
+      "word_count": 1008
     }
   ],
   "branches": {
@@ -49,5 +57,5 @@
     }
   },
   "created": "2026-04-20",
-  "last_updated": "2026-04-23"
+  "last_updated": "2026-04-27"
 }
