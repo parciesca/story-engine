@@ -7,7 +7,7 @@
   "engine": "story",
   "engine_version": "5.0.0",
   "active_branch": "main",
-  "current_chapter": 6,
+  "current_chapter": 7,
   "chapters": [
     {
       "number": 1,
@@ -56,6 +56,14 @@
       "file": "chapters/06.md",
       "written": "2026-04-27",
       "word_count": 1022
+    },
+    {
+      "number": 7,
+      "title": "Even After",
+      "branch": "main",
+      "file": "chapters/07.md",
+      "written": "2026-04-27",
+      "word_count": 987
     }
   ],
   "branches": {

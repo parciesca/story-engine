@@ -8,31 +8,34 @@ PREMISE & TONE
   Core premise: Two ordinary humans — a merchant and a scribe — travel the Aldenmere road in a world held together by a forty-year-old treaty between dragon courts, elvish feudal powers, and the human Midland Compact. Small people, small business, small concerns. Except that the scribe carries in his satchel a copy of a document he does not understand, and understanding it may be the difference between peace and the next Burning.
 
 DRAMATIS PERSONAE
-  Maret Ashvale — Merchant, mid-30s. Runs a small concern in goods other merchants overlook: salt-glazed pottery, preserved medicinals, specialty dyes. One wagon, two draft horses — Stub (short-legged, reliable) and Reliable (frequently unreliable, named by her husband). Widowed four years ago when her husband Corren died of a summer fever. Has been running the business alone since. She is not bitter; she is efficient. Has a talent for reading people that she calls common sense. Hired Davan because she needed a literate hand for paperwork at the Aldenmere toll gates, and he was available and affordable. As of Ch. 5, knows everything. As of Ch. 6, operating tactically: bought a half day with a false destination (Cressholm), locked down the story, planning next moves.
-    Voice anchor: Direct, dry, occasionally kind in a way that appears accidental. Doesn't explain herself. Good at silence. When she says "I know" she means she has known for some time. Her response to danger is immediate, practical, and does not involve alarm.
+  Maret Ashvale — Merchant, mid-30s. Runs a small concern in goods other merchants overlook: salt-glazed pottery, preserved medicinals, specialty dyes. One wagon, two draft horses — Stub (short-legged, reliable) and Reliable (frequently unreliable, named by her husband). Widowed four years ago when her husband Corren died of a summer fever. Has been running the business alone since. She is not bitter; she is efficient. Has a talent for reading people that she calls common sense. Hired Davan because she needed a literate hand for paperwork at the Aldenmere toll gates, and he was available and affordable. As of Ch. 5, knows everything. As of Ch. 6, operating tactically. As of Ch. 7, half a day from Aldenmere, watching the road.
+    Voice anchor: Direct, dry, occasionally kind in a way that appears accidental. Doesn't explain herself. Good at silence. Her response to danger is immediate and practical. "She does that" is her highest form of acknowledgment for something she can't explain.
     Status: active
 
-  Davan Orr — Scribe, late-20s. Attached to the Vardene copying house of Mael & Sons for five years before it burned. Trained in four scripts: Common, Elvish formal (read, not spoken), Old Compact, and Merchant's Mark. Good memory, precise hand, genuinely curious about language. Not adventurous. He's on this road because his house burned, his livelihood is ash, and Maret Ashvale was the only person who offered him work in the three days since. He keeps copies of everything he transcribes — professional habit, locked chest in his room — which is why he has the document. Has told Maret everything (Ch. 5). Carries guilt about Benne Farr. Took off his Scribes' Register ring the morning after the fire; it is in his satchel.
-    Voice anchor: Careful, observant, not sure how to apply what he observes. Notices things other people miss and then doesn't know what to do with them. Does his processing in the dark, in his head, after everyone else is asleep.
+  Davan Orr — Scribe, late-20s. Attached to the Vardene copying house of Mael & Sons for five years before it burned. Trained in four scripts: Common, Elvish formal (read, not spoken), Old Compact, and Merchant's Mark. Good memory, precise hand, genuinely curious about language. Not adventurous. He keeps copies of everything he transcribes — professional habit. Has told Maret everything. Carries guilt about Benne Farr. Took off his Scribes' Register ring the morning after the fire; it is in his satchel. Now has a knotted cord on his left wrist from the shrine at the north fork. Carries the luck-reader's words without knowing what to do with them.
+    Voice anchor: Careful, observant, not sure how to apply what he observes. Does his processing in the dark and in motion. Resists the mystical reading while acknowledging when something is accurate.
     Status: active
 
   Ysse — Appears at the Sweetwater waystation on the Aldenmere road. Elvish features, human road clothes, traveling alone. Eats quietly, doesn't invite conversation. Will appear again. Not what she seems. Introduced Ch. 1.
     Status: active
 
-  Perrin — Old man who runs the cider stand at Arden Crossroads. Any age between seventy and a hundred. Small body, large hands. Knows Maret by name. When Davan asked about nested arcs resolving to a glyph at the center, Perrin answered with "Where did you see that?" — same voice as "it's cider." Closed the encounter with "Another time, then. Good roads to you both." The door is not locked — left ajar. Has knowledge of the third sigil and will not share it yet.
-    Voice anchor: Spare, dry, economical. Does not waste words. Not warm, not cold.
-    Status: active
+  Perrin — Old man at the cider stand at Arden Crossroads. Has knowledge of the third sigil; left the door ajar with "Another time, then."
+    Voice anchor: Spare, dry, economical.
+    Status: active (behind them)
 
-  Sethverak — Dragon Warden at Aldenmere. Younger — perhaps eighty years — which is very young for a dragon. Ambitious, contemptuous of the process, believed to be acting outside his remit. The other dragons don't fully trust him. Neither does anyone else. Mentioned, not yet seen.
-    Status: active (offscreen)
+  Sethverak — Dragon Warden at Aldenmere. Young for a dragon (perhaps eighty). Ambitious, acting outside his remit. Not trusted by other dragons or anyone else.
+    Status: active (offscreen, ahead)
 
-  Benne Farr — Scribe at Mael & Sons. Copied the second piece from the same client who commissioned Davan's document, when Davan was ill. Died in the fire. Confirms the fire was targeted and the client knew who had handled the work.
+  Benne Farr — Scribe at Mael & Sons. Copied the second piece from the same client. Died in the fire.
     Status: deceased
 
-  Gram — Keeper of Brenford waystation, a day and a half south of Aldenmere. Perhaps fifty, efficient, not unfriendly. Mentioned the rider to Maret without suspicion. Does not know Cressholm market dates. Not complicit.
-    Status: minor, introduced Ch. 6
+  Gram — Keeper of Brenford waystation. Mentioned the rider without suspicion. Not complicit.
+    Status: minor
 
-  The Rider (unnamed) — Was at Brenford waystation before Davan and Maret arrived. Dark coat, good horse, seal ring on the right hand. Asked about a wagon out of Vardene with two aboard. Was ahead of them on the road — either targeted route intelligence or a wide canvass. Connection to the client seal (doubled V inside a circle) unconfirmed.
+  The Luck-Reader (unnamed) — Old woman at the luck-shrine at the north fork. Has been there thirty years. Maret knows her type; she "says the thing." Looked at Davan's hands and said: "Scribe's hands. Ink stays in the lines, doesn't it. Even after." Not a warning, not comfort — an accurate observation. Tied a plain knotted cord on Davan's wrist.
+    Status: minor, introduced Ch. 7
+
+  The Rider (unnamed) — Was at Brenford waystation before them. Dark coat, good horse, seal ring right hand. Either targeted route intelligence or a wide net. Connection to client seal unconfirmed.
     Status: active (offscreen)
 
 WORLD RULES
@@ -43,53 +46,53 @@ WORLD RULES
   - Humans (Midland Compact) are city-states and small kingdoms loosely confederated around shared trade routes and the Aldenmere road system. Fast-breeding, adaptable, creative. Run the trade. Their own magic is dismissed: hedge-craft, luck-reading, small things that sometimes work — neither elves nor dragons take it seriously. This is a mistake. Human Warden at Aldenmere: Aldric Thresh, third-generation civil servant of the founding family, primarily worried about his position and pension. The Compact's copy of the Threefold Accord is kept in the Hall of Records in the city of Vardene.
 
   The Threefold Accord
-  - Signed forty years ago after the Burning Years — a period of catastrophic conflict initiated when a young dragon (since killed for it) scoured the elvish Greenmere Forest, and the elves retaliated by destroying a dragon hatching ground. Thousands dead on all sides. Each party maintains territory and a Warden at the neutral Standing House in Aldenmere; any grievance goes through the Warden process before any military action.
-  - Requires unanimous renewal every fifty years. The next renewal vote is in ten years. If any party withdraws before then, the clock resets — and the other parties may act as they see fit.
-  - The Accord exists in three copies. The Vardene copy was authenticated at signing — any amendment must be countersigned by all three Wardens. There is currently a fourth document: a coded addendum signed by a minor human lord and a dragon representative, without elvish knowledge. If discovered and proven authentic, the elves have legal standing to declare the Accord void. The document is in Davan Orr's satchel. He does not know what it is.
+  - Signed forty years ago after the Burning Years. Requires unanimous renewal every fifty years — next vote in ten years. Three copies exist. A coded addendum (fourth document), signed without elvish knowledge, is in Davan's satchel.
 
   Magic & Scripts
-  - Human "small magic" — luck-bending, minor gifts — exists but is not taken seriously by the elder races. This will matter.
-  - Dragon script exists and appears on sealed Warden-to-Warden dispatches. Rare in human territory; unreadable at gate-level. A Warden's own clerk may be able to read it. (Maret has seen it twice through the glass of the Aldenmere gatehouse in four years.)
-  - Arcanate-to-old-dragon-lineage script — rumored on old-road talk, used between the elvish Arcanate and signatory dragon lineages. No agreed name. May not exist as described. Unverified.
+  - Human "small magic" — luck-bending, minor gifts — exists but is not taken seriously by the elder races. The luck-reader at the north fork is a working example: she looks at what people carry and says what she sees. Occasionally exactly right. Maret knows this type; everyone does. Nobody takes it seriously. This is a mistake.
+  - Dragon script on sealed Warden dispatches. Rare; unreadable by most.
+  - Arcanate-to-old-dragon-lineage script — rumored, unverified.
 
   Practical
-  - Dragons do not appear over the Midlands outside their corridor (the Vrethian Corridor, running northeast to southwest, far from the Aldenmere road). To do so is a breach of the Accord — or an act of deliberate message-sending.
-  - Elvish toll gates require paperwork for non-elvish wagons. This is the legitimate reason Maret needs a scribe.
+  - Dragons do not appear over the Midlands outside the Vrethian Corridor. To do so is a breach of the Accord or a message.
+  - Elvish toll gates require paperwork for non-elvish wagons.
   - Dragons hoard information and debts, not gold.
-  - Elves are not immortal; they live two to four centuries.
-  - Seal rings on the right hand: not a guild or civil service convention Davan recognizes. Unknown affiliation.
+  - Seal rings on the right hand: unknown affiliation. Not guild, not civil service.
 
   Geography
-  - Vardene — the human city where the story begins. Major trade hub, home to the Hall of Records (and the Accord copy). The copying house where Davan worked burned three days before the story opens. The fire was deliberate.
-  - The Aldenmere Road — main trade route connecting Vardene to the border town of Aldenmere. Six days by wagon under good conditions. Passes through human farmland, then the border region where elvish and human territory blur. Marker stones at every league.
-  - Aldenmere — border town, neutral ground by treaty. Population ~3,000, mostly human but with a permanent elvish diplomatic quarter and a Dragon Warden's hall. The Standing House is the oldest building in town. Maret has a delivery contract here. Now approximately a day and a half north.
-  - Whetham waystation — small stone waystation on the Aldenmere road, a day past Sweetwater. Slate roof, swept yard, sleeping space on the floor by the hearth for three copper. The keeper, Hollis, knows Maret by name and does not ask questions.
-  - Arden Crossroads — four roads meeting at a broad paved circle with a Compact marker at the center. A willow at the southeast corner shades Perrin's cider stand. Now behind them.
-  - Brenford waystation — gray stone, a day and a half south of Aldenmere. Keeper named Gram. Four copper for two. The rider was here before them.
-  - Cressholm — a town Maret named as their destination to mislead. The market is not Thursday. Buys them perhaps a half day.
+  - Vardene — where the story begins. The archive burned.
+  - The Aldenmere Road — six days by wagon. Now nearly complete.
+  - Aldenmere — border town, neutral ground. Half a day north as of Ch. 7. Standing House, elvish diplomatic quarter, Dragon Warden's hall.
+  - Whetham waystation — behind them. Hollis, no questions.
+  - Arden Crossroads — behind them. Perrin. Left ajar.
+  - Brenford waystation — behind them. Gram. The rider was there first.
+  - The north fork luck-shrine — the luck-reader's post. Thirty years. Left fork for Aldenmere.
+  - The newer marker stones on the northern approach — replaced recently. Unusually well-maintained. Not commented on in text; noted here.
+  - Cressholm — false destination Maret gave Gram. Buys a half day.
 
 THEMATIC THREADS
   - The weight carried by people who don't know they're carrying it
   - How peace is made by the powerful and broken by the ordinary
   - Memory as power — and who controls it
   - Small competences (a good hand, a merchant's eye) mattering enormously
+  - Ink stays in the lines, even after — what a scribe writes persists past the burning of the originals
 
 UNRESOLVED TENSIONS
-  - What is in the coded addendum? Who signed it and why?
-  - Who actually commissioned the document? Client seal: doubled V inside a circle. Aldric Thorne used as proxy (dead three years). Identity unknown.
-  - The rider with the seal ring on his right hand — same party as the client? Different arm of the same search?
-  - Is the net wide (multiple roads, multiple riders) or targeted (they knew which road)?
-  - What was in the land survey near the Vrethian Corridor's southern terminus?
-  - What was in the second piece Benne Farr copied?
-  - What does Perrin know? ("Another time" is not a closed door.)
-  - Where is Vael Orinth, the elvish Warden? (Six weeks without report)
+  - What is in the coded addendum?
+  - Who commissioned it? Client seal: doubled V inside a circle. Proxy: Aldric Thorne, dead.
+  - The rider with the seal ring — same party? Wide net or targeted?
+  - The land survey near the Vrethian Corridor's southern terminus.
+  - The second piece Benne Farr copied.
+  - What does Perrin know?
+  - Where is Vael Orinth? (Six weeks without report)
   - What is Sethverak doing at Aldenmere?
   - What is Ysse?
-  - Why did Mael personally deliver the commission to Davan's desk?
+  - Why did Mael personally deliver the commission?
+  - The newer marker stones on the northern approach — why recently replaced?
 
 AUTHOR NOTES
   - The magic system should stay subtle. No fireballs.
-  - The document in Davan's satchel is the engine of the plot but should not be revealed quickly. Let it press on him through ignorance first.
-  - Maret's horse named "Reliable" is unreliable. This is a recurring small joke and also a metaphor.
-  - Benne Farr's death is the guilt Davan carries alongside the danger. Don't let him process it too cleanly.
-  - The rider being ahead of them, not behind, is the key horror of Ch. 6. It means either intelligence or a net. Both are bad. Let this sit unresolved.
+  - The document in Davan's satchel is the engine of the plot. Let it press on him through ignorance.
+  - Maret's horse named "Reliable" is unreliable. Recurring small joke and metaphor.
+  - Benne Farr's death is guilt Davan carries alongside danger. Don't process it too cleanly.
+  - Luck-reading works by being accurate about what people carry. It doesn't need to be more than that.
