@@ -1,0 +1,32 @@
+{
+  "title": "Smoke on the River",
+  "slug": "smoke-on-the-river",
+  "status": "active",
+  "created": "2026-05-06T00:00:00Z",
+  "last_modified": "2026-05-06T00:00:00Z",
+  "engine": "story",
+  "engine_version": "5.0.0",
+  "treatment_source": null,
+  "genre": "Mystery / hardboiled noir",
+  "tone": "Dry, melancholic, quietly observant. Walt's voice is wry and economical; the prose carries the weight of a city in slow decline.",
+  "perspective": "Third-person close, past tense, anchored to Walt Reardon",
+  "current_chapter": 1,
+  "active_branch": "main",
+  "branches": {
+    "main": {
+      "forked_from": null,
+      "forked_at_chapter": null,
+      "created": "2026-05-06T00:00:00Z"
+    }
+  },
+  "chapters": [
+    {
+      "number": 1,
+      "branch": "main",
+      "title": "The Forty-Dollar Hour",
+      "file": "chapters/01.md",
+      "written": "2026-05-06T00:00:00Z",
+      "word_count": 1180
+    }
+  ]
+}
