@@ -5,6 +5,7 @@ PREMISE & TONE
   Genre: Mystery / hardboiled noir.
   Tone: Dry, melancholic, quietly observant. Walt's voice is wry and economical; the prose carries the weight of a city in slow decline.
   Core premise: Spring 1974, Detroit. Walter Reardon — ex-Detroit PD, three years out, working out of a one-room office above a Polish lunch counter on Cass Avenue — is hired by Loretta Mills to find her brother Marcus, an autoworker who has been missing two weeks and whose disappearance the police have made it their business not to solve.
+  Prose discipline (author note): Avoid "the way a [person] [verbs]" and "in a [adj] way" constructions — they read as crutch phrasing. Reach for the concrete detail or the direct sentence instead.
 
 DRAMATIS PERSONAE
   Walter "Walt" Reardon — Mid-40s, ex-Detroit PD detective. Three years out of the department under circumstances not yet revealed. Now a private investigator on Cass Avenue. Wry, apathetic about the city's larger rot, but focused once a case has hooks in him. Drinks his coffee, doesn't volunteer information about himself. Voice anchor: economical, observational — "He had given up, by that spring, on a number of things." Status: active.
